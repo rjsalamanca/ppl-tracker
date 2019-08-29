@@ -8,6 +8,23 @@ class Users {
         this.email = email;
         this.password = password;
     }
+
+    static async checkUser(email) {
+        try {
+            const response = db.result(`
+                SELECT * FROM users
+                WHERE email = $1
+            `, [email]);
+
+            return response;
+        } catch (err) {
+            return err.message;
+        }
+    }
+
+    static async getUser(email, password) {
+
+    }
 }
 
 module.exports = Users;
