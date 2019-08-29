@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "db:reset": "psql ppl_tracker -f ./sql/schema.sql -U rjs && psql ppl_tracker -f ./sql/seed.sql -U rjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -11,6 +13,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-session": "^1.16.2",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pg-promise": "^9.2.1"

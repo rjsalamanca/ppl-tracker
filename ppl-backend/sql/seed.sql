@@ -1,3 +1,3 @@
 INSERT INTO users
-    (first_name,last_name,email,password)
-VALUES('First Temp', 'Last Temp', 'test@email.com', '1');
+    (username,first_name,last_name,email,password)
+VALUES('testAcc', 'First Temp', 'Last Temp', 'test@email.com', '1');

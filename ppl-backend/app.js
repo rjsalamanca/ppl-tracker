@@ -1,5 +1,6 @@
 const express = require('express'),
     path = require('path'),
+    session = require('express-session'),
     cookieParser = require('cookie-parser'),
     logger = require('morgan'),
     cors = require('cors');
@@ -24,6 +25,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
+app.use(session({
+    secret: 'get rad',
+    resave: false,
+    saveUninitialized: true,
+    is_logged_in: false
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
