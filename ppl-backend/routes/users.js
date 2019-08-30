@@ -6,15 +6,16 @@ const express = require('express'),
 
 /* 
   Error Codes:
+
+  0 = Success
   1 = No User Found
-  2 = Password Incorrect 
+  2 = Password Incorrect
+  3 = User Already Created
+  4 = Database Error
 */
 
 router.post('/loginStatus', async (req, res) => {
-  if (req.session.is_logged_in !== true)
-    res.json({
-      is_logged_in: req.session.is_logged_in
-    })
+  (req.session.is_logged_in === true) ? res.json({ is_logged_in: req.session.is_logged_in }) : res.json({ is_logged_in: false })
 });
 
 router.post('/logout', async (req, res) => {
@@ -55,6 +56,24 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
-router.post('/register, asy')
+router.post('/register', async (req, res) => {
+  const { first_name, last_name, email, password } = req.body;
+  const user = new UsersModel(null, first_name, last_name, email, null);
+  const checkUser = await UsersModel.checkUser(email);
+
+  if (checkUser.rowCount === 0) {
+    const hashedPW = await bcrypt.hash(password, SALT_ROUNDS);
+    const addUser = await user.addUser(hashedPW);
+    if (addUser.rowCount === 1) {
+      //Successfully added user
+      res.json({ errorCode: 0 })
+    } else {
+      //Failed To add User
+      res.json({ errorCode: 4 })
+    }
+  } else {
+    res.json({ errorCode: 3 })
+  }
+})
 
 module.exports = router;

@@ -11,7 +11,7 @@ class Users {
 
     static async checkUser(email) {
         try {
-            const response = db.result(`
+            const response = await db.result(`
                 SELECT * FROM users
                 WHERE email = $1
             `, [email]);
@@ -22,8 +22,16 @@ class Users {
         }
     }
 
-    static async getUser(email, password) {
-
+    async addUser(hashedPW) {
+        try {
+            const response = await db.result(`
+                INSERT INTO users (first_name, last_name, email, password)
+                VALUES($1,$2,$3,$4)
+            `, [this.first_name, this.last_name, this.email, hashedPW])
+            return response;
+        } catch (err) {
+            return err.message;
+        }
     }
 }
 
