@@ -3,9 +3,14 @@ import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import '../App.css';
+import { throws } from "assert";
 
 class Login extends Component {
-    state = { errorCode: 0 }
+    state = {
+        errorCode: -1,
+        email: '',
+        password: ''
+    }
 
     handleEmail = (e) => { this.setState({ email: e.target.value }) }
     handlePassword = (e) => { this.setState({ password: e.target.value }) }
@@ -20,12 +25,16 @@ class Login extends Component {
                     "Accept": "application/json",
                     "Content-Type": "application/json"
                 },
+                credentials: 'include',
                 body: JSON.stringify(this.state)
             })
 
             const data = await response.json();
+
             this.setState({ errorCode: data.errorCode });
-            /* 
+            console.log(data);
+            this.checkLoginStatus();
+            /*
                 Error Codes:
 
                 0 = Success
@@ -38,6 +47,23 @@ class Login extends Component {
 
         } catch (err) {
             this.setState({ errorCode: 5 });
+        }
+    }
+
+    checkLoginStatus = async () => {
+        const url = "http://localhost:3000/users/loginStatus";
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                credentials: "include"
+            })
+
+            const data = await response.json();
+
+            console.log("IN CHECK LOGIN STATUS: ", data.is_logged_in)
+        } catch (err) {
+            return err.message;
         }
     }
 
@@ -64,7 +90,7 @@ class Login extends Component {
                         </Form>
                         {
                             {
-                                0: null,
+                                0: <Redirect to="/profile" />,
                                 1:
                                     <Alert className="alert alert-dismissible alert-danger users-alert">
                                         <strong>Oops,</strong> <b>User was not found</b> , please register.

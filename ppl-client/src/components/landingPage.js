@@ -4,10 +4,11 @@ class LandingPage extends Component {
     state = {
 
     }
+
     render() {
         return (
             <div>
-                HOME
+                bro
             </div>
         );
     }

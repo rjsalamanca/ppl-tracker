@@ -14,7 +14,8 @@ const express = require('express'),
   4 = Database Error
 */
 
-router.post('/loginStatus', async (req, res) => {
+router.get('/loginStatus', async (req, res) => {
+  console.log('IN login status: ', req.session);
   (req.session.is_logged_in === true) ? res.json({ is_logged_in: req.session.is_logged_in }) : res.json({ is_logged_in: false })
 });
 
@@ -34,16 +35,23 @@ router.post('/login', async (req, res, next) => {
     const comparePassword = await bcrypt.compare(password, user.password);
     // If the password matches
     if (!!comparePassword) {
+      var hour = 3600000;
       req.session.is_logged_in = true;
       req.session.first_name = user.first_name;
       req.session.last_name = user.last_name;
       req.session.id = user.id;
+      req.session.expires = new Date(Date.now() + hour);
+      req.session.maxAge = hour;
+      req.session.save();
 
       res.json({
+        errorCode: 0,
+        is_logged_in: req.session.is_logged_in,
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email
-      })
+      });
+
     } else {
       res.json({
         errorCode: 2
