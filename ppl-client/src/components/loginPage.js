@@ -6,53 +6,68 @@ import '../App.css';
 
 class Login extends Component {
     state = {
-        email: "",
-        password: "",
-        login: false,
         errorCode: 0
     }
 
-    // componentDidMount = () => {
-    //     if (this.props.location.errorCode !== undefined) {
-    //         this.setState({ errorCode: this.props.location.errorCode })
-    //     }
-    // }
+    handleEmail = (e) => { this.setState({ email: e.target.value }) }
+    handlePassword = (e) => { this.setState({ password: e.target.value }) }
 
-    // handleEmail = (e) => { this.setState({ email: e.target.value }) }
-    // handlePassword = (e) => { this.setState({ password: e.target.value }) }
+    login = async () => {
+        const url = "http://localhost:3000/users/login";
 
-    // login = async () => {
-    //     const url = "http://localhost:3000/users/login";
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.state)
+            })
 
-    //     try {
-    //         const response = await fetch(url, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Accept": "application/json",
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify(this.state)
-    //         })
+            const data = await response.json();
+            this.setState({ errorCode: data });
+            console.log(this.state.errorCode);
+            /* 
+                Error Codes:
 
-    //         const data = await response.json();
-    //         const { login, errorCode } = data;
+                0 = Success
+                1 = No User Found
+                2 = Password Incorrect
+                3 = User Already Created
+                4 = Database Error
+                5 = URL to backend is bad
+            */
 
-    //         if (!!login) {
-    //             const { id, f_name, l_name, email } = data;
-    //             this.props.changeLoginState({ login, id, f_name, l_name, email })
-    //         }
+        } catch (err) {
+            this.setState({ errorCode: 5 });
+        }
+    }
 
-    //         this.setState({
-    //             login,
-    //             errorCode
-    //         })
-    //     } catch (err) {
-    //         // This error code tells us that the url is bad.
-    //         this.setState({ errorCode: 3 });
-    //     }
-    // }
+    test = (code) => {
+        switch (code) {
+            case 0:
+                break;
+            case 1:
+                return (
+                    <Alert className="alert alert-dismissible alert-danger users-alert">
+                        <strong>Oh $h%+!</strong> <b>User not registered</b> , please register.
+                    </Alert>
+                );
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
+    }
 
     render() {
+        const { errorCode } = this.state;
         return (
             <div>
                 <Card className="loginSignUpContainer mt-5">
@@ -71,7 +86,7 @@ class Login extends Component {
                                 Sign In
                         </Button>
                         </Form>
-
+                        {this.test(errorCode)}
                         <p className="mt-4">
                             No Account? <Link to="/register"><b>Register</b></Link>
                         </p>
