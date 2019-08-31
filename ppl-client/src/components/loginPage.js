@@ -5,9 +5,7 @@ import { Card, Button, Form, Alert } from "react-bootstrap";
 import '../App.css';
 
 class Login extends Component {
-    state = {
-        errorCode: 0
-    }
+    state = { errorCode: 0 }
 
     handleEmail = (e) => { this.setState({ email: e.target.value }) }
     handlePassword = (e) => { this.setState({ password: e.target.value }) }
@@ -26,8 +24,7 @@ class Login extends Component {
             })
 
             const data = await response.json();
-            this.setState({ errorCode: data });
-            console.log(this.state.errorCode);
+            this.setState({ errorCode: data.errorCode });
             /* 
                 Error Codes:
 
@@ -44,30 +41,9 @@ class Login extends Component {
         }
     }
 
-    test = (code) => {
-        switch (code) {
-            case 0:
-                break;
-            case 1:
-                return (
-                    <Alert className="alert alert-dismissible alert-danger users-alert">
-                        <strong>Oh $h%+!</strong> <b>User not registered</b> , please register.
-                    </Alert>
-                );
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-        }
-    }
-
     render() {
         const { errorCode } = this.state;
+
         return (
             <div>
                 <Card className="loginSignUpContainer mt-5">
@@ -86,7 +62,28 @@ class Login extends Component {
                                 Sign In
                         </Button>
                         </Form>
-                        {this.test(errorCode)}
+                        {
+                            {
+                                0: null,
+                                1:
+                                    <Alert className="alert alert-dismissible alert-danger users-alert">
+                                        <strong>Oops,</strong> <b>User was not found</b> , please register.
+                                    </Alert>,
+                                2:
+                                    <Alert className="alert alert-dismissible alert-danger users-alert">
+                                        <strong>Oops,</strong> <b>Password was Incorrect</b> , please try again.
+                                    </Alert>,
+                                3:
+                                    <Alert className="alert alert-dismissible alert-danger users-alert">
+                                        <strong>Oops,</strong> <b>Password was Incorrect</b> , please try again.
+                                    </Alert>,
+                                default:
+                                    <Alert className="alert alert-dismissible alert-danger users-alert">
+                                        <strong>We're sorry,</strong> <b>something wrong happened on our end</b> , please try again in a bit.
+                                    </Alert>
+                            }[errorCode]
+                        }
+
                         <p className="mt-4">
                             No Account? <Link to="/register"><b>Register</b></Link>
                         </p>
