@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
-import '../App.css';
+import '../../App.css';
 
 class Login extends Component {
     state = {
