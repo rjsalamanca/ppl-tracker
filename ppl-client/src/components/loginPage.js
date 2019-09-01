@@ -3,7 +3,6 @@ import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import '../App.css';
-import { throws } from "assert";
 
 class Login extends Component {
     state = {
@@ -32,8 +31,7 @@ class Login extends Component {
             const data = await response.json();
 
             this.setState({ errorCode: data.errorCode });
-            console.log(data);
-            this.checkLoginStatus();
+            this.props.checkLoginStatus();
             /*
                 Error Codes:
 
@@ -47,23 +45,6 @@ class Login extends Component {
 
         } catch (err) {
             this.setState({ errorCode: 5 });
-        }
-    }
-
-    checkLoginStatus = async () => {
-        const url = "http://localhost:3000/users/loginStatus";
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: "include"
-            })
-
-            const data = await response.json();
-
-            console.log("IN CHECK LOGIN STATUS: ", data.is_logged_in)
-        } catch (err) {
-            return err.message;
         }
     }
 

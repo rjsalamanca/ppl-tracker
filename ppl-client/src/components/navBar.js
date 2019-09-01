@@ -3,13 +3,14 @@ import { Nav, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 
 class NavBar extends Component {
-  state = { check: 'bruh' };
+  state = { check: null };
 
-  // componentDidMount = () => {
+  // componentDidUpdate = () => {
   //   this.props.checkLoginStatus();
   //   this.setState({ check: this.props.is_logged_in })
   //   console.log(this.props.is_logged_in)
   // }
+
 
   render() {
     return (
@@ -24,14 +25,25 @@ class NavBar extends Component {
               <Link className="nav-link" to='/'>Home <span className="sr-only">(current)</span></Link>
             </Nav.Item>
           </Nav>
-          <Nav className="navbar-nav ml-auto">
-            <Nav.Item className="nav-item active">
-              <Link className="nav-link" to="/login">Login</Link>
-            </Nav.Item>
-            <Nav.Item className="nav-item active">
-              <Link className="nav-link" to="/register">Register</Link>
-            </Nav.Item>
-          </Nav>
+          {
+            {
+              true:
+                <Nav className="navbar-nav ml-auto">
+                  <Nav.Item className="nav-item active">
+                    <Link className="nav-link" to="/logout">Logout</Link>
+                  </Nav.Item>
+                </Nav>,
+              false:
+                <Nav className="navbar-nav ml-auto">
+                  <Nav.Item className="nav-item active">
+                    <Link className="nav-link" to="/login">Login</Link>
+                  </Nav.Item>
+                  <Nav.Item className="nav-item active">
+                    <Link className="nav-link" to="/register">Register</Link>
+                  </Nav.Item>
+                </Nav>
+            }[this.props.is_logged_in]
+          }
         </div>
       </Nav >
 

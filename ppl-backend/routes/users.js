@@ -19,7 +19,7 @@ router.get('/loginStatus', async (req, res) => {
   (req.session.is_logged_in === true) ? res.json({ is_logged_in: req.session.is_logged_in }) : res.json({ is_logged_in: false })
 });
 
-router.post('/logout', async (req, res) => {
+router.get('/logout', async (req, res) => {
   req.session.destroy();
   res.json({
     is_logged_in: false
