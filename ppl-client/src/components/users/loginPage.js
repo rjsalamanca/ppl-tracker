@@ -11,6 +11,10 @@ class Login extends Component {
         password: ''
     }
 
+    componentDidMount() {
+        (this.props.location.errorCode === 0) ? this.setState({ errorCode: 7 }) : this.setState({ errorCode: -1 });
+    }
+
     handleEmail = (e) => { this.setState({ email: e.target.value }) }
     handlePassword = (e) => { this.setState({ password: e.target.value }) }
 
@@ -74,19 +78,19 @@ class Login extends Component {
                                 0: <Redirect to="/profile" />,
                                 1:
                                     <Alert className="alert alert-dismissible alert-danger users-alert">
-                                        <strong>Oops,</strong> <b>User was not found</b> , please register.
+                                        <strong>Oops, User was not found</strong> , please register.
                                     </Alert>,
                                 2:
                                     <Alert className="alert alert-dismissible alert-danger users-alert">
-                                        <strong>Oops,</strong> <b>Password was Incorrect</b> , please try again.
+                                        <strong>Oops, Password was Incorrect</strong> , please try again.
                                     </Alert>,
-                                3:
-                                    <Alert className="alert alert-dismissible alert-danger users-alert">
-                                        <strong>Oops,</strong> <b>Password was Incorrect</b> , please try again.
+                                7:
+                                    <Alert className="alert alert-dismissible alert-success users-alert">
+                                        <strong>You've successfully registered!</strong> Please Login.
                                     </Alert>,
                                 default:
                                     <Alert className="alert alert-dismissible alert-danger users-alert">
-                                        <strong>We're sorry,</strong> <b>something wrong happened on our end</b> , please try again in a bit.
+                                        <strong>We're sorry, something wrong happened on our end.</strong> , please try again in a bit.
                                     </Alert>
                             }[errorCode]
                         }
