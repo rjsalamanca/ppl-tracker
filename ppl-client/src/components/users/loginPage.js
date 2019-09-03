@@ -94,7 +94,6 @@ class Login extends Component {
                                     </Alert>
                             }[errorCode]
                         }
-
                         <p className="mt-4">
                             No Account? <Link to="/register"><b>Register</b></Link>
                         </p>
