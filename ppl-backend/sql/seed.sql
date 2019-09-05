@@ -8,5 +8,5 @@ INSERT INTO push
 VALUES(1);
 
 INSERT INTO exercises
-    (exercise_name, pounds, rep_sets, cycle)
-VALUES('Bench Press', 135, '5-5-5-12', 1);
+    (exercise_name, pounds, rep_sets, cycle, exercise_date)
+VALUES('Bench Press', 135, '5-5-5-12', 1, 'Oct 14 2019');

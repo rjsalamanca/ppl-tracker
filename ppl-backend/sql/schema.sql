@@ -25,5 +25,6 @@ CREATE TABLE exercises
     exercise_name VARCHAR(500),
     pounds INT,
     rep_sets VARCHAR(500),
-    cycle INT REFERENCES push(id)
+    cycle INT REFERENCES push(id),
+    exercise_date VARCHAR(100)
 );
