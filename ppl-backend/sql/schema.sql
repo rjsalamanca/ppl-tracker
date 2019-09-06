@@ -2,7 +2,7 @@
 DROP TABLE users;
 DROP TABLE exercises;
 DROP TABLE push;
-DROP TABLE routines;
+DROP TABLE routine;
 
 CREATE TABLE users
 (
@@ -13,9 +13,18 @@ CREATE TABLE users
     password VARCHAR(500)
 );
 
+CREATE TABLE routine
+(
+    id SERIAL PRIMARY KEY,
+    routine_name VARCHAR(500),
+    date_started VARCHAR(100),
+    user_id INT REFERENCES users(id)
+);
+
 CREATE TABLE push
 (
     id SERIAL PRIMARY KEY,
+    routine_id INT REFERENCES routine(id),
     exercise_id INT
 );
 

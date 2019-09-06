@@ -7,7 +7,8 @@ const express = require('express'),
     cors = require('cors');
 
 const indexRouter = require('./routes/index'),
-    usersRouter = require('./routes/users');
+    usersRouter = require('./routes/users'),
+    pplSystemRouter = require('./routes/ppl_system');
 
 const corsOptions = {
     // origin: '*'
@@ -40,5 +41,6 @@ app.use(session({
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/ppl', pplSystemRouter);
 
 module.exports = app;
