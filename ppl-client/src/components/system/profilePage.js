@@ -41,7 +41,8 @@ class Profile extends Component {
     }
 
     render() {
-        console.log(this.state.routines.length)
+
+        const { routines } = this.state;
         return (
             <div>
                 <Calendar
@@ -49,6 +50,7 @@ class Profile extends Component {
                     value={this.state.date}
                 />
                 {
+                    //JSX Switch Case
                     {
                         0:
                             <div>
@@ -56,11 +58,16 @@ class Profile extends Component {
                                 <Link className="nav-link" to="/ppl/create_routine">
                                     <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
                                 </Link>
-
                             </div>,
-                        default:
-                            <div>found bvhjbvhj</div>
-                    }[this.state.routines.length]
+                    }[this.state.routines.length] ||
+                    // default
+                    <div>
+                        {routines.map(ele => {
+                            return (
+                                <p key={`routine${ele.id}`}>{ele.routine_name}</p>
+                            );
+                        })}
+                    </div>
                 }
             </div>
         );
