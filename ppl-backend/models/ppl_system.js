@@ -18,6 +18,17 @@ class PPL_System {
             return err.msg;
         }
     }
+
+    async createRoutine() {
+        try {
+            const response = await db.none(`
+                INSERT INTO routine (routine_name, date_started, user_id)
+                VALUES($1,$2,$3)
+            `, [this.routine_name, this.date_started, this.user_id])
+        } catch (err) {
+            return err.msg;
+        }
+    }
 }
 
 module.exports = PPL_System;

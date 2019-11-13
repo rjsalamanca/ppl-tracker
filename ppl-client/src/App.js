@@ -6,7 +6,9 @@ import LandingPage from './components/landingPage';
 import LoginPage from './components/users/loginPage';
 import LogoutPage from './components/users/logoutPage';
 import RegisterPage from './components/users/registerPage';
+
 import ProfilePage from './components/system/profilePage';
+import CreateRoutine from './components/system/createRoutine';
 
 import './App.css';
 
@@ -47,6 +49,8 @@ class App extends Component {
           <Route path="/logout" exact render={(props) => <LogoutPage {...props} is_logged_in={this.state.is_logged_in} changeToLogout={this.changeToLogout} checkLoginStatus={this.checkLoginStatus} />} />
           <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
           <Route path="/profile" exact render={(props) => <ProfilePage {...props} />} />
+
+          <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
 
           {/* 
           <Route path="/profile" exact render={(props) => <Profile {...props} user={this.state} changeLoginState={this.changeLoginState} />} />

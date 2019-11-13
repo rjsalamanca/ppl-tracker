@@ -39,7 +39,7 @@ router.post('/login', async (req, res, next) => {
       req.session.is_logged_in = true;
       req.session.first_name = user.first_name;
       req.session.last_name = user.last_name;
-      req.session.id = user.id;
+      req.session.user_id = user.id;
       req.session.expires = new Date(Date.now() + hour);
       req.session.maxAge = hour;
       req.session.save();
