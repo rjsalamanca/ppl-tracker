@@ -33,9 +33,9 @@ class Login extends Component {
             })
 
             const data = await response.json();
-
+            await this.props.checkLoginStatus()
             this.setState({ errorCode: data.errorCode });
-            this.props.checkLoginStatus();
+
             /*
                 Error Codes:
 
@@ -75,7 +75,6 @@ class Login extends Component {
                         </Form>
                         {
                             {
-                                0: <Redirect to="/profile" />,
                                 1:
                                     <Alert className="alert alert-dismissible alert-danger users-alert">
                                         <strong>Oops, User was not found</strong> , please register.
@@ -88,16 +87,17 @@ class Login extends Component {
                                     <Alert className="alert alert-dismissible alert-success users-alert">
                                         <strong>You've successfully registered!</strong> Please Login.
                                     </Alert>,
-                                default:
-                                    <Alert className="alert alert-dismissible alert-danger users-alert">
-                                        <strong>We're sorry, something wrong happened on our end.</strong> , please try again in a bit.
-                                    </Alert>
                             }[errorCode]
+                            // ||
+                            // <Alert className="alert alert-dismissible alert-danger users-alert">
+                            //     <strong>We're sorry, something wrong happened on our end.</strong> , please try again in a bit.
+                            // </Alert>
                         }
                         <p className="mt-4">
                             No Account? <Link to="/register"><b>Register</b></Link>
                         </p>
                     </Card.Body>
+                    {errorCode === 0 ? <Redirect to="/profile" /> : <div></div>}
                 </Card >
             </div>
         )

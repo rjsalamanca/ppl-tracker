@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
 app.use(session({
-    store: new FileStore(),
+    store: new FileStore({ logFn: function () { } }),
     secret: 'get rad',
     resave: false,
     saveUninitialized: true,

@@ -25,7 +25,7 @@ class createRoutine extends Component {
             });
 
             const data = await response.json();
-
+            console.log('hi')
             console.log(data)
         } catch (err) {
             console.log(err.message);

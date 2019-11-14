@@ -11,7 +11,6 @@ class NavBar extends Component {
   //   console.log(this.props.is_logged_in)
   // }
 
-
   render() {
     return (
       < Nav className="navbar navbar-expand-lg navbar-light bg-light" >

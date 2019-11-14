@@ -15,12 +15,15 @@ const express = require('express'),
 */
 
 router.get('/loginStatus', async (req, res) => {
-  console.log('IN login status: ', req.session);
+  //console.log('IN login status: ', req.session.hasOwnProperty('is_logged_in'));
+  // console.log('test')
+  // if (!!req.session.hasOwnProperty('is_logged_in'))
   (req.session.is_logged_in === true) ? res.json({ is_logged_in: req.session.is_logged_in }) : res.json({ is_logged_in: false })
 });
 
 router.get('/logout', async (req, res) => {
   req.session.destroy();
+
   res.json({
     is_logged_in: false
   })
@@ -42,14 +45,15 @@ router.post('/login', async (req, res, next) => {
       req.session.user_id = user.id;
       req.session.expires = new Date(Date.now() + hour);
       req.session.maxAge = hour;
-      req.session.save();
-
-      res.json({
-        errorCode: 0,
-        is_logged_in: req.session.is_logged_in,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email
+      req.session.save(function (err) {
+        console.log('hi')
+        res.json({
+          errorCode: 0,
+          is_logged_in: req.session.is_logged_in,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email
+        });
       });
 
     } else {

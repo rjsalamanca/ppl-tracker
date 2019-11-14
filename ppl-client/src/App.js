@@ -27,11 +27,17 @@ class App extends Component {
     try {
       const response = await fetch(url, {
         method: 'GET',
-        credentials: "include"
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        credentials: 'include'
       })
 
       const data = await response.json();
       this.setState({ is_logged_in: data.is_logged_in })
+
+      return 'yes';
     } catch (err) {
       console.log(this.state.is_logged_in)
       return err.message;
@@ -48,7 +54,7 @@ class App extends Component {
           <Route path="/login" exact render={(props) => <LoginPage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
           <Route path="/logout" exact render={(props) => <LogoutPage {...props} is_logged_in={this.state.is_logged_in} changeToLogout={this.changeToLogout} checkLoginStatus={this.checkLoginStatus} />} />
           <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
-          <Route path="/profile" exact render={(props) => <ProfilePage {...props} />} />
+          <Route path="/profile" exact render={(props) => <ProfilePage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
 
           <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
 

@@ -11,7 +11,8 @@ class Profile extends Component {
         routines: []
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
+        console.log('profile page loaded')
         this.checkForRoutines();
     }
 
@@ -19,17 +20,21 @@ class Profile extends Component {
         const url = "http://localhost:3000/ppl/routine"
         try {
             const response = await fetch(url, {
-                method: "POST",
+                method: "GET",
                 headers: {
-                    "Accept": "application/json",
+                    // "Accept": "application/json",
                     "Content-Type": "application/json"
                 },
-                credentials: 'include',
-                body: JSON.stringify(this.state)
+                credentials: 'include'
             });
 
             const data = await response.json();
-            this.setState({ routines: data.routines })
+            console.log(data)
+            if (data.routine_found === true) {
+                this.setState({ routines: data.routines });
+            }
+            // console.log(data)
+            //data.routine_found === true ? this.setState({ routines: data.routines }) : console.log('No Found');
         } catch (err) {
             console.log(err.message);
         }
@@ -50,25 +55,23 @@ class Profile extends Component {
                     value={this.state.date}
                 />
                 {
-                    //JSX Switch Case
-                    {
-                        0:
-                            <div>
-                                No Routine Found
+                    routines.length === 0 ?
+                        <div>
+                            No Routine Found
                                 <Link className="nav-link" to="/ppl/create_routine">
-                                    <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
-                                </Link>
-                            </div>,
-                    }[this.state.routines.length] ||
-                    // default
-                    <div>
-                        {routines.map(ele => {
-                            return (
-                                <p key={`routine${ele.id}`}>{ele.routine_name}</p>
-                            );
-                        })}
-                    </div>
+                                <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
+                            </Link>
+                        </div>
+                        :
+                        <div>
+                            {routines.map(ele => {
+                                return (
+                                    <p key={`routine${ele.id}`}>{ele.routine_name}</p>
+                                );
+                            })}
+                        </div>
                 }
+
             </div>
         );
     }
