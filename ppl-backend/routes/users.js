@@ -22,7 +22,16 @@ router.get('/loginStatus', async (req, res) => {
 });
 
 router.get('/logout', async (req, res) => {
+  console.log('bruh')
+  console.log('sess before:', req.session);
+  req.session.expires = new Date(Date.now() - 1000000000000);
+  req.session.maxAge = 1;
+
+  console.log('after:', req.session)
+
   req.session.destroy();
+  res.clearCookie();
+  console.log(req.session)
 
   res.json({
     is_logged_in: false
@@ -45,8 +54,7 @@ router.post('/login', async (req, res, next) => {
       req.session.user_id = user.id;
       req.session.expires = new Date(Date.now() + hour);
       req.session.maxAge = hour;
-      req.session.save(function (err) {
-        console.log('hi')
+      await req.session.save(function (err) {
         res.json({
           errorCode: 0,
           is_logged_in: req.session.is_logged_in,

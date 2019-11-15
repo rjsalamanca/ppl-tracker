@@ -17,8 +17,10 @@ const corsOptions = {
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204,
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": "http://localhost:3001",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
     "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+    "Access-Control-Allow-Credentials": true
 };
 
 const app = express();
@@ -29,13 +31,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
+
 app.use(session({
-    store: new FileStore({ logFn: function () { } }),
+    //{ logFn: function () { } }
+    store: new FileStore(),
     secret: 'get rad',
     resave: false,
     saveUninitialized: true,
     cookie: {
-        is_logged_in: false
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     }
 }));
 

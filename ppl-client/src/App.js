@@ -27,10 +27,10 @@ class App extends Component {
     try {
       const response = await fetch(url, {
         method: 'GET',
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
+        // headers: {
+        //   "Accept": "application/json",
+        //   "Content-Type": "application/json"
+        // },
         credentials: 'include'
       })
 
@@ -55,7 +55,6 @@ class App extends Component {
           <Route path="/logout" exact render={(props) => <LogoutPage {...props} is_logged_in={this.state.is_logged_in} changeToLogout={this.changeToLogout} checkLoginStatus={this.checkLoginStatus} />} />
           <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
           <Route path="/profile" exact render={(props) => <ProfilePage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
-
           <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
 
           {/* 

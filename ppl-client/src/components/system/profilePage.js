@@ -11,32 +11,32 @@ class Profile extends Component {
         routines: []
     }
 
-    componentDidMount = () => {
+    async componentDidMount() {
         console.log('profile page loaded')
         this.checkForRoutines();
     }
+    // console.log('curr state: ', this.state)
 
     checkForRoutines = async () => {
-        const url = "http://localhost:3000/ppl/routine"
+        const url = "http://localhost:3000/ppl/routine";
         try {
             const response = await fetch(url, {
                 method: "GET",
-                headers: {
-                    // "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                credentials: 'include'
+                // headers: {
+                //     "Accept": "application/json",
+                //     "Content-Type": "application/x-www-form-urlencoded",
+                // },
+                credentials: "include"
             });
 
             const data = await response.json();
-            console.log(data)
             if (data.routine_found === true) {
                 this.setState({ routines: data.routines });
             }
-            // console.log(data)
+            console.log(data)
             //data.routine_found === true ? this.setState({ routines: data.routines }) : console.log('No Found');
         } catch (err) {
-            console.log(err.message);
+            console.log(err);
         }
     }
 
@@ -58,7 +58,7 @@ class Profile extends Component {
                     routines.length === 0 ?
                         <div>
                             No Routine Found
-                                <Link className="nav-link" to="/ppl/create_routine">
+                            <Link className="nav-link" to="/ppl/create_routine">
                                 <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
                             </Link>
                         </div>
