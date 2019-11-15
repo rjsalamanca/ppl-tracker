@@ -27,10 +27,10 @@ class App extends Component {
     try {
       const response = await fetch(url, {
         method: 'GET',
-        // headers: {
-        //   "Accept": "application/json",
-        //   "Content-Type": "application/json"
-        // },
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
         credentials: 'include'
       })
 

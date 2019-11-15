@@ -5,11 +5,11 @@ import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-ro
 class NavBar extends Component {
   state = { check: null };
 
-  // componentDidUpdate = () => {
-  //   this.props.checkLoginStatus();
-  //   this.setState({ check: this.props.is_logged_in })
-  //   console.log(this.props.is_logged_in)
-  // }
+  componentDidMount = () => {
+    this.props.checkLoginStatus();
+    this.setState({ check: this.props.is_logged_in })
+    console.log(this.props.is_logged_in)
+  }
 
   render() {
     return (
