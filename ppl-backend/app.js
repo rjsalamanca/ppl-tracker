@@ -33,13 +33,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
 
 app.use(session({
-    //{ logFn: function () { } }
     store: new FileStore(),
     secret: 'get rad',
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        //1 hour
+        maxAge: 60 * 60 * 1000,
     }
 }));
 
