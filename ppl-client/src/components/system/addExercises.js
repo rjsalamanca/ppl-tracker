@@ -15,12 +15,24 @@ class addExercises extends Component {
     handleShow = () => this.setState({ show: true });
     handleDayName = (e) => this.setState({ day_name: e.target.value });
     handleExerciseName = (e) => this.setState({ exercise_name: e.target.value });
+    handleSetWeight = (e, idx) => {
+        const { sets } = this.state;
+        let newSets = [...sets];
+        newSets[idx].value = e.target.value;
+        this.setState({ sets: newSets });
+    };
+    handleRemoveSets = (idx) => {
+        const { sets } = this.state;
+        let newSets = [...sets];
+        newSets.splice(idx, 1);
+        this.setState({ sets: newSets });
+    }
 
     modalTrigger = () => {
         const { show, sets } = this.state;
         this.setState({
             exercise_name: '',
-            sets: [{ value: 0 }]
+            sets: [{ value: null }]
         });
         !!show ? this.setState({ show: false }) : this.setState({ show: true })
     }
@@ -28,7 +40,7 @@ class addExercises extends Component {
     addSet = () => {
         const { sets } = this.state;
         let newSets = [...sets];
-        newSets.push({ value: sets[sets.length - 1].value + 1 })
+        newSets.push({ value: null })
         this.setState({ sets: newSets });
     }
 
@@ -45,9 +57,13 @@ class addExercises extends Component {
                             <div>
                                 Exercise Name: <Form.Control type="input" onChange={(e) => this.handleDayName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
                                 {this.state.sets.map((set, idx) =>
-                                    <div key={`set-${idx}`}>
+                                    <div key={`set-${idx + 1}`}>
+                                        {console.log(set)}
                                         Set {idx + 1} Weight:
-                                        <input type="text" placeholder="Enter weight in lbs" onChange={e => console.log('bro')} />
+                                        <input type="text" placeholder="Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} />
+                                        <button type="button" onClick={() => this.handleRemoveSets(idx)}>
+                                            X
+                                        </button>
                                     </div>
                                 )}
                                 <Button variant="secondary" onClick={(e) => this.addSet(e)}>
