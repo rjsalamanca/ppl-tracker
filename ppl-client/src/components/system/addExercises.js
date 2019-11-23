@@ -5,7 +5,6 @@ class addExercises extends Component {
     state = {
         test: 'testing state',
         show: false,
-        day_name: '',
         exercise_name: '',
         exercises: [],
         exercise_error: 0,
@@ -14,12 +13,11 @@ class addExercises extends Component {
 
     handleClose = () => this.setState({ show: false });
     handleShow = () => this.setState({ show: true });
-    handleDayName = (e) => this.setState({ day_name: e.target.value });
     handleExerciseName = (e) => this.setState({ exercise_name: e.target.value });
     handleSetWeight = (e, idx) => {
         const { sets } = this.state;
         let newSets = [...sets];
-        newSets[idx].value = e.target.value;
+        newSets[idx].weight = e.target.value;
         this.setState({ sets: newSets });
     };
 
@@ -32,9 +30,10 @@ class addExercises extends Component {
 
     modalTrigger = () => {
         const { show, sets } = this.state;
+        this.props.clearDayError();
         this.setState({
             exercise_name: '',
-            sets: [{ value: null }],
+            sets: [{ weight: null }],
             exercise_error: 0
         });
         !!show ? this.setState({ show: false }) : this.setState({ show: true })
@@ -43,41 +42,31 @@ class addExercises extends Component {
     addSet = () => {
         const { sets } = this.state;
         let newSets = [...sets];
-        newSets.push({ value: null })
+        newSets.push({ weight: null })
         this.setState({ sets: newSets });
     }
 
-    saveExercise = () => {
+    saveExercise = async () => {
         const { exercises, exercise_name, sets } = this.state;
         let newExercises = [...exercises];
-        let tempSets = sets.filter((set) => set.value !== null);
-        console.log(exercise_name)
-        console.log(sets)
+        let tempSets = sets.filter((set) => set.weight !== null);
+
         if (exercise_name !== '') {
             for (let i = 0; i < sets.length; i++) {
-                if (sets[i].value === null) {
+                if (sets[i].weight === null) {
                     this.setState({ exercise_error: 1 })
                     break;
                 }
             }
             if (sets.length === tempSets.length) {
                 newExercises.push({ name: exercise_name, sets })
-                //     this.setState({ exercises: newExercises })
-                this.setState({
+                await this.setState({
                     exercises: newExercises,
                     exercise_error: 0
                 })
+                this.props.sendExercisesToDay(this.state.exercises);
                 this.handleClose();
             }
-
-            // if (tempSets.length !== 0) {
-            //     newExercises.push({ name: exercise_name, sets })
-            //     this.setState({ exercises: newExercises })
-            //     this.handleClose();
-            // } else {
-            //     console.log('error')
-            //     this.setState({ exercise_error: 1 });
-            // }
         } else {
             this.setState({ exercise_error: 2 });
         }
@@ -124,23 +113,25 @@ class addExercises extends Component {
                             Close
                         </Button>
                         <Button variant="primary" onClick={this.saveExercise}>
-                            Save Changes
+                            Save Excercise
                         </Button>
                     </Modal.Footer>
                 </Modal>
 
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Day Name: </Form.Label>
-                    <Form.Control type="input" onChange={(e) => this.handleDayName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
-                </Form.Group>
                 {exercises.map((exercise, idx) =>
                     <div key={`exercise-${idx}`}>
                         {exercise.name}
+                        <ul>
+                            {exercise.sets.map((set, setIdx) =>
+                                <li key={`${exercise.name}-set-${setIdx}`}>
+                                    <b>Set {setIdx + 1}</b> {set.weight}lbs x 10
+                                </li>
+                            )}
+                        </ul>
                     </div>
                 )}
                 <Form>
                     <Button className="mb-3" variant="danger" onClick={(e) => this.modalTrigger(e)}>Add Exercise</Button>
-                    <Button className="m-3 btn-block" variant="success" onClick={(e) => alert('finish')}>Finish</Button>
                 </Form>
             </div >
         );

@@ -47,7 +47,7 @@ class createRoutine extends Component {
 
                     <Button className="mb-3" variant="danger" onClick={(e) => this.createRoutine(e)}>Create</Button>
                 </Form>
-                {this.state.redirect ? <Redirect to="/ppl/routine/add_exercises" /> : <div></div>}
+                {this.state.redirect ? <Redirect to="/ppl/routine/add_day" /> : <div></div>}
             </div>
         );
     }
