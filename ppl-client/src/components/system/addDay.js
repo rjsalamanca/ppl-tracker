@@ -46,6 +46,10 @@ class addDay extends Component {
         }
     }
 
+    saveRoutine = async () => {
+
+    }
+
     render() {
         const { show, days, day_error } = this.state;
         return (
@@ -59,7 +63,7 @@ class addDay extends Component {
                                     {exercise.name}
                                     <ul>
                                         {exercise.sets.map((set, idx) =>
-                                            <li key={`exercise-${day.name}-set-${idx}`}>Set {idx} : {set.weight} x 10</li>
+                                            <li key={`exercise-${day.name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x 10</li>
                                         )}
                                     </ul>
                                 </li>
@@ -97,7 +101,7 @@ class addDay extends Component {
 
                 <Form>
                     <Button className="mb-3" variant="danger" onClick={(e) => this.modalTrigger(e)}>Add Day</Button>
-                    <Button className="m-3 btn-block" variant="success" onClick={(e) => alert('finish')}>Finish</Button>
+                    <Button className="m-3 btn-block" variant="success" onClick={(e) => this.saveRoutine}>Finish</Button>
                 </Form>
             </div>
         )

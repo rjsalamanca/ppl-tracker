@@ -1,8 +1,9 @@
 -- CREATE DATABASE ppl_tracker;
-DROP TABLE users;
+DROP TABLE exercise_sets;
 DROP TABLE exercises;
-DROP TABLE push;
+DROP TABLE routine_day;
 DROP TABLE routine;
+DROP TABLE users;
 
 CREATE TABLE users
 (
@@ -21,19 +22,28 @@ CREATE TABLE routine
     user_id INT REFERENCES users(id)
 );
 
-CREATE TABLE push
+CREATE TABLE routine_day
 (
     id SERIAL PRIMARY KEY,
+    day_name VARCHAR(100),
     routine_id INT REFERENCES routine(id),
-    exercise_id INT
+    exercise_id INT,
+    exercise_date VARCHAR(100)
 );
 
 CREATE TABLE exercises
 (
     id SERIAL PRIMARY KEY,
     exercise_name VARCHAR(500),
-    pounds INT,
-    rep_sets VARCHAR(500),
-    cycle INT REFERENCES push(id),
-    exercise_date VARCHAR(100)
+    reps INT,
+    routine_day_id INT REFERENCES routine_day(id)
 );
+
+CREATE TABLE exercise_sets
+(
+    id SERIAL PRIMARY KEY,
+    weight FLOAT,
+    sets INT,
+    reps INT,
+    exercise_id INT REFERENCES exercises(id)
+)
