@@ -23,6 +23,20 @@ class NavBar extends Component {
             <Nav.Item className="nav-item active">
               <Link className="nav-link" to='/'>Home <span className="sr-only">(current)</span></Link>
             </Nav.Item>
+            {
+              {
+                true:
+                  <Nav className="navbar-nav ml-auto">
+                    <Nav.Item className="nav-item active">
+                      <Link className="nav-link" to="/ppl/create_routine">Create Routine</Link>
+                    </Nav.Item>
+                    <Nav.Item className="nav-item active">
+                      <Link className="nav-link" to="/profile">Profile</Link>
+                    </Nav.Item>
+                  </Nav>
+              }[this.props.is_logged_in]
+            }
+
           </Nav>
           {
             {

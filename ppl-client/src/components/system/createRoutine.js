@@ -6,11 +6,13 @@ import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-ro
 class createRoutine extends Component {
     state = {
         redirect: false,
+        error_code: 0,
         routine_name: '',
+        routine_info: {},
         todays_date: moment(new Date()).format("MMM DD YYYY")
     };
 
-    handleRoutine = (e) => this.setState({ routine_name: e.target.value });
+    handleRoutine = (e) => this.setState({ error_code: 0, routine_name: e.target.value });
 
     createRoutine = async () => {
         const url = "http://localhost:3000/ppl/create_routine"
@@ -26,10 +28,8 @@ class createRoutine extends Component {
             });
 
             const data = await response.json();
-            console.log(data.routine_added)
-            console.log('test :', !!data.routine_added)
 
-            !!data.routine_added ? this.setState({ redirect: true }) : this.setState({ redirect: false });
+            !!data.routine_added ? this.setState({ redirect: true, routine_info: data.routine_info }) : this.setState({ redirect: false, error_code: data.error_code });
         } catch (err) {
             console.log(err.message);
         }
@@ -47,7 +47,15 @@ class createRoutine extends Component {
 
                     <Button className="mb-3" variant="danger" onClick={(e) => this.createRoutine(e)}>Create</Button>
                 </Form>
-                {this.state.redirect ? <Redirect to="/ppl/routine/add_day" /> : <div></div>}
+                {
+                    {
+                        1: <div>ERROR ALREADY EXISTS</div>
+                    }[this.state.error_code]
+                }
+                {this.state.redirect ? <Redirect to={{
+                    pathname: "/ppl/routine/add_day",
+                    state: { routine_info: this.state.routine_info }
+                }} /> : <div></div>}
             </div>
         );
     }

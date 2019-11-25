@@ -11,15 +11,23 @@ router.get('/routine', async (req, res) => {
 router.post('/create_routine', async (req, res) => {
     const { routine_name, todays_date } = req.body;
     const user_id = req.session.user_id;
-    const routineModel = new pplSystemModel(null, routine_name, todays_date, user_id)
-    const addRoutine = await routineModel.createRoutine();
+    const routineModel = new pplSystemModel(null, routine_name, null, todays_date, user_id)
+    const checkIfRoutineAlreadyCreated = await routineModel.getRoutineInfo()
 
-    addRoutine.rowCount === 1 ? res.json({ routine_added: true }) : res.json({ routine_added: false });
+    if (checkIfRoutineAlreadyCreated === undefined) {
+        const addRoutine = await routineModel.createRoutine();
+        const getRoutineInfo = await routineModel.getRoutineInfo();
+        addRoutine.rowCount === 1 ? res.json({ routine_added: true, routine_info: getRoutineInfo }) : res.json({ routine_added: false });
+    } else {
+        // Error Code 
+        // 1 = Already Created
+        res.json({ routine_added: false, error_code: 1 })
+    }
 });
 
-router.post('/routine/add_exercises', async (req, res) => {
-    console.log('test')
-});
+router.post('/routine/add_routine', async (req, res) => {
+    const { days } = req.body;
 
+});
 
 module.exports = router;

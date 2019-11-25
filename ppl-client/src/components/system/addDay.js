@@ -12,6 +12,10 @@ class addDay extends Component {
         days: []
     }
 
+    componentDidMount() {
+        console.log(this.props.location.state.routine_info)
+    }
+
     handleClose = () => this.setState({ show: false });
     handleShow = () => this.setState({ show: true });
     handleDayName = (e) => this.setState({ day_name: e.target.value });
@@ -47,7 +51,25 @@ class addDay extends Component {
     }
 
     saveRoutine = async () => {
+        const url = "http://localhost:3000/ppl/routine/add_routine"
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                credentials: 'include',
+                body: JSON.stringify(this.state)
+            });
 
+            // const data = await response.json();
+            // console.log(data.routine_added)
+            // console.log('test :', !!data.routine_added)
+
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 
     render() {
@@ -101,7 +123,7 @@ class addDay extends Component {
 
                 <Form>
                     <Button className="mb-3" variant="danger" onClick={(e) => this.modalTrigger(e)}>Add Day</Button>
-                    <Button className="m-3 btn-block" variant="success" onClick={(e) => this.saveRoutine}>Finish</Button>
+                    <Button className="m-3 btn-block" variant="success" onClick={(e) => this.saveRoutine()}>Finish</Button>
                 </Form>
             </div>
         )

@@ -27,8 +27,7 @@ CREATE TABLE routine_day
     id SERIAL PRIMARY KEY,
     day_name VARCHAR(100),
     routine_id INT REFERENCES routine(id),
-    exercise_id INT,
-    exercise_date VARCHAR(100)
+    routine_date VARCHAR(100)
 );
 
 CREATE TABLE exercises
