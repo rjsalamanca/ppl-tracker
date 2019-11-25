@@ -1,7 +1,7 @@
 const db = require('./conn.js');
 
 class PPL_System {
-    constructor(routine_id, routine_name, date_started, days, user_id) {
+    constructor(routine_id, routine_name, days, date_started, user_id) {
         this.routine_id = routine_id,
             this.routine_name = routine_name,
             this.days = days,

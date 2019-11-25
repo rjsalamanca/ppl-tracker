@@ -3,7 +3,6 @@ import { Card, Button, Form, Alert, Modal } from "react-bootstrap";
 
 class addExercises extends Component {
     state = {
-        test: 'testing state',
         show: false,
         exercise_name: '',
         exercises: [],

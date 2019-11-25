@@ -32,9 +32,8 @@ class addDay extends Component {
     saveExercisesToDay = async () => {
         const { days, day_name, temp_exercises } = this.state;
         let temp_days = [...days];
-        console.log('test')
+
         if (day_name !== '') {
-            console.log('temp_ex', temp_exercises)
             if (temp_exercises.length !== 0) {
                 temp_days.push({ name: day_name, exercises: temp_exercises })
                 await this.setState({
