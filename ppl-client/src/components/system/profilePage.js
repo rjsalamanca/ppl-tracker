@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
 import Calendar from 'react-calendar';
 import moment from 'moment';
-import { Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 
 
 class Profile extends Component {
     state = {
         date: new Date(),
-        routines: []
+        routines: [],
+        selectedRoutine: ''
     }
 
     async componentDidMount() {
         console.log('profile page loaded')
         this.checkForRoutines();
     }
-    // console.log('curr state: ', this.state)
+
+    handleRoutine = async (e) => {
+        if (e.target.value !== 'Select Routine') {
+            await this.setState({ selectedRoutine: e.target.value });
+            this.test();
+        }
+    }
+
+    test = () => {
+        console.log('test')
+    }
 
     checkForRoutines = async () => {
         const url = "http://localhost:3000/ppl/routine";
@@ -64,11 +75,21 @@ class Profile extends Component {
                         </div>
                         :
                         <div>
-                            {routines.map(ele => {
-                                return (
-                                    <p key={`routine${ele.id}`}>{ele.routine_name}</p>
-                                );
-                            })}
+                            <Form>
+                                <Form.Control onChange={(e) => this.handleRoutine(e)} as="select">
+                                    <option>Select A Routine</option>
+
+                                    {routines.length !== 0 ?
+                                        routines.map(routine =>
+                                            <option key={`routine${routine.id}`}>{routine.routine_name}</option>
+                                        )
+                                        :
+                                        <option disabled>Loading Routines...</option>
+                                    }
+
+                                </Form.Control>
+                            </Form>
+
                         </div>
                 }
 

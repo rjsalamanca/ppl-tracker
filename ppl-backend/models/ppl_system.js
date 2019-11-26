@@ -136,7 +136,9 @@ LOOP HERE
         try {
             const response = await db.result(`
                 INSERT INTO exercise_sets(weight, sets, reps, exercise_id)
-                VALUES($1, $2, $3, (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id = (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6) ))
+                VALUES($1, $2, $3, 
+                    (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id = 
+                        (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6)))
             `, [parseInt(set_info.weight), set, 10, exercise.name, day.name, this.routine_id]);
 
             return response;

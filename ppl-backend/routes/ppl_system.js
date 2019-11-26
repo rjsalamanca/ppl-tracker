@@ -40,32 +40,18 @@ router.post('/routine/add_routine', async (req, res) => {
                 if (addExercise.rowCount >= 1) {
                     exercise.sets.forEach(async (set, idx) => {
                         let addSets = await routine.addExerciseSet(exercise, (idx + 1), set, day);
+                        if (addSets.rowCount >= 1) {
+                            // added 
+                        } else {
+                            // Fail wasn't added
+                        }
                     })
                 } else {
-                    // FAIL SAFE
+                    // Fail wasn't added
                 }
             })
-            // let getDayInfo = await routine.getRoutineDayInfo(day);
-            //let storedDayInfo = getDayInfo.rows[0];
-
-            // if (storedDayInfo.rowCount > 0) {
-            //     day.exercises.forEach(async (exercise) => {
-            //         let addExercise = await routine.addExercise(exercise, storedDayInfo.id);
-            //         console.log(addExercise)
-            //         // if (addExercise.rowCount === 1) {
-            //         //     let getExerciseInfo = await routine.getExerciseInfo(exercise, storedDayInfo.id);
-            //         //     let storedExerciseInfo = getExerciseInfo.rows[0];
-
-            //         //     console.log(storedExerciseInfo)
-            //         // } else {
-            //         //     // fail
-            //         // }
-            //     })
-            // } else {
-            //     //fail
-            // }
         } else {
-            // fail wasn't added
+            // Fail wasn't added
         }
     })
 });
