@@ -29,28 +29,43 @@ router.post('/routine/add_routine', async (req, res) => {
     const { days, routine_info } = req.body;
     const user_id = req.session.user_id;
 
-    //{ id: 12,
-    //   routine_name: 'ppl',
-    //   date_started: 'Nov 25 2019',
-    //   user_id: 1 }
-
-    // console.log(routine_info);
-    //routine_id, routine_name, days, date_started, user_id
-    const routine = new pplSystemModel(routine_info.id, routine_info.routine_name, null, routine_info.date_started, user_id)
+    const routine = new pplSystemModel(routine_info.id, routine_info.routine_name, days, routine_info.date_started, user_id);
 
     days.forEach(async (day) => {
         let addDay = await routine.addRoutineDay(day);
 
-        if (addDay.rowCount === 1) {
-            let getDayInfo = await routine.getRoutineDayInfo(day);
-            console.log('test:', getDayInfo)
+        if (addDay.rowCount >= 1) {
+            day.exercises.forEach(async (exercise) => {
+                let addExercise = await routine.addExercise(day, exercise);
+                if (addExercise.rowCount >= 1) {
+                    exercise.sets.forEach(async (set, idx) => {
+                        let addSets = await routine.addExerciseSet(exercise, (idx + 1), set, day);
+                    })
+                } else {
+                    // FAIL SAFE
+                }
+            })
+            // let getDayInfo = await routine.getRoutineDayInfo(day);
+            //let storedDayInfo = getDayInfo.rows[0];
 
-            // day.exercises.forEach((exercise) => {
-            //     let addExercise = await routine.addExercise(exercise);
+            // if (storedDayInfo.rowCount > 0) {
+            //     day.exercises.forEach(async (exercise) => {
+            //         let addExercise = await routine.addExercise(exercise, storedDayInfo.id);
+            //         console.log(addExercise)
+            //         // if (addExercise.rowCount === 1) {
+            //         //     let getExerciseInfo = await routine.getExerciseInfo(exercise, storedDayInfo.id);
+            //         //     let storedExerciseInfo = getExerciseInfo.rows[0];
 
-            // })
+            //         //     console.log(storedExerciseInfo)
+            //         // } else {
+            //         //     // fail
+            //         // }
+            //     })
+            // } else {
+            //     //fail
+            // }
         } else {
-            // fail
+            // fail wasn't added
         }
     })
 });
