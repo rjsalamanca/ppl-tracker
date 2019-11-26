@@ -25,6 +25,14 @@ router.post('/create_routine', async (req, res) => {
     }
 });
 
+router.get('/get_full_routine/:routine?', async (req, res) => {
+    const { routine } = req.params;
+    const user_id = req.session.user_id;
+    const getFullRoutine = await pplSystemModel.getFullRoutine(routine, user_id);
+
+
+});
+
 router.post('/routine/add_routine', async (req, res) => {
     const { days, routine_info } = req.body;
     const user_id = req.session.user_id;

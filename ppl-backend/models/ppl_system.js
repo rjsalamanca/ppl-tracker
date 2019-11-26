@@ -20,6 +20,17 @@ class PPL_System {
         }
     }
 
+    static async getFullRoutine(routine_name, uid) {
+        try {
+            const response = await db.result(`
+                SELECT * FROM routine WHERE user_id = $1
+            `, [uid])
+            return response;
+        } catch (err) {
+            return err.msg;
+        }
+    }
+
     async test() {
         try {
 

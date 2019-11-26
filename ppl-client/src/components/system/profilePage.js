@@ -20,12 +20,21 @@ class Profile extends Component {
     handleRoutine = async (e) => {
         if (e.target.value !== 'Select Routine') {
             await this.setState({ selectedRoutine: e.target.value });
-            this.test();
+            this.getFullRoutine();
         }
     }
 
-    test = () => {
-        console.log('test')
+    getFullRoutine = async () => {
+        const url = `http://localhost:3000/ppl/get_full_routine/${this.state.selectedRoutine}`;
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                credentials: "include"
+            });
+            const data = await response.json();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     checkForRoutines = async () => {
