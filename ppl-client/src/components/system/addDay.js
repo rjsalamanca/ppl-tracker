@@ -8,12 +8,13 @@ class addDay extends Component {
         show: false,
         day_name: '',
         day_error: 0,
+        routine_info: {},
         temp_exercises: [],
         days: []
     }
 
     componentDidMount() {
-        console.log(this.props.location.state.routine_info)
+        this.setState({ routine_info: this.props.location.state.routine_info })
     }
 
     handleClose = () => this.setState({ show: false });
@@ -62,9 +63,7 @@ class addDay extends Component {
                 body: JSON.stringify(this.state)
             });
 
-            // const data = await response.json();
-            // console.log(data.routine_added)
-            // console.log('test :', !!data.routine_added)
+            const data = await response.json();
 
         } catch (err) {
             console.log(err.message);

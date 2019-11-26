@@ -31,6 +31,39 @@ class PPL_System {
         }
     }
 
+    async getRoutineDayInfo(day) {
+        try {
+            const response = await db.result(`
+                 SELECT * FROM routine_day WHERE day_name = $1 AND routine_id = $2
+            `, [day.name, this.routine_id])
+            return response;
+        } catch (err) {
+            return err.msg;
+        }
+    }
+
+    async getExerciseInfo() {
+        try {
+            const response = await db.result(`
+                 SELECT * FROM routine WHERE user_id = $1 AND routine_name = $2
+            `, [this.user_id, this.routine_name]);
+            return response;
+        } catch (err) {
+            return err.msg;
+        }
+    }
+
+    async getExerciseSetInfo() {
+        try {
+            const response = await db.one(`
+                 SELECT * FROM routine WHERE user_id = $1 AND routine_name = $2
+            `, [this.user_id, this.routine_name])
+            return response;
+        } catch (err) {
+            return err.msg;
+        }
+    }
+
     async createRoutine() {
         try {
             const response = await db.result(`
@@ -43,22 +76,24 @@ class PPL_System {
         }
     }
 
-    static async addRoutine() {
+    async addRoutineDay(day) {
         try {
             const response = await db.result(`
-                `)
-
+                INSERT INTO routine_day (day_name, routine_id, routine_date)
+                VALUES($1,$2,$3)
+            `, [day.name, this.routine_id, this.routine_date]);
             return response;
         } catch (err) {
             return err.msg;
         }
     }
 
-    static async addExercises() {
+    static async addExercises(exercise) {
         try {
             const response = await db.result(`
-                `)
-
+                INSERT INTO exercises (exercise_name, reps, routine_day_id)
+                VALUES($1,$2,$3)
+            `, [day.name, this.routine_id, this.routine_date]);
             return response;
         } catch (err) {
             return err.msg;
