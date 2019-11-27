@@ -23,8 +23,8 @@ class PPL_System {
     static async getFullRoutine(routine_name, uid) {
         try {
             const response = await db.result(`
-                SELECT * FROM routine WHERE user_id = $1
-            `, [uid])
+                SELECT  FROM routine WHERE routine_name = $1 user_id = $2
+            `, [routine, _name, uid])
             return response;
         } catch (err) {
             return err.msg;
