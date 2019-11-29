@@ -23,39 +23,18 @@ class PPL_System {
     static async getFullRoutine(routine_name, uid) {
         try {
             const response = await db.result(`
-                SELECT  FROM routine WHERE routine_name = $1 user_id = $2
-            `, [routine, _name, uid])
-            return response;
-        } catch (err) {
-            return err.msg;
-        }
-    }
-
-    async test() {
-        try {
-
-            let routine_day_values = this.days.map((day) => `( '${day.name}', $1)`).join(',\n')
-            console.log(routine_day_values)
-            const testing = `
-                WITH routine_day_insert AS (
-                    INSERT INTO routine_day (day_name ,routine_id) 
-                    VALUES( 'bench day', $1)
-LOOP HERE
-                    RETURNING id
-                ),
-                exercise_insert AS (
-                    INSERT INTO exercises (exercise_name ,routine_day_id) 
-                    VALUES ('Bench Press', (SELECT id FROM routine_day_insert))
-LOOP HERE
-                    RETURNING id
-                )
-                INSERT INTO exercise_sets(weight , reps, exercise_id) 
-LOOP HERE
-                VALUES(135,10, (SELECT id FROM exercise_insert))
-            `;
-
-            const response = await db.result(`
-            `, [this.routine_id])
+            SELECT users.id AS user_id,
+                routine.id AS routine_id,routine.routine_name, 
+                routine_day.day_name, routine_date,
+                exercises.exercise_name,
+                exercise_sets.weight,exercise_sets.sets,exercise_sets.reps
+            FROM users
+            INNER JOIN routine ON users.id = routine.user_id
+            INNER JOIN routine_day ON routine.id = routine_day.routine_id
+            INNER JOIN exercises ON exercises.routine_day_id = routine_day.id
+            INNER JOIN exercise_sets ON exercise_sets.exercise_id = exercises.id
+            WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
+            ORDER BY routine_day.id`, [uid, routine_name]);
             return response;
         } catch (err) {
             return err.msg;

@@ -45,4 +45,4 @@ CREATE TABLE exercise_sets
     sets INT,
     reps INT,
     exercise_id INT REFERENCES exercises(id)
-)
+);
