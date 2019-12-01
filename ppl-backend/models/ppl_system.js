@@ -22,7 +22,7 @@ class PPL_System {
 
     static async getFullRoutine(routine_name, uid) {
         try {
-            const response = await db.result(`
+            const response = await db.any(`
             SELECT users.id AS user_id,
                 routine.id AS routine_id,routine.routine_name, 
                 routine_day.day_name, routine_date,
