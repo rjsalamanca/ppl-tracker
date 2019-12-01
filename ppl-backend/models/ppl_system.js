@@ -23,18 +23,32 @@ class PPL_System {
     static async getFullRoutine(routine_name, uid) {
         try {
             const response = await db.any(`
-            SELECT users.id AS user_id,
-                routine.id AS routine_id,routine.routine_name, 
-                routine_day.day_name, routine_date,
-                exercises.exercise_name,
-                exercise_sets.weight,exercise_sets.sets,exercise_sets.reps
-            FROM users
-            INNER JOIN routine ON users.id = routine.user_id
-            INNER JOIN routine_day ON routine.id = routine_day.routine_id
-            INNER JOIN exercises ON exercises.routine_day_id = routine_day.id
-            INNER JOIN exercise_sets ON exercise_sets.exercise_id = exercises.id
-            WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
-            ORDER BY routine_day.id`, [uid, routine_name]);
+            SELECT json_agg(USR) 
+            FROM (
+                SELECT users.id AS user_id, 
+                    routine.id AS routine_id, 
+                    routine.routine_name AS routine_name,
+                    (SELECT json_agg(RD)
+                    FROM(
+                        SELECT routine_day.day_name, 
+                            routine_day.id AS routine_day_id,
+                            (SELECT json_agg(EXER)
+                            FROM(
+                                SELECT * FROM exercises
+                                WHERE exercises.routine_day_id = routine_day_id
+                                ) AS EXER
+                            ) AS exercises
+                        FROM routine
+                        INNER JOIN routine_day ON routine.id = routine_day.routine_id
+                    ) AS RD
+                ) AS ROUTINE_DAYS
+                FROM users
+                INNER JOIN routine ON users.id = routine.user_id
+                WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
+                AND ROUTINE_DAYS.routine_id = USR.routine_id
+            ) AS USR
+
+            `, [uid, routine_name]);
             return response;
         } catch (err) {
             return err.msg;

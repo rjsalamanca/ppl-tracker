@@ -29,38 +29,7 @@ router.get('/get_full_routine/:routine?', async (req, res) => {
     const { routine } = req.params;
     const user_id = req.session.user_id;
     const getFullRoutine = await pplSystemModel.getFullRoutine(routine, user_id);
-    let routineJson = {};
-    console.log('bruh:', getFullRoutine)
-    getFullRoutine.rows.forEach((ele, idx) => {
-        if (idx === 0) {
-            // Initial get, we need to format our JSON
-            routineJson['user_id'] = ele.user_id;
-            routineJson['routine_id'] = ele.routine_id;
-            routineJson['routine_name'] = ele.routine_name;
-            routineJson['routine_days'] = [];
-
-            let temp = `{
-                    "day_name": "${ele.day_name}",
-                    "exercises": [{
-                        "exercise_name": "${ele.exercise_name}",
-                        "sets": [{
-                            "set" : "${ele.sets}",
-                            "weight" : "${ele.weight}",
-                            "reps" : "${ele.reps}"
-                        }]
-                    }]
-            }`;
-            routineJson.routine_days.push(JSON.parse(temp))
-        } else {
-            // for (let i = 0; i < routineJson.routine_days.length; i++) {
-            //     if (routineJson.routine_days[i].includes(ele.day_name)) {
-
-            //     }
-            // }
-        }
-    });
-
-    console.log(routineJson)
+    console.log('bruh:', JSON.stringify(getFullRoutine))
 });
 
 router.post('/routine/add_routine', async (req, res) => {
