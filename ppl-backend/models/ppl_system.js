@@ -32,6 +32,7 @@ class PPL_System {
                     FROM(
                         SELECT routine_day.day_name, 
                             routine_day.id AS routine_day_id,
+                            routine_day.routine_id,
                             (SELECT json_agg(EXER)
                             FROM(
                                 SELECT * FROM exercises
@@ -41,11 +42,11 @@ class PPL_System {
                         FROM routine
                         INNER JOIN routine_day ON routine.id = routine_day.routine_id
                     ) AS RD
+                    WHERE RD.routine_id = routine.id
                 ) AS ROUTINE_DAYS
                 FROM users
                 INNER JOIN routine ON users.id = routine.user_id
                 WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
-                AND ROUTINE_DAYS.routine_id = USR.routine_id
             ) AS USR
 
             `, [uid, routine_name]);
