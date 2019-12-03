@@ -29,7 +29,7 @@ router.get('/get_full_routine/:routine?', async (req, res) => {
     const { routine } = req.params;
     const user_id = req.session.user_id;
     const getFullRoutine = await pplSystemModel.getFullRoutine(routine, user_id);
-    console.log('bruh:', JSON.stringify(getFullRoutine))
+    getFullRoutine[0].json_agg === null ? res.json({ routine_found: false }) : res.json({ routine_found: true, routine: getFullRoutine[0].json_agg[0] });
 });
 
 router.post('/routine/add_routine', async (req, res) => {

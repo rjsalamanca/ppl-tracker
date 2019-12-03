@@ -47,9 +47,7 @@ class PPL_System {
                 FROM users
                 INNER JOIN routine ON users.id = routine.user_id
                 WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
-            ) AS USR
-
-            `, [uid, routine_name]);
+            ) AS USR `, [uid, routine_name]);
             return response;
         } catch (err) {
             return err.msg;
