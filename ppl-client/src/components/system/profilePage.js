@@ -4,16 +4,17 @@ import moment from 'moment';
 import { Form, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 
+import RoutineInformation from './routineInformation';
 
 class Profile extends Component {
     state = {
         date: new Date(),
         routines: [],
-        selectedRoutine: ''
+        selectedRoutine: '',
+        loadedRoutine: { routine_found: false }
     }
 
-    async componentDidMount() {
-        console.log('profile page loaded')
+    componentDidMount() {
         this.checkForRoutines();
     }
 
@@ -32,7 +33,7 @@ class Profile extends Component {
                 credentials: "include"
             });
             const data = await response.json();
-            console.log(data)
+            !!data.routine_found ? this.setState({ loadedRoutine: data }) : this.setState({ loadedRoutine: { routine_found: false } })
         } catch (err) {
             console.log(err);
         }
@@ -43,19 +44,11 @@ class Profile extends Component {
         try {
             const response = await fetch(url, {
                 method: "GET",
-                // headers: {
-                //     "Accept": "application/json",
-                //     "Content-Type": "application/x-www-form-urlencoded",
-                // },
                 credentials: "include"
             });
 
             const data = await response.json();
-            if (data.routine_found === true) {
-                this.setState({ routines: data.routines });
-            }
-            console.log(data)
-            //data.routine_found === true ? this.setState({ routines: data.routines }) : console.log('No Found');
+            if (data.routine_found === true) this.setState({ routines: data.routines });
         } catch (err) {
             console.log(err);
         }
@@ -67,8 +60,7 @@ class Profile extends Component {
     }
 
     render() {
-
-        const { routines } = this.state;
+        const { routines, loadedRoutine } = this.state;
         return (
             <div>
                 <Calendar
@@ -99,6 +91,8 @@ class Profile extends Component {
 
                                 </Form.Control>
                             </Form>
+
+                            <RoutineInformation routine={this.state.loadedRoutine} /> :
 
                         </div>
                 }
