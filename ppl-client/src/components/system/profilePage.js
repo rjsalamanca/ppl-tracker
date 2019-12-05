@@ -33,7 +33,7 @@ class Profile extends Component {
                 credentials: "include"
             });
             const data = await response.json();
-            !!data.routine_found ? this.setState({ loadedRoutine: data }) : this.setState({ loadedRoutine: { routine_found: false } })
+            !!data.routine_found ? this.setState({ loadedRoutine: data }) : this.setState({ loadedRoutine: { routine_found: false } });
         } catch (err) {
             console.log(err);
         }
@@ -91,9 +91,7 @@ class Profile extends Component {
 
                                 </Form.Control>
                             </Form>
-
-                            <RoutineInformation routine={this.state.loadedRoutine} /> :
-
+                            <RoutineInformation routine={loadedRoutine} />
                         </div>
                 }
 
