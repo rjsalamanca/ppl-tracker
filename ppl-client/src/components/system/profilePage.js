@@ -34,6 +34,7 @@ class Profile extends Component {
             });
             const data = await response.json();
             !!data.routine_found ? this.setState({ loadedRoutine: data }) : this.setState({ loadedRoutine: { routine_found: false } });
+            console.log(data)
         } catch (err) {
             console.log(err);
         }

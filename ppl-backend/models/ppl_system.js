@@ -33,12 +33,23 @@ class PPL_System {
                         SELECT routine_day.day_name, 
                             routine_day.id AS routine_day_id,
                             routine_day.routine_id,
-                            (SELECT json_agg(EXER)
+                            (SELECT json_agg(exer)
                             FROM(
-                                SELECT * FROM exercises
+                                SELECT exercise_name,
+                                routine_day_id,
+                                (SELECT json_agg(single_set)
+                                FROM(
+                                        SELECT weight,
+                                            sets AS set,
+                                            reps
+                                        FROM exercise_sets
+                                        WHERE exercise_sets.exercise_id = exercises.id
+                                    )AS single_set
+                                ) AS sets
+                                FROM exercises
                                 WHERE exercises.routine_day_id = routine_day_id
-                                ) AS EXER
-                            ) AS exercises
+                            ) AS exer
+                        ) AS exercises
                         FROM routine
                         INNER JOIN routine_day ON routine.id = routine_day.routine_id
                     ) AS RD

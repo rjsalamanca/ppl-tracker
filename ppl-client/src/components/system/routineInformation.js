@@ -32,14 +32,15 @@ class RoutineInformation extends Component {
                                 {routine_info.routine.routine_days.map((day) =>
                                     <div key={`day-${day.day_name}`}>
                                         <h3>{day.day_name}</h3>
+                                        Todays Routine:
                                         <ul>
                                             {day.exercises.map((exercise, idx) =>
                                                 <li key={`exercise-${day.day_name}-${idx}`}>
                                                     {exercise.exercise_name}
                                                     <ul>
-                                                        {/* {exercise.sets.map((set, idx) =>
+                                                        {exercise.sets.map((set, idx) =>
                                                             <li key={`exercise-${day.day_name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x 10</li>
-                                                        )} */}
+                                                        )}
                                                     </ul>
                                                 </li>
                                             )}
