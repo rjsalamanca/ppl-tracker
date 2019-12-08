@@ -11,11 +11,11 @@ class RoutineInformation extends Component {
         await this.setState({ routine_info: this.props.routine });
     }
 
-    componentWillReceiveProps(newProps) {
+    async componentWillReceiveProps(newProps) {
         const oldProps = this.props;
         if (oldProps !== newProps) {
-            this.setState({ routine_info: newProps.routine });
-            console.log(newProps.routine)
+            await this.setState({ routine_info: newProps.routine });
+            console.log('yo:', newProps.routine)
         }
     }
 
