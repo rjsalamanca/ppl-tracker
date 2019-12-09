@@ -28,10 +28,11 @@ class PPL_System {
                 SELECT users.id AS user_id, 
                     routine.id AS routine_id, 
                     routine.routine_name AS routine_name,
+                    routine.date_started,
                     (SELECT json_agg(RD)
                     FROM(
                         SELECT routine_day.day_name, 
-                            routine_day.id AS brobrobro,
+                            routine_day.id AS routine_day_id,
                             routine_day.routine_id,
                             (SELECT json_agg(EXER)
                                 FROM(
