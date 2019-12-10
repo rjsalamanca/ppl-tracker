@@ -4,6 +4,8 @@ import { Form, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import { get } from 'http';
 
+import './routineInformation.css'
+
 class RoutineInformation extends Component {
     state = {
         routine_info: {},
@@ -40,6 +42,83 @@ class RoutineInformation extends Component {
         const { routine_info, todays_workout } = this.state;
         return (
             <>
+                <section id="section-pricing" className="section-pricing">
+                    <div className="container">
+                        <div className="pricing-table">
+                            <div className="row">
+                                {/* <!-- First package --> */}
+                                <div className="col-md-4">
+                                    <div className="package">
+                                        <div className="header-package-1 text-center">
+                                            <h3>Basic</h3>
+                                            <div className="price"><h3>$10</h3></div>
+                                        </div>
+
+                                        {/* <!-- details --> */}
+                                        <div className="package-features text-center">
+                                            <ul>
+                                                <li>Bandwith Unlimited</li>
+                                                <li>Disk Space Unlimited</li>
+                                                <li>Unlimited Sub Domain</li>
+                                                <li>Free Domain</li>
+                                                <li>Free Support</li>
+                                            </ul>
+                                            <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* <!-- Second package --> */}
+                                <div className="col-md-4">
+                                    <div className="package">
+                                        <div className="header-package-2 text-center">
+                                            <h3>Standard</h3>
+                                            <div className="price"><h3>$25</h3></div>
+                                        </div>
+
+                                        {/* <!-- details --> */}
+                                        <div className="package-features text-center">
+                                            <ul>
+                                                <li>Bandwith Unlimited</li>
+                                                <li>Disk Space Unlimited</li>
+                                                <li>Unlimited Sub Domain</li>
+                                                <li>Free Domain</li>
+                                                <li>Free Support</li>
+                                                <li>Extra</li>
+                                            </ul>
+                                            <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* <!-- Third package --> */}
+                                <div className="col-md-4">
+                                    <div className="package">
+                                        <div className="header-package-3 text-center">
+                                            <h3>Advanced</h3>
+                                            <div className="price">
+                                                <h3>$50</h3>
+                                            </div>
+                                        </div>
+
+                                        {/* <!-- details --> */}
+                                        <div className="package-features text-center">
+                                            <ul>
+                                                <li>Bandwith Unlimited</li>
+                                                <li>Disk Space Unlimited</li>
+                                                <li>Unlimited Sub Domain</li>
+                                                <li>Free Domain</li>
+                                                <li>Free Support</li>
+                                            </ul>
+                                            <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 {
                     Object.entries(routine_info).length === 0 ?
                         <div>LOADING</div> :
@@ -54,11 +133,11 @@ class RoutineInformation extends Component {
                                             {day.exercises.map((exercise, idx) =>
                                                 <li key={`exercise-${day.day_name}-${idx}`}>
                                                     {exercise.exercise_name}
-                                                    <ul>
+                                                    {/* <ul>
                                                         {exercise.sets.map((set, idx) =>
                                                             <li key={`exercise-${day.day_name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x 10</li>
                                                         )}
-                                                    </ul>
+                                                    </ul> */}
                                                 </li>
                                             )}
                                         </ul>

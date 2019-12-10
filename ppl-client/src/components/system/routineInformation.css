@@ -1,0 +1,152 @@
+/* ============================================================================================== 
+This copyright notice must be kept untouched in the stylesheet at all times.
+The original version of this stylesheet and the associated (x)html 
+is available at https://www.script-tutorials.com/responsive-pricing-table-with-bootstrap/
+Copyright (c) Script Tutorials. All rights reserved.
+This stylesheet and the associated (x)html may be modified in any way to fit your requirements.
+================================================================================================= */
+
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  outline: none;
+}
+a:focus {
+  background-color: #a89d8a;
+}
+header {
+  background-color: rgba(33, 33, 33, 0.9);
+  color: #fff;
+  display: block;
+  font: 14px/1.3 Arial,sans-serif;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+header h2{
+  font-size: 16px;
+  margin: 0 auto;
+  padding: 10px 0;
+  width: 80%;
+  text-align: center;
+}
+
+header a, header a:visited, header a:hover, header a:active {
+  text-decoration: none;
+  color: #fcfcfc; 
+}
+
+.section-pricing {
+  padding:50px 0;
+}
+
+.pricing-table {
+  font-family:Roboto, sans-serif;
+  margin-top:35px;
+}
+
+.package {
+  margin:20px 0;
+  overflow:auto;
+}
+
+.header-package-1,.header-package-2,.header-package-3 {
+  background:green;
+  border-radius:4px 4px 0 0;
+  color:#fff;
+  font-weight:700;
+}
+
+.header-package-1 {
+  margin-top:30px;
+  padding-bottom:15px;
+  padding-top:15px;
+}
+
+.header-package-2 {
+  padding-bottom:30px;
+  padding-top:30px;
+}
+
+.header-package-3 {
+  margin-top:30px;
+  padding-bottom:15px;
+  padding-top:15px;
+}
+
+.header-package-1 h3,.header-package-2 h3,.header-package-3 h3 {
+  color:#fff;
+  font-weight:800;
+}
+
+.price {
+  border:2px solid #fff;
+  color:green;
+  margin:0 auto;
+  padding-bottom:20px;
+  padding-top:15px;
+  width:100px;
+}
+
+.recomended h4 {
+  border:2px dashed #FFF;
+  display:inline-block;
+  left:15px;
+  padding:10px;
+  position:absolute;
+  transform:rotate(-45deg);
+}
+
+.package-features {
+  border:1px solid #E3E3E3;
+}
+
+.package-features ul {
+  padding:0;
+}
+
+.package-features ul li {
+  border-bottom:2px solid #e3e3e3;
+  list-style:none;
+  overflow:auto;
+  padding:20px 10px;
+}
+
+/* buttons */
+.wrp-button {
+  padding:26px 10px 36px;
+}
+
+.package-features .standard-button {
+  margin:0;
+  padding:15px 20px;
+}
+
+.standard-button {
+  background:green;
+  border:0;
+  border-radius:4px;
+  color:#fff;
+  font-family:sans-serif;
+  font-size:16px;
+  font-weight:700;
+  line-height:inherit;
+  margin:5px;
+  padding:15px 30px;
+  text-transform:uppercase;
+  -webkit-transition:all ease .25s;
+  transition:all ease .25s;
+}
+
+.standard-button:hover {
+  color:#fff;
+  opacity:0.8;
+}
+
+.standard-button:focus {
+  color:#fff;
+}
