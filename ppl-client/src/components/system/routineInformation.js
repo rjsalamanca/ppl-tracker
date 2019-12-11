@@ -56,95 +56,80 @@ class RoutineInformation extends Component {
                                 <section id="section-pricing" className="section-pricing">
                                     <h2>Routine: {routine_info.routine.routine_name}</h2>
 
-                                    {routine_info.routine.routine_days.map((day) =>
-                                        <div key={`day-${day.day_name}`}>
-                                            <h3>{day.day_name}</h3>
-                                            <ul>
-                                                {day.exercises.map((exercise, idx) =>
-                                                    <li key={`exercise-${day.day_name}-${idx}`}>
-                                                        {exercise.exercise_name}
-                                                        {/* <ul>
-                                                        {exercise.sets.map((set, idx) =>
-                                                            <li key={`exercise-${day.day_name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x 10</li>
-                                                        )}
-                                                    </ul> */}
-                                                    </li>
-                                                )}
-                                            </ul>
-                                        </div>
-                                    )}
+                                    {!!workout_days.hasOwnProperty('today') ?
+                                        <div className="container">
+                                            <div className="pricing-table">
+                                                <div className="row center-row">
+                                                    {/* <!-- First package --> */}
+                                                    <div className="packageCol">
+                                                        <div className="package">
+                                                            <div className="header-package-1 text-center">
+                                                                <h3>Yesterday: {workout_days.yesterday.day_name}</h3>
+                                                            </div>
 
-                                    <div className="container">
-                                        <div className="pricing-table">
-                                            <div className="row center-row">
-                                                {/* <!-- First package --> */}
-                                                <div className="packageCol">
-                                                    <div className="package">
-                                                        <div className="header-package-1 text-center">
-                                                            <h3>Yesterday</h3>
-                                                        </div>
-
-                                                        {/* <!-- details --> */}
-                                                        <div className="package-features text-center">
-                                                            <ul>
-                                                                <li>Bandwith Unlimited</li>
-                                                                <li>Disk Space Unlimited</li>
-                                                                <li>Unlimited Sub Domain</li>
-                                                                <li>Free Domain</li>
-                                                                <li>Free Support</li>
-                                                            </ul>
-                                                            <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div>
+                                                            {/* <!-- details --> */}
+                                                            <div className="package-features text-center">
+                                                                <ul>
+                                                                    {workout_days.yesterday.exercises.map((exercise, idx) =>
+                                                                        <li key={`exercise-${workout_days.yesterday.day_name}-${idx}`}>
+                                                                            {exercise.exercise_name}
+                                                                        </li>
+                                                                    )}
+                                                                </ul>
+                                                                {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                {/* <!-- Second package --> */}
-                                                <div className="packageCol">
-                                                    <div className="package current">
-                                                        <div className="header-package-2 text-center">
-                                                            <h3>Todays Workout: {!!workout_days.hasOwnProperty('today') ? workout_days.today.day_name : <span></span>}</h3>
-                                                        </div>
+                                                    {/* <!-- Second package --> */}
+                                                    <div className="packageCol">
+                                                        <div className="package current">
+                                                            <div className="header-package-2 text-center">
+                                                                <h3>Todays Workout: {workout_days.today.day_name}</h3>
+                                                            </div>
 
-                                                        {/* <!-- details --> */}
-                                                        <div className="package-features text-center">
-                                                            <ul>
-                                                                <li>Bandwith Unlimited</li>
-                                                                <li>Disk Space Unlimited</li>
-                                                                <li>Unlimited Sub Domain</li>
-                                                                <li>Free Domain</li>
-                                                                <li>Free Support</li>
-                                                                <li>Extra</li>
-                                                            </ul>
-                                                            <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div>
+                                                            {/* <!-- details --> */}
+                                                            <div className="package-features text-center">
+                                                                <ul>
+                                                                    {workout_days.today.exercises.map((exercise, idx) =>
+                                                                        <li key={`exercise-${workout_days.today.day_name}-${idx}`}>
+                                                                            {exercise.exercise_name}
+                                                                        </li>
+                                                                    )}
+                                                                </ul>
+                                                                {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                {/* <!-- Third package --> */}
-                                                <div className="packageCol">
-                                                    <div className="package">
-                                                        <div className="header-package-1 text-center">
-                                                            <h3>Tomorrow</h3>
-                                                        </div>
+                                                    {/* <!-- Third package --> */}
+                                                    <div className="packageCol">
+                                                        <div className="package">
+                                                            <div className="header-package-1 text-center">
+                                                                <h3>Tomorrow: {workout_days.tomorrow.day_name}</h3>
+                                                            </div>
 
-                                                        {/* <!-- details --> */}
-                                                        <div className="package-features text-center">
-                                                            <ul>
-                                                                <li>Bandwith Unlimited</li>
-                                                                <li>Disk Space Unlimited</li>
-                                                                <li>Unlimited Sub Domain</li>
-                                                                <li>Free Domain</li>
-                                                                <li>Free Support</li>
-                                                            </ul>
-                                                            <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div>
+                                                            {/* <!-- details --> */}
+                                                            <div className="package-features text-center">
+                                                                <ul>
+                                                                    {workout_days.tomorrow.exercises.map((exercise, idx) =>
+                                                                        <li key={`exercise-${workout_days.tomorrow.day_name}-${idx}`}>
+                                                                            {exercise.exercise_name}
+                                                                        </li>
+                                                                    )}
+                                                                </ul>
+                                                                {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                        : ''
+                                    }
                                 </section>
-                            </div>
+                            </div >
                             :
                             <div>Select a Routine Above</div>
                 }
