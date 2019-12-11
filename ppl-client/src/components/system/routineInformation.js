@@ -10,7 +10,7 @@ class RoutineInformation extends Component {
     state = {
         routine_info: {},
         date_between: 0,
-        todays_workout: ''
+        workout_days: {}
     }
 
     async componentDidMount() {
@@ -25,21 +25,27 @@ class RoutineInformation extends Component {
                 let start_date = moment(this.state.routine_info.routine.date_started, "MMM-DD-YYYY");
                 let current = moment(new Date(), "MMM DD YYYY");
                 await this.setState({ date_between: Math.ceil(moment.duration(current.diff(start_date)).asDays()) })
-                this.getTodaysWorkout();
+                await this.getTodaysWorkout();
             }
         }
     }
 
     getTodaysWorkout() {
-        const { routine_info, date_between, todays_workout } = this.state;
+        const { routine_info, date_between } = this.state;
         const days = routine_info.routine.routine_days;
         const curr_day_ind = (date_between % days.length) - 1;
-        let curr_workout;
-        curr_day_ind < 0 ? this.setState({ todays_workout: days[days.length - 1] }) : this.setState({ todays_workout: days[curr_day_ind] });
+        let temp_days = {};
+        if (curr_day_ind <= 0) {
+            temp_days = { today: days[days.length - 1], tomorrow: days[0] };
+            (days.length - 1 === 0) ? temp_days['yesterday'] = days[days.length - 1] : temp_days['yesterday'] = days[days.length - 2]
+        } else {
+            temp_days = { today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1], yesterday: days[curr_day_ind - 1] };
+        }
+        this.setState({ workout_days: temp_days });
     }
 
     render() {
-        const { routine_info, todays_workout } = this.state;
+        const { routine_info, workout_days } = this.state;
         return (
             <>
                 {
@@ -49,6 +55,24 @@ class RoutineInformation extends Component {
                             <div>
                                 <section id="section-pricing" className="section-pricing">
                                     <h2>Routine: {routine_info.routine.routine_name}</h2>
+
+                                    {routine_info.routine.routine_days.map((day) =>
+                                        <div key={`day-${day.day_name}`}>
+                                            <h3>{day.day_name}</h3>
+                                            <ul>
+                                                {day.exercises.map((exercise, idx) =>
+                                                    <li key={`exercise-${day.day_name}-${idx}`}>
+                                                        {exercise.exercise_name}
+                                                        {/* <ul>
+                                                        {exercise.sets.map((set, idx) =>
+                                                            <li key={`exercise-${day.day_name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x 10</li>
+                                                        )}
+                                                    </ul> */}
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        </div>
+                                    )}
 
                                     <div className="container">
                                         <div className="pricing-table">
@@ -78,7 +102,7 @@ class RoutineInformation extends Component {
                                                 <div className="packageCol">
                                                     <div className="package current">
                                                         <div className="header-package-2 text-center">
-                                                            <h3>Todays Workout</h3>
+                                                            <h3>Todays Workout: {!!workout_days.hasOwnProperty('today') ? workout_days.today.day_name : <span></span>}</h3>
                                                         </div>
 
                                                         {/* <!-- details --> */}
@@ -120,24 +144,6 @@ class RoutineInformation extends Component {
                                         </div>
                                     </div>
                                 </section>
-                                Todays Routine: {todays_workout.day_name}
-                                {routine_info.routine.routine_days.map((day) =>
-                                    <div key={`day-${day.day_name}`}>
-                                        <h3>{day.day_name}</h3>
-                                        <ul>
-                                            {day.exercises.map((exercise, idx) =>
-                                                <li key={`exercise-${day.day_name}-${idx}`}>
-                                                    {exercise.exercise_name}
-                                                    {/* <ul>
-                                                        {exercise.sets.map((set, idx) =>
-                                                            <li key={`exercise-${day.day_name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x 10</li>
-                                                        )}
-                                                    </ul> */}
-                                                </li>
-                                            )}
-                                        </ul>
-                                    </div>
-                                )}
                             </div>
                             :
                             <div>Select a Routine Above</div>
