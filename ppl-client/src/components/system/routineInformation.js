@@ -82,8 +82,8 @@ class RoutineInformation extends Component {
                                                     </div>
 
                                                     {/* <!-- Second package --> */}
-                                                    <div className="packageCol">
-                                                        <div className="package current">
+                                                    <div className="packageCol current">
+                                                        <div className="package">
                                                             <div className="header-package-2 text-center">
                                                                 <h3>Todays Workout: {workout_days.today.day_name}</h3>
                                                             </div>
