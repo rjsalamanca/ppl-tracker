@@ -4,7 +4,7 @@ import { Form, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import { get } from 'http';
 
-import './routineInformation.css'
+import './routineInformationStyle.css'
 
 class RoutineInformation extends Component {
     state = {
@@ -54,7 +54,9 @@ class RoutineInformation extends Component {
                         !!this.state.routine_info.routine_found ?
                             <div>
                                 <section id="section-pricing" className="section-pricing">
-                                    <h2>Routine: {routine_info.routine.routine_name}</h2>
+                                    <h2 className="routineName text-center">
+                                        {routine_info.routine.routine_name}
+                                    </h2>
 
                                     {!!workout_days.hasOwnProperty('today') ?
                                         <div className="container">
@@ -64,18 +66,19 @@ class RoutineInformation extends Component {
                                                     <div className="packageCol">
                                                         <div className="package">
                                                             <div className="header-package-1 text-center">
-                                                                <h3>Yesterday: {workout_days.yesterday.day_name}</h3>
+                                                                <h3>YESTERDAY</h3>
                                                             </div>
 
                                                             {/* <!-- details --> */}
                                                             <div className="package-features text-center">
-                                                                <ul>
+                                                                Workout: {workout_days.yesterday.day_name}
+                                                                <ol>
                                                                     {workout_days.yesterday.exercises.map((exercise, idx) =>
                                                                         <li key={`exercise-${workout_days.yesterday.day_name}-${idx}`}>
                                                                             {exercise.exercise_name}
                                                                         </li>
                                                                     )}
-                                                                </ul>
+                                                                </ol>
                                                                 {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
                                                             </div>
                                                         </div>
@@ -85,18 +88,18 @@ class RoutineInformation extends Component {
                                                     <div className="packageCol current">
                                                         <div className="package">
                                                             <div className="header-package-2 text-center">
-                                                                <h3>Todays Workout: {workout_days.today.day_name}</h3>
+                                                                <h3>TODAY</h3>
                                                             </div>
-
                                                             {/* <!-- details --> */}
                                                             <div className="package-features text-center">
-                                                                <ul>
+                                                                Workout: {workout_days.today.day_name}
+                                                                <ol>
                                                                     {workout_days.today.exercises.map((exercise, idx) =>
                                                                         <li key={`exercise-${workout_days.today.day_name}-${idx}`}>
                                                                             {exercise.exercise_name}
                                                                         </li>
                                                                     )}
-                                                                </ul>
+                                                                </ol>
                                                                 {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
                                                             </div>
                                                         </div>
@@ -106,18 +109,18 @@ class RoutineInformation extends Component {
                                                     <div className="packageCol">
                                                         <div className="package">
                                                             <div className="header-package-1 text-center">
-                                                                <h3>Tomorrow: {workout_days.tomorrow.day_name}</h3>
+                                                                <h3>TOMORROW</h3>
                                                             </div>
-
                                                             {/* <!-- details --> */}
                                                             <div className="package-features text-center">
-                                                                <ul>
+                                                                Workout: {workout_days.tomorrow.day_name}
+                                                                <ol>
                                                                     {workout_days.tomorrow.exercises.map((exercise, idx) =>
                                                                         <li key={`exercise-${workout_days.tomorrow.day_name}-${idx}`}>
                                                                             {exercise.exercise_name}
                                                                         </li>
                                                                     )}
-                                                                </ul>
+                                                                </ol>
                                                                 {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
                                                             </div>
                                                         </div>

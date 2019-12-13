@@ -13,14 +13,6 @@ This stylesheet and the associated (x)html may be modified in any way to fit you
   padding: 0;
 }
 
-a {
-  outline: none;
-}
-
-a:focus {
-  background-color: #a89d8a;
-}
-
 header {
   background-color: rgba(33, 33, 33, 0.9);
   color: #fff;
@@ -49,7 +41,7 @@ header a, header a:visited, header a:hover, header a:active {
 }
 
 .section-pricing {
-  padding:50px 0;
+  padding:20px 0px;
 }
 
 .pricing-table {
@@ -64,7 +56,15 @@ header a, header a:visited, header a:hover, header a:active {
 
 .row.center-row{
   justify-content:center;
-  flex-wrap:no-wrap;
+  flex-wrap:nowrap;
+}
+
+.routineName{
+  text-transform: uppercase;
+  margin-bottom:20px;
+  text-shadow: 2px 0px #000000;
+  font-weight: bold;
+  color:#007bff
 }
 
 .packageCol{
@@ -74,6 +74,7 @@ header a, header a:visited, header a:hover, header a:active {
 }
 
 .packageCol.current{
+  min-width:200px;
   box-shadow: 0px 0px 10px #000000;
   border:none;
 }
@@ -92,6 +93,9 @@ header a, header a:visited, header a:hover, header a:active {
   border-left:none;
   border-radius:0px 4px 4px 0px;
 }
+.packageCol:first-child .header-package-1,.packageCol:last-child .header-package-1 {
+  background:#6c757d;
+}
 
 .package {
   /* margin:20px 0; */
@@ -99,7 +103,7 @@ header a, header a:visited, header a:hover, header a:active {
 }
 
 .header-package-1,.header-package-2,.header-package-3 {
-  background:green;
+  background:#007bff;
   color:#fff;
   font-weight:700;
   padding:10px;
@@ -117,7 +121,7 @@ header a, header a:visited, header a:hover, header a:active {
 
 .price {
   border:2px solid #fff;
-  color:green;
+  color:#007bff;
   margin:0 auto;
   padding-bottom:20px;
   padding-top:15px;
@@ -153,7 +157,7 @@ header a, header a:visited, header a:hover, header a:active {
 }
 
 .standard-button {
-  background:green;
+  color:#007bff;
   border:0;
   border-radius:4px;
   color:#fff;

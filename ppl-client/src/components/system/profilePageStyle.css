@@ -1,0 +1,16 @@
+.routineSelection{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    max-width: 1400px;
+    margin:0 auto;
+}
+
+.react-calendar{
+    margin-right: 20px;
+}
+
+.routineInformation{
+    width: 100%;
+}

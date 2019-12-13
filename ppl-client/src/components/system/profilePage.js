@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-ro
 
 import RoutineInformation from './routineInformation';
 
+import './profilePageStyle.css'
+
 class Profile extends Component {
     state = {
         date: new Date(),
@@ -63,7 +65,7 @@ class Profile extends Component {
     render() {
         const { routines, loadedRoutine } = this.state;
         return (
-            <div>
+            <div className="routineSelection">
                 <Calendar
                     onChange={this.CalendarOnChange}
                     value={this.state.date}
@@ -77,8 +79,9 @@ class Profile extends Component {
                             </Link>
                         </div>
                         :
-                        <div>
+                        <div className="routineInformation">
                             <Form>
+
                                 <Form.Control onChange={(e) => this.handleRoutine(e)} as="select">
                                     <option>Select A Routine</option>
 
