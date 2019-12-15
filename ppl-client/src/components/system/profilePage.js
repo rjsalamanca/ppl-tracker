@@ -12,7 +12,7 @@ class Profile extends Component {
     state = {
         date: new Date(),
         routines: [],
-        selectedRoutine: '',
+        selectedRoutine: 'Select A Routine',
         loadedRoutine: { routine_found: false },
         selectedWorkout: {},
         loadWorkout: false
@@ -23,15 +23,20 @@ class Profile extends Component {
     }
 
     handleRoutine = async (e) => {
-        if (e.target.value !== 'Select Routine') {
-            await this.setState({
-                selectedRoutine: e.target.value,
-                loadedRoutine: { routine_found: false },
-                selectedWorkout: {},
-                loadWorkout: false
-            });
+        //console.log(e.target.value)
+        //if (e.target.value !== 'Select A Routine') {
+        await this.setState({
+            selectedRoutine: e.target.value,
+            loadedRoutine: { routine_found: false },
+            selectedWorkout: {},
+            loadWorkout: true
+        });
+
+        if (this.state.selectedRoutine !== 'Select A Routine') {
             await this.getFullRoutine();
         }
+        //     console.log('DONT DO ANYTHING')
+        // }
     }
 
     getFullRoutine = async () => {
@@ -42,8 +47,7 @@ class Profile extends Component {
                 credentials: "include"
             });
             const data = await response.json();
-            !!data.routine_found ? this.setState({ loadedRoutine: data }) : this.setState({ loadedRoutine: { routine_found: false } });
-            console.log(data)
+            !!data.routine_found ? this.setState({ loadedRoutine: data, loadWorkout: false }) : this.setState({ loadedRoutine: { routine_found: false }, loadWorkout: false });
         } catch (err) {
             console.log(err);
         }
@@ -73,8 +77,27 @@ class Profile extends Component {
         await this.setState({ selectedWorkout: workout, loadWorkout: true });
     }
 
+    loadRoutineComponent = () => {
+        const { selectedRoutine, loadWorkout, loadedRoutine } = this.state;
+        if (selectedRoutine === 'Select A Routine') {
+            return (<div>Please select a routine above.</div>);
+        } else if (!!loadWorkout) {
+            return (
+                <div>
+                    {
+                        //LOADING IN HERE
+                    }
+                </div>
+            );
+        } else if (!loadedRoutine.routine_found) {
+            return (<div>NO INFO FOUND</div>);
+        } else {
+            return (<RoutineInformation routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />)
+        }
+    }
+
     render() {
-        const { routines, loadedRoutine, selectedRoutine, loadWorkout } = this.state;
+        const { routines } = this.state;
         return (
             <>
                 <div className="routineSelection">
@@ -107,13 +130,10 @@ class Profile extends Component {
 
                                     </Form.Control>
                                 </Form>
-                                <RoutineInformation routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />
+                                {this.loadRoutineComponent()}
                             </div>
                     }
                 </div>
-                {
-                    !loadWorkout ? '' : <div>SELECTED</div>
-                }
             </>
         );
     }
