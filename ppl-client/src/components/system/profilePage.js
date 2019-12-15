@@ -13,7 +13,9 @@ class Profile extends Component {
         date: new Date(),
         routines: [],
         selectedRoutine: '',
-        loadedRoutine: { routine_found: false }
+        loadedRoutine: { routine_found: false },
+        selectedWorkout: {},
+        loadWorkout: false
     }
 
     componentDidMount() {
@@ -22,8 +24,13 @@ class Profile extends Component {
 
     handleRoutine = async (e) => {
         if (e.target.value !== 'Select Routine') {
-            await this.setState({ selectedRoutine: e.target.value });
-            this.getFullRoutine();
+            await this.setState({
+                selectedRoutine: e.target.value,
+                loadedRoutine: { routine_found: false },
+                selectedWorkout: {},
+                loadWorkout: false
+            });
+            await this.getFullRoutine();
         }
     }
 
@@ -62,44 +69,52 @@ class Profile extends Component {
         console.log(moment(date).format("MMM DD YYYY"));
     }
 
+    getSelectedWorkout = async (workout) => {
+        await this.setState({ selectedWorkout: workout, loadWorkout: true });
+    }
+
     render() {
-        const { routines, loadedRoutine } = this.state;
+        const { routines, loadedRoutine, selectedRoutine, loadWorkout } = this.state;
         return (
-            <div className="routineSelection">
-                <Calendar
-                    onChange={this.CalendarOnChange}
-                    value={this.state.date}
-                />
-                {
-                    routines.length === 0 ?
-                        <div>
-                            No Routine Found
+            <>
+                <div className="routineSelection">
+                    <Calendar
+                        onChange={this.CalendarOnChange}
+                        value={this.state.date}
+                    />
+                    {
+                        routines.length === 0 ?
+                            <div>
+                                No Routine Found
                             <Link className="nav-link" to="/ppl/create_routine">
-                                <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
-                            </Link>
-                        </div>
-                        :
-                        <div className="routineInformation">
-                            <Form>
+                                    <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
+                                </Link>
+                            </div>
+                            :
+                            <div className="routineInformation">
+                                <Form>
 
-                                <Form.Control onChange={(e) => this.handleRoutine(e)} as="select">
-                                    <option>Select A Routine</option>
+                                    <Form.Control onChange={(e) => this.handleRoutine(e)} as="select">
+                                        <option>Select A Routine</option>
 
-                                    {routines.length !== 0 ?
-                                        routines.map(routine =>
-                                            <option key={`routine${routine.id}`}>{routine.routine_name}</option>
-                                        )
-                                        :
-                                        <option disabled>Loading Routines...</option>
-                                    }
+                                        {routines.length !== 0 ?
+                                            routines.map(routine =>
+                                                <option key={`routine${routine.id}`}>{routine.routine_name}</option>
+                                            )
+                                            :
+                                            <option disabled>Loading Routines...</option>
+                                        }
 
-                                </Form.Control>
-                            </Form>
-                            <RoutineInformation routine={loadedRoutine} />
-                        </div>
+                                    </Form.Control>
+                                </Form>
+                                <RoutineInformation routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />
+                            </div>
+                    }
+                </div>
+                {
+                    !loadWorkout ? '' : <div>SELECTED</div>
                 }
-
-            </div>
+            </>
         );
     }
 }

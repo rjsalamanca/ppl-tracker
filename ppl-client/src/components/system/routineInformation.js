@@ -8,19 +8,21 @@ import './routineInformationStyle.css'
 
 class RoutineInformation extends Component {
     state = {
+        loadedProps: false,
         routine_info: {},
         date_between: 0,
-        workout_days: {}
+        workout_days: {},
+        selectedWorkout: {}
     }
 
-    async componentDidMount() {
-        await this.setState({ routine_info: this.props.routine });
+    componentDidMount() {
+        this.setState({ routine_info: this.props.routine });
     }
 
     async componentWillReceiveProps(newProps) {
         const oldProps = this.props;
         if (oldProps !== newProps) {
-            await this.setState({ routine_info: newProps.routine });
+            await this.setState({ loadedProps: true, routine_info: newProps.routine });
             if (!!this.state.routine_info.routine_found) {
                 let start_date = moment(this.state.routine_info.routine.date_started, "MMM-DD-YYYY");
                 let current = moment(new Date(), "MMM DD YYYY");
@@ -30,7 +32,7 @@ class RoutineInformation extends Component {
         }
     }
 
-    getTodaysWorkout() {
+    getTodaysWorkout = async () => {
         const { routine_info, date_between } = this.state;
         const days = routine_info.routine.routine_days;
         const curr_day_ind = (date_between % days.length) - 1;
@@ -41,7 +43,7 @@ class RoutineInformation extends Component {
         } else {
             temp_days = { today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1], yesterday: days[curr_day_ind - 1] };
         }
-        this.setState({ workout_days: temp_days });
+        await this.setState({ workout_days: temp_days });
     }
 
     render() {
@@ -50,8 +52,8 @@ class RoutineInformation extends Component {
             <>
                 {
                     Object.entries(routine_info).length === 0 ?
-                        <div>LOADING</div> :
-                        !!this.state.routine_info.routine_found ?
+                        <div>Loading</div> :
+                        !this.state.routine_info.routine_found ? <div></div> :
                             <div>
                                 <section id="section-pricing" className="section-pricing">
                                     <h2 className="routineName text-center">
@@ -72,14 +74,14 @@ class RoutineInformation extends Component {
                                                             {/* <!-- details --> */}
                                                             <div className="package-features text-center">
                                                                 Workout: {workout_days.yesterday.day_name}
-                                                                <ol>
+                                                                <ul>
                                                                     {workout_days.yesterday.exercises.map((exercise, idx) =>
                                                                         <li key={`exercise-${workout_days.yesterday.day_name}-${idx}`}>
                                                                             {exercise.exercise_name}
                                                                         </li>
                                                                     )}
-                                                                </ol>
-                                                                {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
+                                                                </ul>
+                                                                <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.yesterday)}>Start</Button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -93,14 +95,14 @@ class RoutineInformation extends Component {
                                                             {/* <!-- details --> */}
                                                             <div className="package-features text-center">
                                                                 Workout: {workout_days.today.day_name}
-                                                                <ol>
+                                                                <ul>
                                                                     {workout_days.today.exercises.map((exercise, idx) =>
                                                                         <li key={`exercise-${workout_days.today.day_name}-${idx}`}>
                                                                             {exercise.exercise_name}
                                                                         </li>
                                                                     )}
-                                                                </ol>
-                                                                {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
+                                                                </ul>
+                                                                <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.today)}>Start</Button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -114,14 +116,14 @@ class RoutineInformation extends Component {
                                                             {/* <!-- details --> */}
                                                             <div className="package-features text-center">
                                                                 Workout: {workout_days.tomorrow.day_name}
-                                                                <ol>
+                                                                <ul>
                                                                     {workout_days.tomorrow.exercises.map((exercise, idx) =>
                                                                         <li key={`exercise-${workout_days.tomorrow.day_name}-${idx}`}>
                                                                             {exercise.exercise_name}
                                                                         </li>
                                                                     )}
-                                                                </ol>
-                                                                {/* <div className="wrp-button text-center"><a href="#" className="btn standard-button">GET IT</a></div> */}
+                                                                </ul>
+                                                                <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.tomorrow)}>Start</Button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -133,8 +135,6 @@ class RoutineInformation extends Component {
                                     }
                                 </section>
                             </div >
-                            :
-                            <div>Select a Routine Above</div>
                 }
             </>
         );

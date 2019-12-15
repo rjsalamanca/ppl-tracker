@@ -71,17 +71,18 @@ header a, header a:visited, header a:hover, header a:active {
   border:1px solid #E3E3E3;
   border-radius:4px;
   overflow: hidden;
+  z-index:10;
+}
+
+.packageCol:first-child, .packageCol:last-child {
+  margin:20px 0;
+  z-index:1;
 }
 
 .packageCol.current{
   min-width:200px;
   box-shadow: 0px 0px 10px #000000;
   border:none;
-}
-
-.packageCol:first-child, .packageCol:last-child {
-  margin:20px 0;
-  z-index:-1
 }
 
 .packageCol:first-child {
@@ -135,6 +136,10 @@ header a, header a:visited, header a:hover, header a:active {
   padding:10px;
   position:absolute;
   transform:rotate(-45deg);
+}
+
+.package-features{
+  padding:10px;
 }
 
 .package-features ul {
