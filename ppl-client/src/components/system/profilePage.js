@@ -5,6 +5,7 @@ import { Form, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 
 import RoutineInformation from './routineInformation';
+import WorkoutInformation from './workoutInformation';
 
 import './profilePageStyle.css'
 
@@ -15,7 +16,8 @@ class Profile extends Component {
         selectedRoutine: 'Select A Routine',
         loadedRoutine: { routine_found: false },
         selectedWorkout: {},
-        loadWorkout: false
+        loadWorkout: false,
+        loadRoutineInfo: false
     }
 
     componentDidMount() {
@@ -29,7 +31,8 @@ class Profile extends Component {
             selectedRoutine: e.target.value,
             loadedRoutine: { routine_found: false },
             selectedWorkout: {},
-            loadWorkout: true
+            loadWorkout: false,
+            loadRoutineInfo: true,
         });
 
         if (this.state.selectedRoutine !== 'Select A Routine') {
@@ -47,7 +50,7 @@ class Profile extends Component {
                 credentials: "include"
             });
             const data = await response.json();
-            !!data.routine_found ? this.setState({ loadedRoutine: data, loadWorkout: false }) : this.setState({ loadedRoutine: { routine_found: false }, loadWorkout: false });
+            !!data.routine_found ? this.setState({ loadedRoutine: data, loadRoutineInfo: false }) : this.setState({ loadedRoutine: { routine_found: false }, loadRoutineInfo: false });
         } catch (err) {
             console.log(err);
         }
@@ -78,10 +81,10 @@ class Profile extends Component {
     }
 
     loadRoutineComponent = () => {
-        const { selectedRoutine, loadWorkout, loadedRoutine } = this.state;
+        const { selectedRoutine, loadRoutineInfo, loadedRoutine } = this.state;
         if (selectedRoutine === 'Select A Routine') {
             return (<div>Please select a routine above.</div>);
-        } else if (!!loadWorkout) {
+        } else if (!!loadRoutineInfo) {
             return (
                 <div>
                     {
@@ -96,8 +99,17 @@ class Profile extends Component {
         }
     }
 
+    loadWorkoutComponent = () => {
+        const { loadWorkout, selectedWorkout } = this.state;
+        if (!!loadWorkout) {
+            return (<WorkoutInformation selectedWorkout={selectedWorkout} />)
+        }
+        // !!loadWorkout ? <div>SELECTED</div> : ''
+
+    }
+
     render() {
-        const { routines } = this.state;
+        const { routines, loadWorkout } = this.state;
         return (
             <>
                 <div className="routineSelection">
@@ -134,6 +146,9 @@ class Profile extends Component {
                             </div>
                     }
                 </div>
+                {
+                    this.loadWorkoutComponent()
+                }
             </>
         );
     }

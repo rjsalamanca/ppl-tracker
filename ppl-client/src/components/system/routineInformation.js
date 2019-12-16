@@ -15,7 +15,6 @@ class RoutineInformation extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.props);
         await this.setState({
             loadedProps: true,
             routine_info: this.props.routine,
@@ -39,7 +38,7 @@ class RoutineInformation extends Component {
 
     async componentWillReceiveProps(newProps) {
         const oldProps = this.props;
-        console.log(newProps)
+
         if (oldProps !== newProps) {
             await this.setState({
                 loadedProps: true,
