@@ -1,0 +1,30 @@
+.workoutInfoContainer{
+    background: lightgray;
+    padding:20px 0;
+}
+
+.workoutInfo{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.exerciseContainer{
+    border-radius: 4px;
+    margin:10px;
+    background-color: #fff;
+    min-width: 350px;
+}
+
+.table.exerciseTable{
+    margin-bottom: 0;
+}
+
+.exerciseTable{
+    text-align: center;
+}
+
+.completedSet{
+    
+}

@@ -77,6 +77,9 @@ class Profile extends Component {
     }
 
     getSelectedWorkout = async (workout) => {
+        //Resets
+        await this.setState({ selectedWorkout: {}, loadWorkout: false });
+        //Sets
         await this.setState({ selectedWorkout: workout, loadWorkout: true });
     }
 
