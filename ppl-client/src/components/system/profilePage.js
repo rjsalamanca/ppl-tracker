@@ -134,7 +134,6 @@ class Profile extends Component {
 
                                     <Form.Control onChange={(e) => this.handleRoutine(e)} as="select">
                                         <option>Select A Routine</option>
-
                                         {routines.length !== 0 ?
                                             routines.map(routine =>
                                                 <option key={`routine${routine.id}`}>{routine.routine_name}</option>
@@ -142,7 +141,6 @@ class Profile extends Component {
                                             :
                                             <option disabled>Loading Routines...</option>
                                         }
-
                                     </Form.Control>
                                 </Form>
                                 {this.loadRoutineComponent()}

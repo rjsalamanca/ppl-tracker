@@ -74,7 +74,7 @@ class addExercises extends Component {
     render() {
         const { show, exercises, exercise_error } = this.state;
         return (
-            < div >
+            <div>
                 <Modal show={show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add An Exercise</Modal.Title>

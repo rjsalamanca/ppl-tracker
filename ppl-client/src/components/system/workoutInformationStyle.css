@@ -1,6 +1,11 @@
 .workoutInfoContainer{
     background: lightgray;
-    padding:20px 0;
+    padding:20px;
+}
+
+.workoutButtonContainer{
+    display:flex;
+    justify-content: space-between;
 }
 
 .workoutInfo{
@@ -10,11 +15,24 @@
     flex-wrap: wrap;
 }
 
+.workoutTitle{
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .exerciseContainer{
     border-radius: 4px;
     margin:10px;
     background-color: #fff;
     min-width: 350px;
+}
+
+.exerciseName{
+    display:block;
+    text-align:center;
+    text-transform: uppercase;
+    padding:10px;
+    font-size:1.2em;
 }
 
 .table.exerciseTable{
@@ -23,8 +41,4 @@
 
 .exerciseTable{
     text-align: center;
-}
-
-.completedSet{
-    
 }

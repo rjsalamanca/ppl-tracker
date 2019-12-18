@@ -1,45 +1,77 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Alert } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 
 import './workoutInformationStyle.css'
 
 class WorkoutInformation extends Component {
-    state = { workout: {} }
+    state = { workout: {}, show: false }
 
     componentDidMount() {
         this.setState({ workout: this.props.selectedWorkout })
     }
 
+    handleClose = () => this.setState({ show: false });
+    handleShow = () => this.setState({ show: true });
+
     setCompleted = (e) => {
         let rowNode = e.target.parentNode.parentNode;
-        if (rowNode.className !== 'table-success') {
-            rowNode.className = 'table-success';
-        } else {
-            rowNode.className = '';
-        }
+        (rowNode.className !== 'table-success') ? rowNode.className = 'table-success' : rowNode.className = '';
     }
 
     finishWorkout = (e) => {
         e.preventDefault();
-        console.log(e)
+
+        let checkWorkoutForm = document.getElementById('workoutForm').checkValidity();
+
+        if (!!checkWorkoutForm) {
+            // send
+        } else {
+            this.handleShow()
+        }
     }
 
     render() {
-        const { workout } = this.state;
-        // console.log(workout);
+        const { workout, show } = this.state;
         return (
             <div className="workoutInfoContainer">
-                <h3>{workout.day_name}</h3>
-                <Form>
-                    <Form.Group controlId="formBasicEmail">
 
+                <Modal show={show} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Finish Workout</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>
+                            You haven't finished the workout yet!
+                            If you really want to end the workout here, the rest of your sets will
+                            be defaulted to zero reps. Click here to finish anyway.
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <div className="workoutButtonContainer">
+                    <Button className="mb-3" variant="primary" type="submit" onClick={(e) => this.finishWorkout(e)}>
+                        Finish Workout
+                    </Button>
+                    <Button className="mb-3" variant="primary" type="submit" onClick={(e) => this.finishWorkout(e)}>
+                        Cancel Workout
+                    </Button>
+                </div>
+
+                <h3 className="workoutTitle">{workout.day_name}</h3>
+                <Form id="workoutForm">
+                    <Form.Group controlId="formBasicEmail">
                         {
                             Object.keys(workout).length === 0 ? <div></div> :
                                 <div className="workoutInfo">
                                     {
                                         workout.exercises.map((exercise, exerciseIdx) =>
                                             <div key={`Workout-${workout.day_name}-${exercise.exercise_name}`} className="exerciseContainer">
-                                                Exercise {`${exerciseIdx + 1} : ${exercise.exercise_name}`}
+                                                <b className="exerciseName">Exercise {`${exerciseIdx + 1} : ${exercise.exercise_name}`}</b>
                                                 <table className="table table-hover exerciseTable ">
                                                     <thead>
                                                         <tr className="bg-primary">
@@ -50,19 +82,16 @@ class WorkoutInformation extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-
                                                         {
                                                             exercise.sets.map((set, idx) =>
-
                                                                 <tr key={`Workout-${workout.day_name}-${exercise.exercise_name}-Set${idx}`}>
                                                                     <th scope="row">{idx + 1}</th>
                                                                     <td>{set.weight}lbs</td>
                                                                     <td>{set.reps}</td>
-                                                                    <td><Form.Check id={`exercise${exerciseIdx + 1}-set${idx + 1}`} type="checkbox" name="set" value="completed" onClick={(e) => this.setCompleted(e)} /></td>
+                                                                    <td><input id={`exercise${exerciseIdx + 1}-set${idx + 1}`} type="checkbox" name="set" value="completed" onClick={(e) => this.setCompleted(e)} required /></td>
                                                                 </tr>
                                                             )
                                                         }
-
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -70,9 +99,6 @@ class WorkoutInformation extends Component {
                                     }
                                 </div>
                         }
-                        <Button className="mb-3" variant="danger" onClick={(e) => this.finishWorkout(e)}>
-                            Sign In
-                        </Button>
                     </Form.Group>
                 </Form>
 
