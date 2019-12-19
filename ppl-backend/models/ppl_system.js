@@ -158,7 +158,7 @@ class PPL_System {
                 VALUES($1, $2, $3, 
                     (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id = 
                         (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6)))
-            `, [parseInt(set_info.weight), set, 10, exercise.name, day.name, this.routine_id]);
+            `, [parseInt(set_info.weight), set, set_info.reps, exercise.name, day.name, this.routine_id]);
 
             return response;
         } catch (err) {

@@ -1,6 +1,11 @@
 .workoutInfoContainer{
     background: lightgray;
+}
+
+.workoutInnerContainer{
     padding:20px;
+    max-width:1400px;
+    margin:0 auto;
 }
 
 .workoutButtonContainer{

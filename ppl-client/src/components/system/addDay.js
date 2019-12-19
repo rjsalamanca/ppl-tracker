@@ -83,7 +83,7 @@ class addDay extends Component {
                                     {exercise.name}
                                     <ul>
                                         {exercise.sets.map((set, idx) =>
-                                            <li key={`exercise-${day.name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x 10</li>
+                                            <li key={`exercise-${day.name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x {set.reps}</li>
                                         )}
                                     </ul>
                                 </li>

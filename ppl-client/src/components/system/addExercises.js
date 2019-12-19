@@ -20,6 +20,13 @@ class addExercises extends Component {
         this.setState({ sets: newSets });
     };
 
+    handleSetReps = (e, idx) => {
+        const { sets } = this.state;
+        let newSets = [...sets];
+        newSets[idx].reps = e.target.value;
+        this.setState({ sets: newSets });
+    };
+
     handleRemoveSets = (idx) => {
         const { sets } = this.state;
         let newSets = [...sets];
@@ -32,7 +39,7 @@ class addExercises extends Component {
         this.props.clearDayError();
         this.setState({
             exercise_name: '',
-            sets: [{ weight: null }],
+            sets: [{ weight: null, reps: 1 }],
             exercise_error: 0
         });
         !!show ? this.setState({ show: false }) : this.setState({ show: true })
@@ -41,8 +48,16 @@ class addExercises extends Component {
     addSet = () => {
         const { sets } = this.state;
         let newSets = [...sets];
-        newSets.push({ weight: null })
+        newSets.push({ weight: null, reps: 0 })
         this.setState({ sets: newSets });
+    }
+
+    displayReps = (maxReps) => {
+        let repsOption = [];
+        for (let i = 0; i <= maxReps; i++) {
+            repsOption.push(i);
+        }
+        return repsOption;
     }
 
     saveExercise = async () => {
@@ -87,6 +102,13 @@ class addExercises extends Component {
                                     <div key={`set-${idx + 1}`}>
                                         Set {idx + 1} Weight:
                                         <input type="text" placeholder="Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} />
+                                        <select onChange={e => this.handleSetReps(e, idx)}>
+                                            {
+                                                this.displayReps(25).map((ele, repIdx) =>
+                                                    repIdx === 1 ? <option key={`set${idx}-reps${ele}`} selected>{ele}</option> : <option key={`set${idx}-reps${ele}`}>{ele}</option>
+                                                )
+                                            }
+                                        </select>
                                         <button type="button" onClick={() => this.handleRemoveSets(idx)}>
                                             X
                                         </button>
@@ -123,7 +145,7 @@ class addExercises extends Component {
                         <ul>
                             {exercise.sets.map((set, setIdx) =>
                                 <li key={`${exercise.name}-set-${setIdx}`}>
-                                    <b>Set {setIdx + 1}</b> {set.weight}lbs x 10
+                                    <b>Set {setIdx + 1}</b> {set.weight}lbs x {set.reps}
                                 </li>
                             )}
                         </ul>
