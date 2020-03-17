@@ -11,65 +11,65 @@ import ProfilePage from './components/system/profilePage';
 import CreateRoutine from './components/system/createRoutine';
 import AddDay from './components/system/addDay';
 
-import AddExercises from './components/system/addExercises';
+// import AddExercises from './components/system/addExercises';
 
 import './App.css';
 
 class App extends Component {
-  state = {
-    is_logged_in: false
-  }
+   state = {
+      is_logged_in: false
+   }
 
-  changeToLogout = async () => {
-    this.setState({ is_logged_in: false });
-  }
+   changeToLogout = async () => {
+      this.setState({ is_logged_in: false });
+   }
 
-  checkLoginStatus = async () => {
-    const url = "http://localhost:3000/users/loginStatus";
+   checkLoginStatus = async () => {
+      const url = "http://localhost:3000/users/loginStatus";
 
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        credentials: 'include'
-      })
+      try {
+         const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+               "Accept": "application/json",
+               "Content-Type": "application/json"
+            },
+            credentials: 'include'
+         })
 
-      const data = await response.json();
-      this.setState({ is_logged_in: data.is_logged_in })
+         const data = await response.json();
+         this.setState({ is_logged_in: data.is_logged_in })
 
-      return 'yes';
-    } catch (err) {
-      console.log(this.state.is_logged_in)
-      return err.message;
-    }
-  }
+         return 'yes';
+      } catch (err) {
+         console.log(this.state.is_logged_in)
+         return err.message;
+      }
+   }
 
-  render() {
+   render() {
 
-    return (
-      <Router>
-        <NavBar is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />
-        <Switch>
-          <Route path="/" exact component={LandingPage} />
-          <Route path="/login" exact render={(props) => <LoginPage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
-          <Route path="/logout" exact render={(props) => <LogoutPage {...props} is_logged_in={this.state.is_logged_in} changeToLogout={this.changeToLogout} checkLoginStatus={this.checkLoginStatus} />} />
-          <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
-          <Route path="/profile" exact render={(props) => <ProfilePage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
-          <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
-          <Route path="/ppl/routine/add_day" exact render={(props) => <AddDay {...props} />} />
+      return (
+         <Router>
+            <NavBar is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />
+            <Switch>
+               <Route path="/" exact component={LandingPage} />
+               <Route path="/login" exact render={(props) => <LoginPage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
+               <Route path="/logout" exact render={(props) => <LogoutPage {...props} is_logged_in={this.state.is_logged_in} changeToLogout={this.changeToLogout} checkLoginStatus={this.checkLoginStatus} />} />
+               <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
+               <Route path="/profile" exact render={(props) => <ProfilePage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
+               <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
+               <Route path="/ppl/routine/add_day" exact render={(props) => <AddDay {...props} />} />
 
-          {/* 
+               {/* 
           <Route path="/profile" exact render={(props) => <Profile {...props} user={this.state} changeLoginState={this.changeLoginState} />} />
           <Route path="/scores" render={(props) => <Scores {...props} user={this.state} changeLoginState={this.changeLoginState} />} />
           <Route path="/play" component={Play} />
           <Route render={() => <Redirect to="/" />} /> */}
-        </Switch>
-      </Router>
-    );
-  }
+            </Switch>
+         </Router>
+      );
+   }
 }
 
 export default App;
