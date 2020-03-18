@@ -72,21 +72,19 @@ class PPL_System {
 
    static async finishWorkout(workoutInfo, date) {
       try {
-         console.log(workoutInfo)
          let buildValues = workoutInfo.map(workout => {
-            let buildSets = workout.sets.map(set => `(${set.weight}, ${set.set}, ${set.reps}, ${date}, ${set.exercise_id})`)
+            let buildSets = workout.sets.map(set => `(${set.weight}, ${set.set}, ${set.reps}, '${date}', ${set.exercise_id})`)
             return buildSets.join(',');
          }).join(',');
 
          const response = await db.result(`
             INSERT INTO exercise_sets 
-               (weight, set_num, reps, date, exercise_id)
+               (weight, set_num, reps, set_date, exercise_id)
             VALUES
                ${buildValues}`);
 
          return response;
       } catch (err) {
-         console.log(err.message)
          return err.message
       }
    }

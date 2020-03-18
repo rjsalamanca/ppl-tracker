@@ -64,10 +64,8 @@ router.post('/routine/add_routine', async (req, res) => {
 });
 
 router.post('/routine/finish_workout', async (req, res) => {
-   const { workout, todays_date } = req.body;
-   const user_id = req.session.user_id;
-   const addSets = await pplSystemModel.finishWorkout(workout.exercises, todays_date, user_id);
-   console.log(addSets)
+   const { workout, workout_date } = req.body;
+   const addSets = await pplSystemModel.finishWorkout(workout.exercises, workout_date);
    addSets.rowCount > 0 ? res.json({ completed_workout: true }) : res.json({ completed_workout: false });
 });
 
