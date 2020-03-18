@@ -42,7 +42,7 @@ class addExercises extends Component {
       this.props.clearDayError();
       this.setState({
          exercise_name: '',
-         sets: [{ weight: null, reps: 1 }],
+         sets: [{ weight: null, reps: 1, initial_set: true }],
          exercise_error: 0
       });
       !!show ? this.setState({ show: false }) : this.setState({ show: true })

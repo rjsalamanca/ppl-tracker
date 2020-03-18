@@ -43,6 +43,7 @@ CREATE TABLE exercise_sets
    weight FLOAT,
    set_num INT,
    reps INT,
-   set_date date,
+   set_date DATE,
+   initial_set BOOLEAN,
    exercise_id INT REFERENCES exercises(id)
 );

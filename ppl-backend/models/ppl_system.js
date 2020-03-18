@@ -44,8 +44,10 @@ class PPL_System {
                                        SELECT weight,
                                           set_num AS set,
                                           reps,
+                                          set_date,
                                           exercise_id
                                           FROM exercise_sets
+                                          WHERE set_date IS NULL
                                     ) single_set
                                     WHERE single_set.exercise_id = exercises.id
                               ) AS sets
@@ -63,7 +65,6 @@ class PPL_System {
                WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
             ) AS USR
             `, [uid, routine_name]);
-         console.log(JSON.stringify(response));
          return response;
       } catch (err) {
          return err.msg;

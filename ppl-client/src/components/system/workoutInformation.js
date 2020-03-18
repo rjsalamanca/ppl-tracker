@@ -7,15 +7,18 @@ import './css/workoutInformationStyle.css'
 class WorkoutInformation extends Component {
    state = {
       workout: {},
-      show: false,
+      showEndEarly: false,
+      showSaving: false,
+      saving: false
    }
 
    componentDidMount() {
       this.setState({ workout: this.props.selectedWorkout })
    }
 
-   handleClose = () => this.setState({ show: false });
-   handleShow = () => this.setState({ show: true });
+   handleClose = () => this.setState({ showEndEarly: false, showSaving: false });
+   handleShowEndEarly = () => this.setState({ showEndEarly: true });
+   handleShowSaving = () => this.setState({ showSaving: true });
 
    setCompleted = (e) => {
       let rowNode = e.target.parentNode.parentNode;
@@ -24,13 +27,15 @@ class WorkoutInformation extends Component {
 
    finishWorkout = async (e) => {
       e.preventDefault();
-      const url = "http://localhost:3000/ppl/routine/finish_workout"
+      const url = "http://localhost:3000/ppl/routine/finish_workout";
       let checkWorkoutForm = document.getElementById('workoutForm').checkValidity();
       if (!!checkWorkoutForm) {
          let sendData = {
             workout: this.state.workout,
             workout_date: moment(new Date()).format("MMM DD YYYY")
          }
+
+         this.setState({ showSaving: true });
 
          try {
             const response = await fetch(url, {
@@ -45,25 +50,29 @@ class WorkoutInformation extends Component {
 
             const data = await response.json();
             console.log(data)
+            if (!!data.completed_workout) {
+               await setTimeout(() => {
+                  this.setState({ showSaving: false })
+               }, 1000);
+
+            }
 
          } catch (err) {
             console.log(err.message);
          }
-
-         // send
       } else {
-         this.handleShow();
+         this.handleShowEndEarly();
       }
    }
 
    render() {
-      const { workout, show } = this.state;
+      const { workout, showEndEarly, showSaving } = this.state;
       console.log(workout)
       return (
          <div className="workoutInfoContainer">
 
             {/* Modal For ending workout early.  */}
-            <Modal show={show} onHide={this.handleClose}>
+            <Modal show={showEndEarly} onHide={this.handleClose}>
                <Modal.Header closeButton>
                   <Modal.Title >Uh Oh...</Modal.Title>
                </Modal.Header>
@@ -78,6 +87,17 @@ class WorkoutInformation extends Component {
                         If you really want to end the workout, the rest of your sets will
                         be defaulted to zero reps. Click <a href="./">here</a> to finish anyway.
                      </p>
+                  </div>
+               </Modal.Body>
+            </Modal>
+
+            <Modal show={showSaving} onHide={this.handleClose}>
+               <Modal.Header closeButton>
+                  <Modal.Title >SAVING</Modal.Title>
+               </Modal.Header>
+               <Modal.Body>
+                  <div>
+                     We are saving right now
                   </div>
                </Modal.Body>
             </Modal>
