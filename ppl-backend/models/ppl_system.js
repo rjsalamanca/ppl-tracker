@@ -42,7 +42,7 @@ class PPL_System {
                                  (SELECT json_agg(single_set)
                                     FROM(
                                        SELECT weight,
-                                          sets AS set,
+                                          set_num AS set,
                                           reps,
                                           exercise_id
                                           FROM exercise_sets
@@ -63,10 +63,31 @@ class PPL_System {
                WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
             ) AS USR
             `, [uid, routine_name]);
-
+         console.log(JSON.stringify(response));
          return response;
       } catch (err) {
          return err.msg;
+      }
+   }
+
+   static async finishWorkout(workoutInfo, date) {
+      try {
+         console.log(workoutInfo)
+         let buildValues = workoutInfo.map(workout => {
+            let buildSets = workout.sets.map(set => `(${set.weight}, ${set.set}, ${set.reps}, ${date}, ${set.exercise_id})`)
+            return buildSets.join(',');
+         }).join(',');
+
+         const response = await db.result(`
+            INSERT INTO exercise_sets 
+               (weight, set_num, reps, date, exercise_id)
+            VALUES
+               ${buildValues}`);
+
+         return response;
+      } catch (err) {
+         console.log(err.message)
+         return err.message
       }
    }
 
@@ -120,7 +141,7 @@ class PPL_System {
          const response = await db.result(`
             INSERT INTO routine(routine_name, date_started, user_id)
             VALUES($1, $2, $3)
-            `, [this.routine_name, this.date_started, this.user_id]);
+               `, [this.routine_name, this.date_started, this.user_id]);
          return response;
       } catch (err) {
          return err.msg;
@@ -130,9 +151,9 @@ class PPL_System {
    async addRoutineDay(day) {
       try {
          const response = await db.result(`
-            INSERT INTO routine_day(day_name, routine_id, routine_date)
-            VALUES($1, $2, $3)
-            `, [day.name, this.routine_id, this.routine_date]);
+            INSERT INTO routine_day(day_name, routine_id)
+            VALUES($1, $2)
+               `, [day.name, this.routine_id]);
          return response;
       } catch (err) {
          return err.msg;
@@ -154,11 +175,11 @@ class PPL_System {
    async addExerciseSet(exercise, set, set_info, day) {
       try {
          const response = await db.result(`
-                INSERT INTO exercise_sets(weight, sets, reps, exercise_id)
-                VALUES($1, $2, $3, 
-                    (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id = 
-                        (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6)))
-            `, [parseInt(set_info.weight), set, set_info.reps, exercise.name, day.name, this.routine_id]);
+         INSERT INTO exercise_sets(weight,set_num, reps, exercise_id)
+         VALUES($1, $2, $3,
+            (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id =
+         (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6)))
+         `, [parseInt(set_info.weight), set, set_info.reps, exercise.name, day.name, this.routine_id]);
 
          return response;
       } catch (err) {

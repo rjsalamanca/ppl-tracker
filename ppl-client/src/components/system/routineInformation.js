@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Button } from 'react-bootstrap';
 // import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 
-import './routineInformationStyle.css'
+import './css/routineInformationStyle.css'
 
 class RoutineInformation extends Component {
    state = {
@@ -36,29 +36,29 @@ class RoutineInformation extends Component {
    //     });
    // }
 
-   // async componentWillReceiveProps(newProps) {
-   //    const oldProps = this.props;
+   async componentWillReceiveProps(newProps) {
+      const oldProps = this.props;
 
-   //    if (oldProps !== newProps) {
-   //       await this.setState({
-   //          loadedProps: true,
-   //          routine_info: newProps.routine,
-   //          workout_days: {},
-   //          selectedWorkout: {}
-   //       });
-   //       if (!!this.state.routine_info.routine_found) {
-   //          let start_date = moment(this.state.routine_info.routine.date_started, "MMM-DD-YYYY");
-   //          let current = moment(new Date(), "MMM DD YYYY");
-   //          await this.setState({ date_between: Math.ceil(moment.duration(current.diff(start_date)).asDays()) })
-   //          await this.getTodaysWorkout();
-   //       } else {
-   //          // await this.setState({
-   //          //     workout_days: {},
-   //          //     selectedWorkout: {}
-   //          // });
-   //       }
-   //    }
-   // }
+      if (oldProps !== newProps) {
+         await this.setState({
+            loadedProps: true,
+            routine_info: newProps.routine,
+            workout_days: {},
+            selectedWorkout: {}
+         });
+         if (!!this.state.routine_info.routine_found) {
+            let start_date = moment(this.state.routine_info.routine.date_started, "MMM-DD-YYYY");
+            let current = moment(new Date(), "MMM DD YYYY");
+            await this.setState({ date_between: Math.ceil(moment.duration(current.diff(start_date)).asDays()) })
+            await this.getTodaysWorkout();
+         } else {
+            // await this.setState({
+            //     workout_days: {},
+            //     selectedWorkout: {}
+            // });
+         }
+      }
+   }
 
    getTodaysWorkout = async () => {
       const { routine_info, date_between } = this.state;

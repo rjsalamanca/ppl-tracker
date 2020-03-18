@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import moment from 'moment';
 
-import './workoutInformationStyle.css'
+import './css/workoutInformationStyle.css'
 
 class WorkoutInformation extends Component {
    state = {
@@ -21,11 +22,34 @@ class WorkoutInformation extends Component {
       (rowNode.className !== 'table-success') ? rowNode.className = 'table-success' : rowNode.className = '';
    }
 
-   finishWorkout = (e) => {
+   finishWorkout = async (e) => {
       e.preventDefault();
+      const url = "http://localhost:3000/ppl/routine/finish_workout"
       let checkWorkoutForm = document.getElementById('workoutForm').checkValidity();
       if (!!checkWorkoutForm) {
-         console.log(this.state)
+         let sendData = {
+            workout: this.state.workout,
+            workout_date: moment(new Date()).format("MMM DD YYYY")
+         }
+
+         try {
+            const response = await fetch(url, {
+               method: "POST",
+               headers: {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json"
+               },
+               credentials: 'include',
+               body: JSON.stringify(sendData)
+            });
+
+            const data = await response.json();
+            console.log(data)
+
+         } catch (err) {
+            console.log(err.message);
+         }
+
          // send
       } else {
          this.handleShow();
@@ -34,6 +58,7 @@ class WorkoutInformation extends Component {
 
    render() {
       const { workout, show } = this.state;
+      console.log(workout)
       return (
          <div className="workoutInfoContainer">
 

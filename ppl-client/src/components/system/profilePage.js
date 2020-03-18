@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import RoutineInformation from './routineInformation';
 import WorkoutInformation from './workoutInformation';
 
-import './profilePageStyle.css'
+import './css/profilePageStyle.css'
 
 class Profile extends Component {
    state = {
