@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { Redirect } from "react-router-dom";
 import moment from 'moment';
 
 import './css/workoutInformationStyle.css'
@@ -9,7 +10,8 @@ class WorkoutInformation extends Component {
       workout: {},
       showEndEarly: false,
       showSaving: false,
-      saving: false
+      saving: false,
+      completed: false
    }
 
    componentDidMount() {
@@ -49,14 +51,15 @@ class WorkoutInformation extends Component {
             });
 
             const data = await response.json();
-            console.log(data)
             if (!!data.completed_workout) {
                await setTimeout(() => {
-                  this.setState({ showSaving: false })
+                  this.setState({ showSaving: false });
                }, 1000);
 
+               await setTimeout(() => {
+                  this.setState({ completed: true });
+               }, 500);
             }
-
          } catch (err) {
             console.log(err.message);
          }
@@ -66,10 +69,11 @@ class WorkoutInformation extends Component {
    }
 
    render() {
-      const { workout, showEndEarly, showSaving } = this.state;
+      const { workout, showEndEarly, showSaving, completed } = this.state;
       console.log(workout)
       return (
          <div className="workoutInfoContainer">
+            {!!completed && <Redirect to="/" />}
 
             {/* Modal For ending workout early.  */}
             <Modal show={showEndEarly} onHide={this.handleClose}>

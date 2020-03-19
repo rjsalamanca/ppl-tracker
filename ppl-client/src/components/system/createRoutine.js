@@ -9,7 +9,7 @@ class createRoutine extends Component {
       error_code: 0,
       routine_name: '',
       routine_info: {},
-      todays_date: moment(new Date()).format("MMM DD YYYY")
+      todays_date: moment(new Date()).format("YYYY-MM-DD")
    };
 
    handleRoutine = (e) => this.setState({ error_code: 0, routine_name: e.target.value });

@@ -20,6 +20,30 @@ class PPL_System {
       }
    }
 
+   static async getWorkoutDays(uid) {
+      try {
+         const response = await db.any(`
+            SELECT json_agg(USR)
+            FROM(
+               SELECT routine.routine_name, 
+                  routine.date_started, 
+                  (SELECT json_agg(days)
+                     FROM(
+                        SELECT * 
+                        FROM routine_day
+                        WHERE routine.id = routine_day.routine_id
+                     ) AS days
+                  ) AS days
+               FROM routine
+               WHERE routine.user_id = $1
+            ) AS USR
+         `, [uid])
+         return response;
+      } catch (err) {
+         return err.message
+      }
+   }
+
    static async getFullRoutine(routine_name, uid) {
       try {
          const response = await db.any(`

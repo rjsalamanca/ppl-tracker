@@ -1,11 +1,30 @@
 const express = require('express'),
    router = express.Router(),
+   moment = require('moment'),
    pplSystemModel = require('../models/ppl_system');
 
 router.get('/routine', async (req, res) => {
    const user_id = req.session.user_id;
    const anyRoutine = await pplSystemModel.checkAnyRoutine(user_id);
    anyRoutine.rowCount === 0 ? res.json({ routine_found: false }) : res.json({ routine_found: true, routines: anyRoutine.rows })
+});
+
+router.post('/routine/currentDay', async (req, res) => {
+   const user_id = req.session.user_id;
+   const { date } = req.body;
+   const getWorkout = await pplSystemModel.getWorkoutDays(user_id);
+
+   if (getWorkout[0].json_agg !== null) {
+      const getWorkoutByDay = getWorkout[0].json_agg.map(workout => {
+         const date_between = Math.ceil(moment.duration(moment(date).diff(workout.date_started)).asDays());
+         const days = workout.days.length;
+         const curr_day_ind = (date_between % days) - 1;
+         return curr_day_ind >= 0 ? { routine_name: workout.routine_name, current_workout: workout.days[curr_day_ind] } : { routine_name: workout.routine_name, current_workout: workout.days[0] }
+      })
+      res.json({ todays_workout: getWorkoutByDay });
+   } else {
+      res.json({ todays_workout: false });
+   }
 });
 
 router.post('/create_routine', async (req, res) => {

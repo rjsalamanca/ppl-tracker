@@ -22,6 +22,8 @@ class Profile extends Component {
 
    componentDidMount() {
       this.checkForRoutines();
+      // const formatedDate = moment(this.state.date).format("YYYY-MM-DD");
+      // this.setState({ date: formatedDate })
    }
 
    handleRoutine = async (e) => {
@@ -71,9 +73,8 @@ class Profile extends Component {
       }
    }
 
-   onCalendarOnChangeChange = (date) => {
+   onCalendarOnChange = (date) => {
       this.setState({ date })
-      console.log(moment(date).format("MMM DD YYYY"));
    }
 
    getSelectedWorkout = async (workout) => {
@@ -108,17 +109,27 @@ class Profile extends Component {
          return (<WorkoutInformation selectedWorkout={selectedWorkout} />)
       }
       // !!loadWorkout ? <div>SELECTED</div> : ''
+   }
 
+   loadTodaysWorkouts = () => {
+
+      try {
+
+      } catch (err) {
+         console.log(err);
+      }
+
+      return ''
    }
 
    render() {
-      const { routines } = this.state;
+      const { routines, date } = this.state;
       return (
          <>
             <div className="routineSelection">
                <Calendar
-                  onChange={this.CalendarOnChange}
-                  value={this.state.date}
+                  onChange={this.onCalendarOnChange}
+                  value={date}
                />
                {
                   routines.length === 0 ?
@@ -146,9 +157,8 @@ class Profile extends Component {
                      </div>
                }
             </div>
-            {
-               this.loadWorkoutComponent()
-            }
+            {this.loadWorkoutComponent()}
+            {this.loadTodaysWorkouts()}
          </>
       );
    }
