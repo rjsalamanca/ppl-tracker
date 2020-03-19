@@ -17,11 +17,12 @@ class Profile extends Component {
       loadedRoutine: { routine_found: false },
       selectedWorkout: {},
       loadWorkout: false,
-      loadRoutineInfo: false
+      todaysWorkouts: false
    }
 
    componentDidMount() {
       this.checkForRoutines();
+      this.loadTodaysWorkouts();
       // const formatedDate = moment(this.state.date).format("YYYY-MM-DD");
       // this.setState({ date: formatedDate })
    }
@@ -35,6 +36,7 @@ class Profile extends Component {
          selectedWorkout: {},
          loadWorkout: false,
          loadRoutineInfo: true,
+         todaysWorkouts: false
       });
 
       if (this.state.selectedRoutine !== 'Select A Routine') {
@@ -73,8 +75,9 @@ class Profile extends Component {
       }
    }
 
-   onCalendarOnChange = (date) => {
-      this.setState({ date })
+   onCalendarOnChange = async (date) => {
+      await this.setState({ date });
+      this.loadTodaysWorkouts();
    }
 
    getSelectedWorkout = async (workout) => {
@@ -111,19 +114,27 @@ class Profile extends Component {
       // !!loadWorkout ? <div>SELECTED</div> : ''
    }
 
-   loadTodaysWorkouts = () => {
-
+   loadTodaysWorkouts = async () => {
+      const url = 'http://localhost:3000/ppl/routine/currentDay'
       try {
-
+         const response = await fetch(url, {
+            method: "POST",
+            headers: {
+               "Accept": "application/json",
+               "Content-Type": "application/json"
+            },
+            credentials: 'include',
+            body: JSON.stringify({ date: this.state.date })
+         });
+         let data = await response.json();
+         this.setState({ todaysWorkouts: data.todays_workout })
       } catch (err) {
          console.log(err);
       }
-
-      return ''
    }
 
    render() {
-      const { routines, date } = this.state;
+      const { routines, date, todaysWorkouts } = this.state;
       return (
          <>
             <div className="routineSelection">
@@ -158,7 +169,24 @@ class Profile extends Component {
                }
             </div>
             {this.loadWorkoutComponent()}
-            {this.loadTodaysWorkouts()}
+            {
+               todaysWorkouts !== false &&
+               <div>
+                  <h3 className="h5">Workouts Scheduled for Today:</h3>
+                  <ul className="list-group">
+                     {
+                        todaysWorkouts.map(workout =>
+                           <li className="list-group-item">
+                              {workout.routine_name}
+                              <ul className="list-group">
+                                 <li className="list-group-item">{workout.current_workout.day_name}</li>
+                              </ul>
+                           </li>
+                        )
+                     }
+                  </ul>
+               </div>
+            }
          </>
       );
    }
