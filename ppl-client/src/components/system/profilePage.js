@@ -17,33 +17,26 @@ class Profile extends Component {
       loadedRoutine: { routine_found: false },
       selectedWorkout: {},
       loadWorkout: false,
-      todaysWorkouts: false
+      todaysWorkouts: []
    }
 
    componentDidMount() {
       this.checkForRoutines();
       this.loadTodaysWorkouts();
-      // const formatedDate = moment(this.state.date).format("YYYY-MM-DD");
-      // this.setState({ date: formatedDate })
    }
 
    handleRoutine = async (e) => {
-      //console.log(e.target.value)
-      //if (e.target.value !== 'Select A Routine') {
       await this.setState({
          selectedRoutine: e.target.value,
          loadedRoutine: { routine_found: false },
          selectedWorkout: {},
          loadWorkout: false,
-         loadRoutineInfo: true,
-         todaysWorkouts: false
+         loadRoutineInfo: true
       });
 
       if (this.state.selectedRoutine !== 'Select A Routine') {
          await this.getFullRoutine();
       }
-      //     console.log('DONT DO ANYTHING')
-      // }
    }
 
    getFullRoutine = async () => {
@@ -62,6 +55,7 @@ class Profile extends Component {
 
    checkForRoutines = async () => {
       const url = "http://localhost:3000/ppl/routine";
+
       try {
          const response = await fetch(url, {
             method: "GET",
@@ -115,7 +109,8 @@ class Profile extends Component {
    }
 
    loadTodaysWorkouts = async () => {
-      const url = 'http://localhost:3000/ppl/routine/currentDay'
+      const url = 'http://localhost:3000/ppl/routine/currentDay';
+      console.log('test')
       try {
          const response = await fetch(url, {
             method: "POST",
@@ -127,21 +122,41 @@ class Profile extends Component {
             body: JSON.stringify({ date: this.state.date })
          });
          let data = await response.json();
-         this.setState({ todaysWorkouts: data.todays_workout })
+         await this.setState({ todaysWorkouts: data.todays_workout })
       } catch (err) {
          console.log(err);
       }
    }
 
    render() {
-      const { routines, date, todaysWorkouts } = this.state;
+      const { routines, date, todaysWorkouts, loadRoutineInfo, loadedRoutine, selectedRoutine } = this.state;
       return (
-         <>
-            <div className="routineSelection">
+         <div className="routineContainer">
+            <div className="routineDateInfo">
                <Calendar
                   onChange={this.onCalendarOnChange}
                   value={date}
                />
+               {
+                  todaysWorkouts.length > 0 &&
+                  <div>
+                     <h3 className="h5">Workouts Scheduled for Today:</h3>
+                     <ul className="list-group">
+                        {
+                           todaysWorkouts.map((workout, ind) =>
+                              <li key={`todays_workout_${workout.routine_name}_${ind}`} className="list-group-item">
+                                 {workout.routine_name}
+                                 <ul className="list-group">
+                                    <li className="list-group-item">{workout.current_workout.day_name}</li>
+                                 </ul>
+                              </li>
+                           )
+                        }
+                     </ul>
+                  </div>
+               }
+            </div>
+            <div className="routineSelection">
                {
                   routines.length === 0 ?
                      <div>
@@ -155,39 +170,23 @@ class Profile extends Component {
                         <Form>
                            <Form.Control onChange={(e) => this.handleRoutine(e)} as="select">
                               <option>Select A Routine</option>
-                              {routines.length !== 0 ?
-                                 routines.map(routine =>
-                                    <option key={`routine${routine.id}`}>{routine.routine_name}</option>
-                                 )
-                                 :
-                                 <option disabled>Loading Routines...</option>
+                              {
+                                 routines.length !== 0 ?
+                                    routines.map(routine =>
+                                       <option key={`routine${routine.id}`}>{routine.routine_name}</option>
+                                    )
+                                    :
+                                    <option disabled>Loading Routines...</option>
                               }
                            </Form.Control>
                         </Form>
+
                         {this.loadRoutineComponent()}
                      </div>
                }
+               {this.loadWorkoutComponent()}
             </div>
-            {this.loadWorkoutComponent()}
-            {
-               todaysWorkouts !== false &&
-               <div>
-                  <h3 className="h5">Workouts Scheduled for Today:</h3>
-                  <ul className="list-group">
-                     {
-                        todaysWorkouts.map(workout =>
-                           <li className="list-group-item">
-                              {workout.routine_name}
-                              <ul className="list-group">
-                                 <li className="list-group-item">{workout.current_workout.day_name}</li>
-                              </ul>
-                           </li>
-                        )
-                     }
-                  </ul>
-               </div>
-            }
-         </>
+         </div>
       );
    }
 }

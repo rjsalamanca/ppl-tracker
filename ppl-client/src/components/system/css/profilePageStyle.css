@@ -1,4 +1,4 @@
-.routineSelection{
+.routineContainer{
    display: flex;
    justify-content: flex-start;
    align-items: flex-start;
@@ -13,4 +13,8 @@
 
 .routineInformation{
    width: 100%;
+}
+
+.list-group-item{
+   border:none;
 }
