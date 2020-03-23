@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Calendar from 'react-calendar';
-import moment from 'moment';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
@@ -47,6 +46,7 @@ class Profile extends Component {
             credentials: "include"
          });
          const data = await response.json();
+         console.log('this is loaded info: ', data)
          !!data.routine_found ? this.setState({ loadedRoutine: data, loadRoutineInfo: false }) : this.setState({ loadedRoutine: { routine_found: false }, loadRoutineInfo: false });
       } catch (err) {
          console.log(err);
@@ -105,7 +105,6 @@ class Profile extends Component {
       if (!!loadWorkout) {
          return (<WorkoutInformation selectedWorkout={selectedWorkout} />)
       }
-      // !!loadWorkout ? <div>SELECTED</div> : ''
    }
 
    loadTodaysWorkouts = async () => {
@@ -129,7 +128,7 @@ class Profile extends Component {
    }
 
    render() {
-      const { routines, date, todaysWorkouts, loadRoutineInfo, loadedRoutine, selectedRoutine } = this.state;
+      const { routines, date, todaysWorkouts } = this.state;
       return (
          <div className="routineContainer">
             <div className="routineDateInfo">
