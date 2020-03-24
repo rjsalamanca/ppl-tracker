@@ -109,7 +109,6 @@ class Profile extends Component {
 
    loadTodaysWorkouts = async () => {
       const url = 'http://localhost:3000/ppl/routine/currentDay';
-      console.log('test')
       try {
          const response = await fetch(url, {
             method: "POST",
@@ -121,6 +120,7 @@ class Profile extends Component {
             body: JSON.stringify({ date: this.state.date })
          });
          let data = await response.json();
+         console.log(data)
          await this.setState({ todaysWorkouts: data.todays_workout })
       } catch (err) {
          console.log(err);

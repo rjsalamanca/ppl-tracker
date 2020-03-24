@@ -18,7 +18,14 @@ router.post('/routine/currentDay', async (req, res) => {
       const getWorkoutByDay = getWorkout[0].json_agg.map(workout => {
          const date_between = Math.ceil(moment.duration(moment(date).diff(workout.date_started)).asDays());
          const days = workout.days.length;
-         const curr_day_ind = (date_between % days) - 1;
+         const curr_day_ind = (date_between % days);
+         console.log('----------------');
+         console.log(`In map of: ${workout.routine_name}`)
+         console.log(`date: ${date}`)
+         console.log(`date_between: ${date_between}`);
+         console.log(`days: ${days}`);
+         console.log(`curr_day_ind: ${curr_day_ind}`);
+         console.log('----------------\n');
          return curr_day_ind >= 0 ? { routine_name: workout.routine_name, current_workout: workout.days[curr_day_ind] } : { routine_name: workout.routine_name, current_workout: workout.days[0] }
       })
       res.json({ todays_workout: getWorkoutByDay });
