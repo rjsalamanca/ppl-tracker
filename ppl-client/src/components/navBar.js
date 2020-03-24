@@ -26,7 +26,7 @@ class NavBar extends Component {
                   {
                      {
                         true:
-                           <Nav className="navbar-nav ml-auto">
+                           <Nav className="navbar-nav">
                               <Nav.Item className="nav-item active">
                                  <Link className="nav-link" to="/ppl/create_routine">Create Routine</Link>
                               </Nav.Item>
