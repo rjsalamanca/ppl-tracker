@@ -12,7 +12,7 @@ class createRoutine extends Component {
       todays_date: moment(new Date()).format("YYYY-MM-DD")
    };
 
-   handleRoutine = (e) => this.setState({ error_code: 0, routine_name: e.target.value });
+   handleRoutine = (e) => this.setState({ error_code: 0, routine_name: e.target.value.trim() });
 
    createRoutine = async () => {
       const url = "http://localhost:3000/ppl/create_routine"
@@ -36,6 +36,7 @@ class createRoutine extends Component {
    }
 
    render() {
+      console.log(this.state.routine_name)
       return (
          <div>
             create here
