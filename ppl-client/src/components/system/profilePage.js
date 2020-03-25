@@ -96,7 +96,7 @@ class Profile extends Component {
       } else if (!loadedRoutine.routine_found) {
          return (<div>NO INFO FOUND</div>);
       } else {
-         return (<RoutineInformation calender_date={date} routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />)
+         return (<RoutineInformation calendar_date={date} routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />)
       }
    }
 

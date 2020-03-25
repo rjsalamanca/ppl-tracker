@@ -16,18 +16,18 @@ class RoutineInformation extends Component {
    }
 
    static getDerivedStateFromProps(nextProps, prevState) {
-      if (nextProps.calender_date !== prevState.date) {
-         return { date: nextProps.calender_date };
+      if (nextProps.calendar_date !== prevState.date) {
+         return { date: nextProps.calendar_date };
       } else return null;
    }
 
    async componentDidUpdate(prevProps, prevState) {
-      // if (prevProps.calender_date !== this.props.calender_date) {
+      // if (prevProps.calendar_date !== this.props.calendar_date) {
       //    //Perform some operation here
       //    console.log(this.state.date)
       //    // this.setState({ someState: someValue });
       // }
-      if (prevProps.calender_date !== this.props.calender_date) {
+      if (prevProps.calendar_date !== this.props.calendar_date) {
          await this.setState({
             loadedProps: true,
             routine_info: this.props.routine,
@@ -56,7 +56,7 @@ class RoutineInformation extends Component {
          routine_info: this.props.routine,
          workout_days: {},
          selectedWorkout: {},
-         date: this.props.calender_date
+         date: this.props.calendar_date
       });
       let start_date = moment(this.state.routine_info.routine.date_started);
       let current = moment(this.state.date, "YYYY-MM-DD");
