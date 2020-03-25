@@ -11,8 +11,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Routine name needs to be trimmed before inputting in DB.
 [] Creating of routine needs to happen in 1 SQL statement.
    - Bugs are created when there is no information in the child. EX: Routine with no Routine Days.
-[] Workouts not updating when changing calender date.
+[X] Workouts not updating when changing calender date.
 [X] Workouts Schedule for Today not properly updating when calender is changed.
+[X] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout. (Back end issue)
 
 ************
 * STYLING: *
@@ -34,7 +35,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Rework checking if still logged in.
 [] Add Rest Days when creating routine.
 [] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
-[] Rework of componentWillReceiveProps in routineInformation.js
+[X] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods
 [] Edit routine/exericses/sets.
+[] Rework with hooks or redux for state management.
 
 ```

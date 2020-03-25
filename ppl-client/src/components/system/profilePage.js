@@ -82,7 +82,7 @@ class Profile extends Component {
    }
 
    loadRoutineComponent = () => {
-      const { selectedRoutine, loadRoutineInfo, loadedRoutine } = this.state;
+      const { selectedRoutine, loadRoutineInfo, loadedRoutine, date } = this.state;
       if (selectedRoutine === 'Select A Routine') {
          return (<div>Please select a routine above.</div>);
       } else if (!!loadRoutineInfo) {
@@ -96,7 +96,7 @@ class Profile extends Component {
       } else if (!loadedRoutine.routine_found) {
          return (<div>NO INFO FOUND</div>);
       } else {
-         return (<RoutineInformation routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />)
+         return (<RoutineInformation calender_date={date} routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />)
       }
    }
 
@@ -120,7 +120,6 @@ class Profile extends Component {
             body: JSON.stringify({ date: this.state.date })
          });
          let data = await response.json();
-         console.log(data)
          await this.setState({ todaysWorkouts: data.todays_workout })
       } catch (err) {
          console.log(err);
@@ -179,7 +178,6 @@ class Profile extends Component {
                               }
                            </Form.Control>
                         </Form>
-
                         {this.loadRoutineComponent()}
                      </div>
                }

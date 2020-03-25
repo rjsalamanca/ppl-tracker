@@ -11,47 +11,37 @@ class RoutineInformation extends Component {
       routine_info: {},
       date_between: 0,
       workout_days: {},
-      selectedWorkout: {}
+      selectedWorkout: {},
+      date: ''
    }
 
-   async componentDidMount() {
-      await this.setState({
-         loadedProps: true,
-         routine_info: this.props.routine,
-         workout_days: {},
-         selectedWorkout: {}
-      })
-      let start_date = moment(this.state.routine_info.routine.date_started, "MMM-DD-YYYY");
-      let current = moment(new Date(), "MMM DD YYYY");
-      await this.setState({ date_between: Math.ceil(moment.duration(current.diff(start_date)).asDays()) })
-      await this.getTodaysWorkout();
+   static getDerivedStateFromProps(nextProps, prevState) {
+      if (nextProps.calender_date !== prevState.date) {
+         return { date: nextProps.calender_date };
+      } else return null;
    }
-   // componentWillUnmount() {
-   //     this.setState({
-   //         loadedProps: false,
-   //         routine_info: {},
-   //         date_between: 0,
-   //         workout_days: {},
-   //         selectedWorkout: {}
-   //     });
-   // }
 
-   async componentWillReceiveProps(newProps) {
-      const oldProps = this.props;
-
-      if (oldProps !== newProps) {
+   async componentDidUpdate(prevProps, prevState) {
+      // if (prevProps.calender_date !== this.props.calender_date) {
+      //    //Perform some operation here
+      //    console.log(this.state.date)
+      //    // this.setState({ someState: someValue });
+      // }
+      if (prevProps.calender_date !== this.props.calender_date) {
          await this.setState({
             loadedProps: true,
-            routine_info: newProps.routine,
+            routine_info: this.props.routine,
             workout_days: {},
             selectedWorkout: {}
          });
          if (!!this.state.routine_info.routine_found) {
-            let start_date = moment(this.state.routine_info.routine.date_started, "MMM-DD-YYYY");
-            let current = moment(new Date(), "MMM DD YYYY");
-            await this.setState({ date_between: Math.ceil(moment.duration(current.diff(start_date)).asDays()) })
+            let start_date = moment(this.state.routine_info.routine.date_started);
+            let current = moment(this.state.date, "YYYY-MM-DD")
+
+            await this.setState({ date_between: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
             await this.getTodaysWorkout();
          } else {
+            console.log('huh')
             // await this.setState({
             //     workout_days: {},
             //     selectedWorkout: {}
@@ -60,16 +50,38 @@ class RoutineInformation extends Component {
       }
    }
 
+   async componentDidMount() {
+      await this.setState({
+         loadedProps: true,
+         routine_info: this.props.routine,
+         workout_days: {},
+         selectedWorkout: {},
+         date: this.props.calender_date
+      });
+      let start_date = moment(this.state.routine_info.routine.date_started);
+      let current = moment(this.state.date, "YYYY-MM-DD");
+
+      await this.setState({ date_between: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
+      await this.getTodaysWorkout();
+   }
+
    getTodaysWorkout = async () => {
       const { routine_info, date_between } = this.state;
       const days = routine_info.routine.routine_days;
-      const curr_day_ind = (date_between % days.length) - 1;
+      const curr_day_ind = date_between % days.length;
       let temp_days = {};
-      if (curr_day_ind <= 0) {
-         temp_days = { today: days[days.length - 1], tomorrow: days[0] };
-         (days.length - 1 === 0) ? temp_days['yesterday'] = days[days.length - 1] : temp_days['yesterday'] = days[days.length - 2]
+
+      if (curr_day_ind === 0) {
+         // cycle at the start
+         temp_days = { yesterday: days[days.length - 1], today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1] };
+         // (days.length - 1 === 0) ? temp_days['yesterday'] = days[days.length] : temp_days['yesterday'] = days[days.length - 1]
+      } else if (curr_day_ind === days.length - 1) {
+         //cycle at the end
+         temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[0] };
+         // temp_days = { today: days[curr_day_ind - 1], tomorrow: days[curr_day_ind], yesterday: days[days.length - 1] };
       } else {
-         temp_days = { today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1], yesterday: days[curr_day_ind - 1] };
+         // cycle in between
+         temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1] };
       }
       await this.setState({ workout_days: temp_days });
    }

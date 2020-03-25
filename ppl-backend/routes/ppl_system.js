@@ -16,7 +16,7 @@ router.post('/routine/currentDay', async (req, res) => {
 
    if (getWorkout[0].json_agg !== null) {
       const getWorkoutByDay = getWorkout[0].json_agg.map(workout => {
-         const date_between = Math.ceil(moment.duration(moment(date).diff(workout.date_started)).asDays());
+         const date_between = Math.floor(moment.duration(moment(date).diff(workout.date_started)).asDays());
          const days = workout.days.length;
          const curr_day_ind = (date_between % days);
          console.log('----------------');
