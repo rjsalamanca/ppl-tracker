@@ -14,7 +14,8 @@ class addDay extends Component {
    }
 
    componentDidMount() {
-      this.setState({ routine_info: this.props.location.state.routine_info })
+      console.log(this.props.location)
+      // this.setState({ routine_info: this.props.location.state.routine_info })
    }
 
    handleClose = () => this.setState({ show: false });
@@ -51,24 +52,25 @@ class addDay extends Component {
    }
 
    saveRoutine = async () => {
-      const url = "http://localhost:3000/ppl/routine/add_routine"
-      try {
-         const response = await fetch(url, {
-            method: "POST",
-            headers: {
-               "Accept": "application/json",
-               "Content-Type": "application/json"
-            },
-            credentials: 'include',
-            body: JSON.stringify(this.state)
-         });
+      console.log(this.state)
+      // const url = "http://localhost:3000/ppl/routine/add_routine"
+      // try {
+      //    const response = await fetch(url, {
+      //       method: "POST",
+      //       headers: {
+      //          "Accept": "application/json",
+      //          "Content-Type": "application/json"
+      //       },
+      //       credentials: 'include',
+      //       body: JSON.stringify(this.state)
+      //    });
 
-         const data = await response.json();
-         console.log(data)
+      //    const data = await response.json();
+      //    console.log(data)
 
-      } catch (err) {
-         console.log(err.message);
-      }
+      // } catch (err) {
+      //    console.log(err.message);
+      // }
    }
 
    render() {
@@ -122,7 +124,7 @@ class addDay extends Component {
 
             <Form>
                <Button className="mb-3" variant="danger" onClick={(e) => this.modalTrigger(e)}>Add Day</Button>
-               <Button className="m-3 btn-block" variant="success" onClick={(e) => this.saveRoutine()}>Finish</Button>
+               <Button className="m-3 btn-block" variant="success" onClick={(e) => this.props.saveRoutine(days)}>Finish</Button>
             </Form>
          </div>
       )

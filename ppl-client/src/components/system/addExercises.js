@@ -4,7 +4,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 // add custom css here
 import "./css/addExercisesStyle.css";
 
-class addExercises extends Component {
+class AddExercises extends Component {
    state = {
       show: false,
       exercise_name: '',
@@ -165,4 +165,4 @@ class addExercises extends Component {
    }
 }
 
-export default addExercises;
+export default AddExercises;

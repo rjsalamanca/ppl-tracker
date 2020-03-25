@@ -3,19 +3,37 @@ import moment from 'moment';
 import { Form, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
+import AddRoutineName from './addRoutineName';
+import AddDay from './addDay';
+
 class createRoutine extends Component {
    state = {
       redirect: false,
       error_code: 0,
       routine_name: '',
-      routine_info: {},
-      todays_date: moment(new Date()).format("YYYY-MM-DD")
+      todays_date: moment(new Date()).format("YYYY-MM-DD"),
+      routine_name_check: false,
    };
 
-   handleRoutine = (e) => this.setState({ error_code: 0, routine_name: e.target.value.trim() });
+   checkRoutineName = (e) => {
+      if (e.target.value.length >= 3) {
+         this.setState({
+            routine_name: e.target.value.trim(),
+            routine_name_check: true
+         });
+      } else {
+         this.setState({ routine_name_check: false });
+      }
+   }
 
-   createRoutine = async () => {
-      const url = "http://localhost:3000/ppl/create_routine"
+   saveRoutine = async (days) => {
+      let send_info = {
+         routine_name: this.state.routine_name,
+         days
+      }
+
+      const url = "http://localhost:3000/ppl/routine/add_routine";
+
       try {
          const response = await fetch(url, {
             method: "POST",
@@ -24,23 +42,31 @@ class createRoutine extends Component {
                "Content-Type": "application/json"
             },
             credentials: 'include',
-            body: JSON.stringify(this.state)
+            body: JSON.stringify(send_info)
          });
 
          const data = await response.json();
+         console.log(data)
 
-         !!data.routine_added ? this.setState({ redirect: true, routine_info: data.routine_info }) : this.setState({ redirect: false, error_code: data.error_code });
       } catch (err) {
          console.log(err.message);
       }
    }
 
+   loadProperComponents = () => {
+      const { routine_name_check } = this.state;
+      if (!!routine_name_check) {
+         return <AddDay saveRoutine={this.saveRoutine} />
+      }
+   }
+
    render() {
-      console.log(this.state.routine_name)
       return (
          <div>
             create here
-            <Form>
+            <AddRoutineName checkRoutineName={this.checkRoutineName} />
+            {this.loadProperComponents()}
+            {/* <Form>
                <Form.Group controlId="formBasicEmail">
                   <Form.Label>Routine Name</Form.Label>
                   <Form.Control type="input" onChange={(e) => this.handleRoutine(e)} placeholder="Ex. Push Pull Legs" />
@@ -56,7 +82,7 @@ class createRoutine extends Component {
             {this.state.redirect ? <Redirect to={{
                pathname: "/ppl/routine/add_day",
                state: { routine_info: this.state.routine_info }
-            }} /> : <div></div>}
+            }} /> : <div></div>} */}
          </div>
       );
    }

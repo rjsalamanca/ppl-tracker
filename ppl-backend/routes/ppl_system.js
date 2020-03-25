@@ -60,34 +60,35 @@ router.get('/get_full_routine/:routine?', async (req, res) => {
 });
 
 router.post('/routine/add_routine', async (req, res) => {
-   const { days, routine_info } = req.body;
-   const user_id = req.session.user_id;
+   console.log(req.body);
+   // const { days, routine_info } = req.body;
+   // const user_id = req.session.user_id;
 
-   const routineModel = new pplSystemModel(routine_info.id, routine_info.routine_name, days, routine_info.date_started, user_id);
+   // const routineModel = new pplSystemModel(routine_info.id, routine_info.routine_name, days, routine_info.date_started, user_id);
 
-   days.forEach(async (day) => {
-      let addDay = await routineModel.addRoutineDay(day);
+   // days.forEach(async (day) => {
+   //    let addDay = await routineModel.addRoutineDay(day);
 
-      if (addDay.rowCount >= 1) {
-         day.exercises.forEach(async (exercise) => {
-            let addExercise = await routineModel.addExercise(day, exercise);
-            if (addExercise.rowCount >= 1) {
-               exercise.sets.forEach(async (set, idx) => {
-                  let addSets = await routineModel.addExerciseSet(exercise, (idx + 1), set, day);
-                  if (addSets.rowCount >= 1) {
-                     // added 
-                  } else {
-                     // Fail wasn't added
-                  }
-               })
-            } else {
-               // Fail wasn't added
-            }
-         })
-      } else {
-         // Fail wasn't added
-      }
-   })
+   //    if (addDay.rowCount >= 1) {
+   //       day.exercises.forEach(async (exercise) => {
+   //          let addExercise = await routineModel.addExercise(day, exercise);
+   //          if (addExercise.rowCount >= 1) {
+   //             exercise.sets.forEach(async (set, idx) => {
+   //                let addSets = await routineModel.addExerciseSet(exercise, (idx + 1), set, day);
+   //                if (addSets.rowCount >= 1) {
+   //                   // added 
+   //                } else {
+   //                   // Fail wasn't added
+   //                }
+   //             })
+   //          } else {
+   //             // Fail wasn't added
+   //          }
+   //       })
+   //    } else {
+   //       // Fail wasn't added
+   //    }
+   // })
 });
 
 router.post('/routine/finish_workout', async (req, res) => {
