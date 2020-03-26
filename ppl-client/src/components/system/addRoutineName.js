@@ -16,7 +16,7 @@ class AddRoutineName extends Component {
       return (
          <div>
             <Form>
-               <Form.Group controlId="formBasicEmail">
+               <Form.Group>
                   <Form.Label>Routine Name</Form.Label>
                   <Form.Control type="input" onChange={(e) => this.handleRoutine(e)} placeholder="Ex. Push Pull Legs" />
                </Form.Group>

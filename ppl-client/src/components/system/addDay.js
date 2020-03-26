@@ -14,7 +14,6 @@ class addDay extends Component {
    }
 
    componentDidMount() {
-      console.log(this.props.location)
       // this.setState({ routine_info: this.props.location.state.routine_info })
    }
 

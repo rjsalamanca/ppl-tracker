@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Form, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
 import AddRoutineName from './addRoutineName';
@@ -13,6 +12,7 @@ class createRoutine extends Component {
       routine_name: '',
       todays_date: moment(new Date()).format("YYYY-MM-DD"),
       routine_name_check: false,
+
    };
 
    checkRoutineName = (e) => {
@@ -29,27 +29,44 @@ class createRoutine extends Component {
    saveRoutine = async (days) => {
       let send_info = {
          routine_name: this.state.routine_name,
+         todays_date: this.state.todays_date,
          days
       }
 
       const url = "http://localhost:3000/ppl/routine/add_routine";
 
-      try {
-         const response = await fetch(url, {
-            method: "POST",
-            headers: {
-               "Accept": "application/json",
-               "Content-Type": "application/json"
-            },
-            credentials: 'include',
-            body: JSON.stringify(send_info)
-         });
+      ////////////////////////
+      //    ERROR CODES:    //
+      ////////////////////////
+      // 0: Valid           //
+      // 1: Already Created //
+      // 2: No Data         //
+      // 3: Database Error  //
+      ////////////////////////
 
-         const data = await response.json();
-         console.log(data)
+      if (days.length !== 0) {
+         try {
+            const response = await fetch(url, {
+               method: "POST",
+               headers: {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json"
+               },
+               credentials: 'include',
+               body: JSON.stringify(send_info)
+            });
 
-      } catch (err) {
-         console.log(err.message);
+            const data = await response.json();
+            if (!!data.routine_added) {
+               this.setState({ redirect: true })
+            } else {
+               this.setState({ error_code: data.error_code })
+            }
+         } catch (err) {
+            this.setState({ error_code: 3 })
+         }
+      } else {
+         this.setState({ error_code: 2 })
       }
    }
 
@@ -63,26 +80,10 @@ class createRoutine extends Component {
    render() {
       return (
          <div>
-            create here
+            {this.state.error_code !== 0 && <div>ERROR</div>}
             <AddRoutineName checkRoutineName={this.checkRoutineName} />
             {this.loadProperComponents()}
-            {/* <Form>
-               <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Routine Name</Form.Label>
-                  <Form.Control type="input" onChange={(e) => this.handleRoutine(e)} placeholder="Ex. Push Pull Legs" />
-               </Form.Group>
-
-               <Button className="mb-3" variant="danger" onClick={(e) => this.createRoutine(e)}>Create</Button>
-            </Form>
-            {
-               {
-                  1: <div>ERROR ALREADY EXISTS</div>
-               }[this.state.error_code]
-            }
-            {this.state.redirect ? <Redirect to={{
-               pathname: "/ppl/routine/add_day",
-               state: { routine_info: this.state.routine_info }
-            }} /> : <div></div>} */}
+            {!!this.state.redirect && <Redirect to="/profile/" />}
          </div>
       );
    }

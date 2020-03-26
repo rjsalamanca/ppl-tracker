@@ -73,14 +73,17 @@ class RoutineInformation extends Component {
 
       if (curr_day_ind === 0) {
          // cycle at the start
-         temp_days = { yesterday: days[days.length - 1], today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1] };
-         // (days.length - 1 === 0) ? temp_days['yesterday'] = days[days.length] : temp_days['yesterday'] = days[days.length - 1]
+         console.log('cycle in start');
+         temp_days = { yesterday: days[days.length - 1], today: days[curr_day_ind] };
+         (days.length - 1 === 0) ? temp_days['tomorrow'] = days[0] : temp_days['tomorrow'] = days[curr_day_ind + 1]
       } else if (curr_day_ind === days.length - 1) {
          //cycle at the end
+         console.log('cycle in end');
          temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[0] };
          // temp_days = { today: days[curr_day_ind - 1], tomorrow: days[curr_day_ind], yesterday: days[days.length - 1] };
       } else {
          // cycle in between
+         console.log('cycle in between');
          temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1] };
       }
       await this.setState({ workout_days: temp_days });
@@ -88,6 +91,7 @@ class RoutineInformation extends Component {
 
    render() {
       const { routine_info, workout_days } = this.state;
+      console.log(workout_days)
       return (
          <>
             {

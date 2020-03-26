@@ -34,61 +34,71 @@ router.post('/routine/currentDay', async (req, res) => {
    }
 });
 
-router.post('/create_routine', async (req, res) => {
-   const { routine_name, todays_date } = req.body;
-   const user_id = req.session.user_id;
-   const routineModel = new pplSystemModel(null, routine_name, null, todays_date, user_id)
-   const checkIfRoutineAlreadyCreated = await routineModel.getRoutineInfo()
+// router.post('/create_routine', async (req, res) => {
+//    const { routine_name, todays_date } = req.body;
+//    const user_id = req.session.user_id;
+//    const routineModel = new pplSystemModel(null, routine_name, null, todays_date, user_id)
+//    const checkIfRoutineAlreadyCreated = await routineModel.getRoutineInfo()
 
-   if (checkIfRoutineAlreadyCreated === undefined) {
-      const addRoutine = await routineModel.createRoutine();
-      const getRoutineInfo = await routineModel.getRoutineInfo();
-      addRoutine.rowCount === 1 ? res.json({ routine_added: true, routine_info: getRoutineInfo }) : res.json({ routine_added: false });
-   } else {
-      // Error Code 
-      // 1 = Already Created
-      res.json({ routine_added: false, error_code: 1 })
-   }
-});
+//    if (checkIfRoutineAlreadyCreated === undefined) {
+//       const addRoutine = await routineModel.createRoutine();
+//       const getRoutineInfo = await routineModel.getRoutineInfo();
+//       addRoutine.rowCount === 1 ? res.json({ routine_added: true, routine_info: getRoutineInfo }) : res.json({ routine_added: false });
+//    } else {
+//       // Error Code 
+//       // 1 = Already Created
+//       res.json({ routine_added: false, error_code: 1 })
+//    }
+// });
 
 router.get('/get_full_routine/:routine?', async (req, res) => {
    const { routine } = req.params;
    const user_id = req.session.user_id;
    const getFullRoutine = await pplSystemModel.getFullRoutine(routine, user_id);
-   console.log(getFullRoutine[0].json_agg)
    getFullRoutine[0].json_agg === null ? res.json({ routine_found: false }) : res.json({ routine_found: true, routine: getFullRoutine[0].json_agg[0] });
 });
 
 router.post('/routine/add_routine', async (req, res) => {
-   console.log(req.body);
-   // const { days, routine_info } = req.body;
-   // const user_id = req.session.user_id;
+   const { days, routine_name, todays_date } = req.body;
+   const user_id = req.session.user_id;
 
-   // const routineModel = new pplSystemModel(routine_info.id, routine_info.routine_name, days, routine_info.date_started, user_id);
+   const routineModel = new pplSystemModel(null, routine_name, null, todays_date, user_id)
+   const checkIfRoutineAlreadyCreated = await routineModel.getRoutineInfo();
 
-   // days.forEach(async (day) => {
-   //    let addDay = await routineModel.addRoutineDay(day);
+   if (checkIfRoutineAlreadyCreated === undefined) {
+      // No duplicate routine name, move forward.
+      const addRoutine = await routineModel.createRoutine();
+      const getRoutineInfo = await routineModel.getRoutineInfo();
+      if (addRoutine.rowCount === 1) {
+         const addingRoutineModel = new pplSystemModel(getRoutineInfo.id, getRoutineInfo.routine_name, days, getRoutineInfo.date_started, user_id);
+         try {
+            days.forEach(async (day) => {
+               let addDay = await addingRoutineModel.addRoutineDay(day);
+               if (addDay.rowCount >= 1) {
+                  day.exercises.forEach(async (exercise) => {
+                     let addExercise = await addingRoutineModel.addExercise(day, exercise);
+                     if (addExercise.rowCount >= 1) {
+                        exercise.sets.forEach(async (set, idx) => {
+                           await addingRoutineModel.addExerciseSet(exercise, (idx + 1), set, day);
+                        })
+                     }
+                  })
+               }
+            });
+            // No failures, we successfully added a routine.
+            res.json({ routine_added: true })
+         } catch (err) {
+            // Error Code: 2 Routine insert failures.
+            res.json({ routine_added: false, error_code: 2 })
+         }
+      } else {
+         res.json({ routine_added: false })
+      }
 
-   //    if (addDay.rowCount >= 1) {
-   //       day.exercises.forEach(async (exercise) => {
-   //          let addExercise = await routineModel.addExercise(day, exercise);
-   //          if (addExercise.rowCount >= 1) {
-   //             exercise.sets.forEach(async (set, idx) => {
-   //                let addSets = await routineModel.addExerciseSet(exercise, (idx + 1), set, day);
-   //                if (addSets.rowCount >= 1) {
-   //                   // added 
-   //                } else {
-   //                   // Fail wasn't added
-   //                }
-   //             })
-   //          } else {
-   //             // Fail wasn't added
-   //          }
-   //       })
-   //    } else {
-   //       // Fail wasn't added
-   //    }
-   // })
+   } else {
+      // Error Code: 1 Routine with the same name has already been created
+      res.json({ routine_added: false, error_code: 1 })
+   }
 });
 
 router.post('/routine/finish_workout', async (req, res) => {
