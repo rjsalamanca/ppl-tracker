@@ -34,23 +34,6 @@ router.post('/routine/currentDay', async (req, res) => {
    }
 });
 
-// router.post('/create_routine', async (req, res) => {
-//    const { routine_name, todays_date } = req.body;
-//    const user_id = req.session.user_id;
-//    const routineModel = new pplSystemModel(null, routine_name, null, todays_date, user_id)
-//    const checkIfRoutineAlreadyCreated = await routineModel.getRoutineInfo()
-
-//    if (checkIfRoutineAlreadyCreated === undefined) {
-//       const addRoutine = await routineModel.createRoutine();
-//       const getRoutineInfo = await routineModel.getRoutineInfo();
-//       addRoutine.rowCount === 1 ? res.json({ routine_added: true, routine_info: getRoutineInfo }) : res.json({ routine_added: false });
-//    } else {
-//       // Error Code 
-//       // 1 = Already Created
-//       res.json({ routine_added: false, error_code: 1 })
-//    }
-// });
-
 router.get('/get_full_routine/:routine?', async (req, res) => {
    const { routine } = req.params;
    const user_id = req.session.user_id;
@@ -92,9 +75,9 @@ router.post('/routine/add_routine', async (req, res) => {
             res.json({ routine_added: false, error_code: 2 })
          }
       } else {
-         res.json({ routine_added: false })
+         // Error Code: 3 Insert Routine Name issue
+         res.json({ routine_added: false, error_code: 3 })
       }
-
    } else {
       // Error Code: 1 Routine with the same name has already been created
       res.json({ routine_added: false, error_code: 1 })

@@ -35,14 +35,16 @@ class createRoutine extends Component {
 
       const url = "http://localhost:3000/ppl/routine/add_routine";
 
-      ////////////////////////
-      //    ERROR CODES:    //
-      ////////////////////////
-      // 0: Valid           //
-      // 1: Already Created //
-      // 2: No Data         //
-      // 3: Database Error  //
-      ////////////////////////
+      ////////////////////////////////////
+      //           ERROR CODES:         //
+      ////////////////////////////////////
+      // 0: Valid                       //
+      // 1: Already Created             //
+      // 2: Routine Insert Failed       //
+      // 3: Routine Name Insert Failed  //
+      // 4: No Days In Routine          //
+      // 5: Backend Connection Failed   //
+      ////////////////////////////////////
 
       if (days.length !== 0) {
          try {
@@ -63,11 +65,37 @@ class createRoutine extends Component {
                this.setState({ error_code: data.error_code })
             }
          } catch (err) {
-            this.setState({ error_code: 3 })
+            // back end connection error
+            this.setState({ error_code: 5 })
          }
       } else {
-         this.setState({ error_code: 2 })
+         // no days error
+         this.setState({ error_code: 4 })
       }
+   }
+
+   displayError = () => {
+      const { error_code } = this.state;
+      let sendJSX = '';
+      switch (error_code) {
+         case 1:
+            sendJSX = 'You already have a routine with the same name, try using a different name';
+            break;
+         case 2:
+            sendJSX = 'We had a problem with adding your routine days or exercises, please send this error to us with the name of your routine days and exercises.';
+            break;
+         case 3:
+            sendJSX = 'We had a problem with adding your routine name, please send this error to us with the name of your routine name.';
+            break;
+         case 4:
+            sendJSX = 'It looks like you forgot to add some days to your routine.';
+            break;
+         case 5:
+            sendJSX = 'Hmm, it looks like either our server or your connection is down.';
+            break;
+         default:
+      }
+      return <div>ERROR: {sendJSX}</div>
    }
 
    loadProperComponents = () => {
@@ -78,12 +106,13 @@ class createRoutine extends Component {
    }
 
    render() {
+      const { error_code, redirect } = this.state;
       return (
          <div>
-            {this.state.error_code !== 0 && <div>ERROR</div>}
+            {error_code !== 0 && this.displayError()}
             <AddRoutineName checkRoutineName={this.checkRoutineName} />
             {this.loadProperComponents()}
-            {!!this.state.redirect && <Redirect to="/profile/" />}
+            {!!redirect && <Redirect to="/profile/" />}
          </div>
       );
    }

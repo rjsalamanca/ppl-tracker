@@ -13,10 +13,6 @@ class addDay extends Component {
       days: []
    }
 
-   componentDidMount() {
-      // this.setState({ routine_info: this.props.location.state.routine_info })
-   }
-
    handleClose = () => this.setState({ show: false });
    handleShow = () => this.setState({ show: true });
    handleDayName = (e) => this.setState({ day_name: e.target.value });
@@ -48,28 +44,6 @@ class addDay extends Component {
       } else {
          this.setState({ day_error: 1 });
       }
-   }
-
-   saveRoutine = async () => {
-      console.log(this.state)
-      // const url = "http://localhost:3000/ppl/routine/add_routine"
-      // try {
-      //    const response = await fetch(url, {
-      //       method: "POST",
-      //       headers: {
-      //          "Accept": "application/json",
-      //          "Content-Type": "application/json"
-      //       },
-      //       credentials: 'include',
-      //       body: JSON.stringify(this.state)
-      //    });
-
-      //    const data = await response.json();
-      //    console.log(data)
-
-      // } catch (err) {
-      //    console.log(err.message);
-      // }
    }
 
    render() {
