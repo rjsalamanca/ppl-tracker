@@ -49,7 +49,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Editing of routine/exericses/sets.
 [] Rework with hooks or redux for state management.
 [X] Rework creating of workout through components instead of redirects
-[IP] Work on failsafes for routine creation
+[X] Work on failsafes for routine creation
    [X] Fail Safe for routine name without any days
    [X] Rework Error Codes/Refactor/Remove commented code
 
