@@ -95,7 +95,11 @@ class createRoutine extends Component {
             break;
          default:
       }
-      return <div>ERROR: {sendJSX}</div>
+      return (
+         <div>
+            ERROR: {sendJSX}
+         </div>
+      );
    }
 
    loadProperComponents = () => {

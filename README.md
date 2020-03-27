@@ -23,7 +23,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Workouts Schedule for Today not properly updating when calendar is changed.
 [X] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout.
    - Back end issue caused by using Math.ceil instead of Math.floor
-[] Select button does not change when selecting reps when creating a routine, but changes in the back end.
+[X] Select button does not change when selecting reps when creating a routine, but changes in the back end.
+[] Workouts before its start date should not be accessible.
 
 ************
 * STYLING: *

@@ -47,7 +47,6 @@ class AddExercises extends Component {
       });
       !!show ? this.setState({ show: false }) : this.setState({ show: true })
    }
-
    addSet = () => {
       const { sets } = this.state;
       let newSets = [...sets];
@@ -90,7 +89,7 @@ class AddExercises extends Component {
    }
 
    render() {
-      const { show, exercises, exercise_error } = this.state;
+      const { show, exercises, exercise_error, sets } = this.state;
       return (
          <div>
             <Modal show={show} onHide={this.handleClose}>
@@ -101,12 +100,12 @@ class AddExercises extends Component {
                   <Form.Group controlId="formBasicEmail">
                      <div>
                         Exercise Name: <Form.Control type="input" onChange={(e) => this.handleExerciseName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
-                        {this.state.sets.map((set, idx) =>
+                        {sets.map((set, idx) =>
                            <div key={`set-${idx + 1}`} className="setContainer">
                               <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
                               <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} />
                               <span className="weightRepsLabel">Reps:</span>
-                              <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={1}>
+                              <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={sets[idx].reps === 0 & sets[idx.weight === null] ? 1 : sets[idx].reps}>
                                  {
                                     this.displayReps(25).map((ele, repIdx) =>
                                        <option key={`set${idx}-reps${ele}`}>{ele}</option>
@@ -157,6 +156,7 @@ class AddExercises extends Component {
                   </div>
                )
             }
+
             <Form>
                <Button className="mb-3" variant="danger" onClick={(e) => this.modalTrigger(e)}>Add Exercise</Button>
             </Form>
