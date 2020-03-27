@@ -26,9 +26,10 @@ router.post('/routine/currentDay', async (req, res) => {
          console.log(`days: ${days}`);
          console.log(`curr_day_ind: ${curr_day_ind}`);
          console.log('----------------\n');
-         return curr_day_ind >= 0 ? { routine_name: workout.routine_name, current_workout: workout.days[curr_day_ind] } : { routine_name: workout.routine_name, current_workout: workout.days[0] }
+         return date_between < 0 ? null : curr_day_ind >= 0 ? { routine_name: workout.routine_name, current_workout: workout.days[curr_day_ind] } : { routine_name: workout.routine_name, current_workout: workout.days[0] }
       })
-      res.json({ todays_workout: getWorkoutByDay });
+
+      res.json({ todays_workout: getWorkoutByDay.filter(e => e !== null) });
    } else {
       res.json({ todays_workout: false });
    }

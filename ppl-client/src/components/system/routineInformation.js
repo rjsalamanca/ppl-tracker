@@ -86,6 +86,27 @@ class RoutineInformation extends Component {
          console.log('cycle in between');
          temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1] };
       }
+
+
+      if (date_between <= 0) {
+         temp_days.yesterday = null;
+      }
+      if (date_between <= -1) {
+         temp_days.today = null;
+      }
+      if (date_between <= -2) {
+         temp_days.tomorrow = null;
+      }
+      // if (date_between === 0) {
+      //    // Display Yesterday as Not Available.
+      //    temp_days.yesterday = null;
+      // } else if (date_between === -1) {
+      //    // Display Yesterday & Today as Not Available
+
+      // } else if (date_between <= -2) {
+      //    // Display all workouts as Not Available
+      // }
+
       await this.setState({ workout_days: temp_days });
    }
 
@@ -117,16 +138,22 @@ class RoutineInformation extends Component {
 
                                           {/* <!-- details --> */}
                                           <div className="package-features text-center">
-                                             Workout: {workout_days.yesterday.day_name}
-                                             <ul>
-                                                {workout_days.yesterday.exercises.map((exercise, idx) =>
-                                                   <li key={`exercise-${workout_days.yesterday.day_name}-${idx}`}>
-                                                      {exercise.exercise_name}
-                                                   </li>
-                                                )}
-                                             </ul>
-                                             <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.yesterday)}>Start</Button>
+                                             {
+                                                workout_days.yesterday !== null ?
+                                                   <div>
+                                                      Workout: {workout_days.yesterday.day_name}
+                                                      <ul>
+                                                         {workout_days.yesterday.exercises.map((exercise, idx) =>
+                                                            <li key={`exercise-${workout_days.yesterday.day_name}-${idx}`}>
+                                                               {exercise.exercise_name}
+                                                            </li>
+                                                         )}
+                                                      </ul>
+                                                      <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.yesterday)}>Start</Button>
+                                                   </div> : <b>WORKOUT NOT AVAILABLE BEFORE THIS DATE</b>
+                                             }
                                           </div>
+
                                        </div>
                                     </div>
 
@@ -138,15 +165,20 @@ class RoutineInformation extends Component {
                                           </div>
                                           {/* <!-- details --> */}
                                           <div className="package-features text-center">
-                                             Workout: {workout_days.today.day_name}
-                                             <ul>
-                                                {workout_days.today.exercises.map((exercise, idx) =>
-                                                   <li key={`exercise-${workout_days.today.day_name}-${idx}`}>
-                                                      {exercise.exercise_name}
-                                                   </li>
-                                                )}
-                                             </ul>
-                                             <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.today)}>Start</Button>
+                                             {
+                                                workout_days.today !== null ?
+                                                   <div>
+                                                      Workout: {workout_days.today.day_name}
+                                                      <ul>
+                                                         {workout_days.today.exercises.map((exercise, idx) =>
+                                                            <li key={`exercise-${workout_days.today.day_name}-${idx}`}>
+                                                               {exercise.exercise_name}
+                                                            </li>
+                                                         )}
+                                                      </ul>
+                                                      <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.today)}>Start</Button>
+                                                   </div> : <b>WORKOUT NOT AVAILABLE BEFORE THIS DATE</b>
+                                             }
                                           </div>
                                        </div>
                                     </div>
@@ -159,15 +191,20 @@ class RoutineInformation extends Component {
                                           </div>
                                           {/* <!-- details --> */}
                                           <div className="package-features text-center">
-                                             Workout: {workout_days.tomorrow.day_name}
-                                             <ul>
-                                                {workout_days.tomorrow.exercises.map((exercise, idx) =>
-                                                   <li key={`exercise-${workout_days.tomorrow.day_name}-${idx}`}>
-                                                      {exercise.exercise_name}
-                                                   </li>
-                                                )}
-                                             </ul>
-                                             <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.tomorrow)}>Start</Button>
+                                             {
+                                                workout_days.tomorrow !== null ?
+                                                   <div>
+                                                      Workout: {workout_days.tomorrow.day_name}
+                                                      <ul>
+                                                         {workout_days.tomorrow.exercises.map((exercise, idx) =>
+                                                            <li key={`exercise-${workout_days.tomorrow.day_name}-${idx}`}>
+                                                               {exercise.exercise_name}
+                                                            </li>
+                                                         )}
+                                                      </ul>
+                                                      <Button onClick={(e) => this.props.getSelectedWorkout(workout_days.tomorrow)}>Start</Button>
+                                                   </div> : <b>WORKOUT NOT AVAILABLE BEFORE THIS DATE</b>
+                                             }
                                           </div>
                                        </div>
                                     </div>

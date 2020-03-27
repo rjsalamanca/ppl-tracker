@@ -24,7 +24,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout.
    - Back end issue caused by using Math.ceil instead of Math.floor
 [X] Select button does not change when selecting reps when creating a routine, but changes in the back end.
-[] Workouts before its start date should not be accessible.
+[IP] Workouts before its start date should not be accessible.
+   [X] Workouts Scheduled Today before date start
+   [X] Current Routine Yesterday/Today/Tomorrow before date start
 
 ************
 * STYLING: *
@@ -45,7 +47,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Rework login back end.
 [] Rework checking if still logged in.
 [] Add Rest Days when creating routine.
-[] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
+[X] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
 [X] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods
 [] Editing of routine/exericses/sets.
 [] Rework with hooks or redux for state management.
