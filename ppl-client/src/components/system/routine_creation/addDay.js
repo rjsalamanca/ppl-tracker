@@ -67,14 +67,13 @@ class addDay extends Component {
                   </ul>
                </div>
             )}
-            <Modal show={show} onHide={this.handleClose}>
+            <Modal show={show} onHide={this.handleClose} id="addDayModal">
                <Modal.Header closeButton>
                   <Modal.Title>Add A Day</Modal.Title>
                </Modal.Header>
                <Modal.Body>
                   <Form.Group controlId="formBasicEmail">
                      <Form.Label>Day Name: </Form.Label>
-
                      <Form.Control type="input" onChange={(e) => this.handleDayName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
                   </Form.Group>
                   <AddExercises clearDayError={this.clearDayError} sendExercisesToDay={this.sendExercisesToDay} />
@@ -88,16 +87,16 @@ class addDay extends Component {
                <Modal.Footer>
                   <Button variant="secondary" onClick={this.handleClose}>
                      Close
-                        </Button>
+                  </Button>
                   <Button variant="primary" onClick={this.saveExercisesToDay}>
                      Save Day
-                        </Button>
+                  </Button>
                </Modal.Footer>
             </Modal>
 
             <Form>
-               <Button className="mb-3" variant="danger" onClick={(e) => this.modalTrigger(e)}>Add Day</Button>
-               <Button className="m-3 btn-block" variant="success" onClick={(e) => this.props.saveRoutine(days)}>Finish</Button>
+               <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => this.modalTrigger(e)}>Add A Day</Button>
+               <Button className="btn-block" variant="primary" onClick={(e) => this.props.saveRoutine(days)}>Finish</Button>
             </Form>
          </div>
       )

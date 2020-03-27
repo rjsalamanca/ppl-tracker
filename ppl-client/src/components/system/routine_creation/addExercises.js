@@ -13,8 +13,18 @@ class AddExercises extends Component {
       sets: [],
    }
 
-   handleClose = () => this.setState({ show: false });
-   handleShow = () => this.setState({ show: true });
+   handleClose = () => {
+      let hidePreviousModal = document.getElementById('addDayModal').parentNode;
+      hidePreviousModal.classList.remove("hideAddModal");
+      this.setState({ show: false });
+   }
+
+   handleShow = () => {
+      let hidePreviousModal = document.getElementById('addDayModal').parentNode;
+      hidePreviousModal.classList.add("hideAddModal");
+      this.setState({ show: true });
+   }
+
    handleExerciseName = (e) => this.setState({ exercise_name: e.target.value });
    handleSetWeight = (e, idx) => {
       const { sets } = this.state;
@@ -45,8 +55,14 @@ class AddExercises extends Component {
          sets: [{ weight: null, reps: 1, initial_set: true }],
          exercise_error: 0
       });
-      !!show ? this.setState({ show: false }) : this.setState({ show: true })
+
+      if (!!show) {
+         this.handleClose();
+      } else {
+         this.handleShow();
+      }
    }
+
    addSet = () => {
       const { sets } = this.state;
       let newSets = [...sets];
@@ -105,7 +121,7 @@ class AddExercises extends Component {
                               <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
                               <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} />
                               <span className="weightRepsLabel">Reps:</span>
-                              <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={sets[idx].reps === 0 & sets[idx.weight === null] ? 1 : sets[idx].reps}>
+                              <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={sets[idx].reps === 0 && sets[idx].weight === null ? 1 : sets[idx].reps}>
                                  {
                                     this.displayReps(25).map((ele, repIdx) =>
                                        <option key={`set${idx}-reps${ele}`}>{ele}</option>
@@ -117,9 +133,7 @@ class AddExercises extends Component {
                               </Button>
                            </div>
                         )}
-                        <Button variant="secondary" onClick={(e) => this.addSet(e)}>
-                           Add Set
-                        </Button>
+                        <Button className="btn-outline-primary" variant="light" onClick={(e) => this.addSet(e)}>Add Set</Button>
                         <div className="exerciseError">
                            {
                               {
@@ -135,10 +149,10 @@ class AddExercises extends Component {
                <Modal.Footer>
                   <Button variant="secondary" onClick={this.handleClose}>
                      Close
-                        </Button>
+                  </Button>
                   <Button variant="primary" onClick={this.saveExercise}>
                      Save Excercise
-                        </Button>
+                  </Button>
                </Modal.Footer>
             </Modal>
 
@@ -158,7 +172,7 @@ class AddExercises extends Component {
             }
 
             <Form>
-               <Button className="mb-3" variant="danger" onClick={(e) => this.modalTrigger(e)}>Add Exercise</Button>
+               <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => this.modalTrigger(e)}>Add An Exercise</Button>
             </Form>
          </div >
       );

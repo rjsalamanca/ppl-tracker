@@ -23,10 +23,13 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Workouts Schedule for Today not properly updating when calendar is changed.
 [X] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout.
    - Back end issue caused by using Math.ceil instead of Math.floor
-[X] Select button does not change when selecting reps when creating a routine, but changes in the back end.
+[IP] Select button does not change when selecting reps when creating a routine, but changes in the back end.
+   - Select bug is back. Need to work on ternary.
 [X] Workouts before its start date should not be accessible.
    [X] Workouts Scheduled Today before date start
    [X] Current Routine Yesterday/Today/Tomorrow before date start
+[] Closing Modals is sometimes a bit too fast.
+[] Error handling for routine weight (should be a number)
 
 ************
 * STYLING: *
@@ -34,6 +37,10 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 
 [] Landing page.
 [IP] Creation of Routines
+   [X] Solved modal on top of modal with simple javascript (Possible rework with React?)
+   [] Format the look of exercises in the 'Add A Day' modal.
+   [] Format the look of all days in side routine creation load components.
+   [] Place errors under the instructions.
 [] Login Page.
 [] Register Page.
 [] Transitions when loading new components.
@@ -56,7 +63,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    [X] Fail Safe for routine name without any days
    [X] Rework Error Codes/Refactor/Remove commented code
 [] Add end date for routine so we can finish
-[] Add a end routine button incase we wanted to end early
-[] Progress Page of our routines
+[] Add an end routine button incase we wanted to end routine early
+[] Progress Page for our routines
 
 ```

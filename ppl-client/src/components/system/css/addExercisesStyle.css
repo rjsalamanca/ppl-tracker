@@ -22,3 +22,7 @@
 .setDelete{
    margin-left: auto;
 }
+
+.hideAddModal{
+   z-index:1;
+}
