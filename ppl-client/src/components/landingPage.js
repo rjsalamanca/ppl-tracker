@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
 class LandingPage extends Component {
-    state = {
+   state = {
 
-    }
+   }
 
-    render() {
-        return (
-            <div>
-                bro
-            </div>
-        );
-    }
+   render() {
+      return (
+         <div>
+            bro
+         </div>
+      );
+   }
 }
 
 export default LandingPage;

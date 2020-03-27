@@ -8,8 +8,7 @@ import LogoutPage from './components/users/logoutPage';
 import RegisterPage from './components/users/registerPage';
 
 import ProfilePage from './components/system/profilePage';
-import CreateRoutine from './components/system/createRoutine';
-import AddDay from './components/system/addDay';
+import CreateRoutine from './components/system/routine_creation/createRoutine';
 
 // import AddExercises from './components/system/addExercises';
 
@@ -59,7 +58,6 @@ class App extends Component {
                <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
                <Route path="/profile" exact render={(props) => <ProfilePage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
                <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
-               <Route path="/ppl/routine/add_day" exact render={(props) => <AddDay {...props} />} />
             </Switch>
          </Router>
       );

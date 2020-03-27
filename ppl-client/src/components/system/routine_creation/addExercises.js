@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
 // add custom css here
-import "./css/addExercisesStyle.css";
+import "../css/addExercisesStyle.css";
 
 class AddExercises extends Component {
    state = {

@@ -6,9 +6,7 @@ class NavBar extends Component {
    state = { check: null };
 
    componentDidMount = () => {
-      // this.props.checkLoginStatus();
       this.setState({ check: this.props.is_logged_in })
-      // console.log(this.props.is_logged_in)
    }
 
    render() {

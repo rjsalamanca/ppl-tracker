@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom";
 import AddRoutineName from './addRoutineName';
 import AddDay from './addDay';
 
+import '../css/createRoutineStyle.css';
+
 class createRoutine extends Component {
    state = {
       redirect: false,
@@ -112,12 +114,26 @@ class createRoutine extends Component {
    render() {
       const { error_code, redirect } = this.state;
       return (
-         <div>
+         <div id="routineCreationMainContainer">
+            <div className="routineCreationFlexContainer">
+               <div className="routineCreationInstructions">
+                  <h1 className="routineHeader h4">Lets Create A Routine</h1>
+                  <ol className="routineInstructions">
+                     <li>Start off by creaing a routine name.</li>
+                     <li>You can then add days to your routine.</li>
+                     <li>When you're adding days you can then add exercises.</li>
+                     <li>Specify the weight for each set/rep.</li>
+                     <li>Once you're done, click finish!</li>
+                  </ol>
+               </div>
+               <div className="routineCreationLoadComponents">
+                  <AddRoutineName checkRoutineName={this.checkRoutineName} />
+                  {this.loadProperComponents()}
+               </div>
+            </div>
             {error_code !== 0 && this.displayError()}
-            <AddRoutineName checkRoutineName={this.checkRoutineName} />
-            {this.loadProperComponents()}
             {!!redirect && <Redirect to="/profile/" />}
-         </div>
+         </div >
       );
    }
 }
