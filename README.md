@@ -1,6 +1,6 @@
 # PPL_Tracker
 
-PPL is short for Push Pull Legs. This project was created to be a personal tracker for my Push Pull Legs workout cycle. As I've been working on this tracker, I've added features that turned in into a full on workout tracker. You're able to create multiple workout routines and you're able to do multiple workouts per day.
+PPL is short for Push Pull Legs. This project was created to be a personal tracker for my Push Pull Legs workout cycle. As I've been working on this tracker, I've added features that turned in into a full on workout tracker. You're able to create multiple workout routines and you're able to track multiple workouts per day.
 
 ```
 
@@ -38,7 +38,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Landing page.
 [IP] Creation of Routines
    [X] Solved modal on top of modal with simple javascript (Possible rework with React?)
-   [] Format the look of exercises in the 'Add A Day' modal.
+   [X] Format the look of exercises in the 'Add A Day' modal.
    [] Format the look of all days in side routine creation load components.
    [] Place errors under the instructions.
 [] Login Page.

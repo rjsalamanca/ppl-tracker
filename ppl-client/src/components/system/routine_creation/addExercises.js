@@ -56,11 +56,7 @@ class AddExercises extends Component {
          exercise_error: 0
       });
 
-      if (!!show) {
-         this.handleClose();
-      } else {
-         this.handleShow();
-      }
+      (!!show) ? this.handleClose() : this.handleShow();
    }
 
    addSet = () => {
@@ -104,73 +100,105 @@ class AddExercises extends Component {
       }
    }
 
+   displayExerciseModal = () => {
+      const { show, exercise_error, sets } = this.state;
+      let error_message = "";
+
+      if (exercise_error === 1) {
+         error_message = "Please don't leave any sets blank.";
+      } else if (exercise_error === 2) {
+         error_message = "Please make sure to add an exercise name.";
+      }
+
+      return (
+         <Modal show={show} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+               <Modal.Title>Add An Exercise</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+               <Form.Group controlId="formBasicEmail">
+                  <div>
+                     Exercise Name: <Form.Control type="input" onChange={(e) => this.handleExerciseName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                     {sets.map((set, idx) =>
+                        <div key={`set-${idx + 1}`} className="setContainer">
+                           <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
+                           <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} />
+                           <span className="weightRepsLabel">Reps:</span>
+                           <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={sets[idx].reps === 0 && sets[idx].weight === null ? 1 : sets[idx].reps}>
+                              {
+                                 this.displayReps(25).map((ele, repIdx) =>
+                                    <option key={`set${idx}-reps${ele}`}>{ele}</option>
+                                 )
+                              }
+                           </select>
+                           <Button className="setDelete" variant="danger" onClick={() => this.handleRemoveSets(idx)}>
+                              X
+                           </Button>
+                        </div>
+                     )}
+                     <Button className="btn-outline-primary" variant="light" onClick={(e) => this.addSet(e)}>Add Set</Button>
+                     <div className="exerciseError">
+                        <p>{error_message}</p>
+                     </div>
+                  </div>
+               </Form.Group>
+
+            </Modal.Body>
+            <Modal.Footer>
+               <Button variant="secondary" onClick={this.handleClose}>
+                  Close
+               </Button>
+               <Button variant="primary" onClick={this.saveExercise}>
+                  Save Excercise
+               </Button>
+            </Modal.Footer>
+         </Modal>
+      );
+   }
+
+   displayExercisesToDay = () => {
+      const { exercises } = this.state;
+
+      if (exercises.length === 0) {
+         return 'No exercises added - add an exercise to your day'
+      }
+
+      return (
+         exercises.map((exercise, idx) =>
+            <div className="exerciseAndSets" key={`exercise-${idx}`}>
+               <h4 className="table-primary h4 text-center pt-2 pb-2">{exercise.name}</h4>
+               <table className="table table-striped table-hover exercise-table">
+                  <thead>
+                     <tr>
+                        <th scope="col">Set</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col">Rep</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {exercise.sets.map((set, setIdx) =>
+                        <tr key={`exercise-${exercise.name}-set-${setIdx + 1}-table`}>
+                           <th scope="row">{setIdx + 1}</th>
+                           <td>{set.weight}lbs</td>
+                           <td>{set.reps}</td>
+                        </tr>
+                     )}
+                  </tbody>
+               </table>
+            </div >
+         )
+      );
+   }
+
    render() {
-      const { show, exercises, exercise_error, sets } = this.state;
       return (
          <div>
-            <Modal show={show} onHide={this.handleClose}>
-               <Modal.Header closeButton>
-                  <Modal.Title>Add An Exercise</Modal.Title>
-               </Modal.Header>
-               <Modal.Body>
-                  <Form.Group controlId="formBasicEmail">
-                     <div>
-                        Exercise Name: <Form.Control type="input" onChange={(e) => this.handleExerciseName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
-                        {sets.map((set, idx) =>
-                           <div key={`set-${idx + 1}`} className="setContainer">
-                              <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
-                              <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} />
-                              <span className="weightRepsLabel">Reps:</span>
-                              <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={sets[idx].reps === 0 && sets[idx].weight === null ? 1 : sets[idx].reps}>
-                                 {
-                                    this.displayReps(25).map((ele, repIdx) =>
-                                       <option key={`set${idx}-reps${ele}`}>{ele}</option>
-                                    )
-                                 }
-                              </select>
-                              <Button className="setDelete" variant="danger" onClick={() => this.handleRemoveSets(idx)}>
-                                 X
-                              </Button>
-                           </div>
-                        )}
-                        <Button className="btn-outline-primary" variant="light" onClick={(e) => this.addSet(e)}>Add Set</Button>
-                        <div className="exerciseError">
-                           {
-                              {
-                                 1: <p>Please don't leave any sets blank.</p>,
-                                 2: <p>Please make sure to add an exercise name.</p>
-                              }[exercise_error]
-                           }
-                        </div>
-                     </div>
-                  </Form.Group>
+            {this.displayExerciseModal()}
+            <h5 className="h5">Exercises:</h5>
 
-               </Modal.Body>
-               <Modal.Footer>
-                  <Button variant="secondary" onClick={this.handleClose}>
-                     Close
-                  </Button>
-                  <Button variant="primary" onClick={this.saveExercise}>
-                     Save Excercise
-                  </Button>
-               </Modal.Footer>
-            </Modal>
-
-            {
-               exercises.map((exercise, idx) =>
-                  <div key={`exercise-${idx}`}>
-                     {exercise.name}
-                     <ul>
-                        {exercise.sets.map((set, setIdx) =>
-                           <li key={`${exercise.name}-set-${setIdx}`}>
-                              <b>Set {setIdx + 1}</b> {set.weight}lbs x {set.reps}
-                           </li>
-                        )}
-                     </ul>
-                  </div>
-               )
-            }
-
+            <div className="displayExercises">
+               {this.displayExercisesToDay()}
+            </div>
             <Form>
                <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => this.modalTrigger(e)}>Add An Exercise</Button>
             </Form>
