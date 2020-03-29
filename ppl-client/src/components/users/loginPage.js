@@ -36,20 +36,53 @@ class Login extends Component {
          await this.props.checkLoginStatus()
          this.setState({ errorCode: data.errorCode });
 
-         /////////////////////
-         //    Error Codes:
-         ////////////////////
-         // 0 = Success
-         // 1 = No User Found
-         // 2 = Password Incorrect
-         // 3 = User Already Created
-         // 4 = Database Error
-         // 5 = URL to backend is bad
-         ///////////////////////
+         ///////////////////////////////
+         //        ERROR CODES:       //
+         ///////////////////////////////
+         // 0 = Success               //
+         // 1 = No User Found         //
+         // 2 = Password Incorrect    //
+         // 3 = Database Error        //
+         // 4 = URL to backend is bad //
+         ///////////////////////////////
 
       } catch (err) {
-         this.setState({ errorCode: 5 });
+         this.setState({ errorCode: 4 });
       }
+   }
+
+   displayError = () => {
+      const { errorCode } = this.state;
+      let errorMessage = '';
+      let errorMessageSecondary = ''
+      switch (errorCode) {
+         case 1:
+            errorMessage = 'Oops, User was not found,';
+            errorMessageSecondary = 'please register.';
+            break;
+         case 2:
+            errorMessage = 'Oops, Password was Incorrect,';
+            errorMessageSecondary = 'please try again.';
+            break;
+         case 3:
+            errorMessage = 'Oops, something happened behind the scenes,';
+            errorMessageSecondary = 'please send this message to us!';
+            break;
+         case 4:
+            errorMessage = 'Oops, something happened when we tried to find our account,';
+            errorMessageSecondary = 'please send this message to us!';
+            break;
+         default:
+            errorMessage = '';
+            errorMessageSecondary = '';
+      }
+
+      return (
+         <Alert className="alert alert-dismissible alert-danger users-alert">
+            <strong>{errorMessage}</strong> {errorMessageSecondary}
+         </Alert>
+      );
+
    }
 
    render() {
@@ -69,28 +102,9 @@ class Login extends Component {
                         <Form.Label>Password</Form.Label>
                         <Form.Control autoComplete="on" type="password" onChange={(e) => this.handlePassword(e)} placeholder="Password" />
                      </Form.Group>
-                     <Button className="mb-3" variant="danger" onClick={(e) => this.login()}>Sign In</Button>
+                     <Button className="mb-3" variant="primary" onClick={(e) => this.login()}>Sign In</Button>
                   </Form>
-                  {
-                     {
-                        1:
-                           <Alert className="alert alert-dismissible alert-danger users-alert">
-                              <strong>Oops, User was not found</strong> , please register.
-                                    </Alert>,
-                        2:
-                           <Alert className="alert alert-dismissible alert-danger users-alert">
-                              <strong>Oops, Password was Incorrect</strong> , please try again.
-                                    </Alert>,
-                        7:
-                           <Alert className="alert alert-dismissible alert-success users-alert">
-                              <strong>You've successfully registered!</strong> Please Login.
-                                    </Alert>,
-                     }[errorCode]
-                     // ||
-                     // <Alert className="alert alert-dismissible alert-danger users-alert">
-                     //     <strong>We're sorry, something wrong happened on our end.</strong> , please try again in a bit.
-                     // </Alert>
-                  }
+                  {errorCode !== -1 && this.displayError()}
                   <p className="mt-4">
                      No Account? <Link to="/register"><b>Register</b></Link>
                   </p>

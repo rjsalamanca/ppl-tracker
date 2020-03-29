@@ -78,30 +78,30 @@ class createRoutine extends Component {
 
    displayError = () => {
       const { error_code } = this.state;
-      let sendJSX = '';
+      let errorMessage = '';
 
       switch (error_code) {
          case 1:
-            sendJSX = 'You already have a routine with the same name, try using a different name';
+            errorMessage = 'You already have a routine with the same name, try using a different name';
             break;
          case 2:
-            sendJSX = 'We had a problem with adding your routine days or exercises, please send this error to us with the name of your routine days and exercises.';
+            errorMessage = 'We had a problem with adding your routine days or exercises, please send this error to us with the name of your routine days and exercises.';
             break;
          case 3:
-            sendJSX = 'We had a problem with adding your routine name, please send this error to us with the name of your routine name.';
+            errorMessage = 'We had a problem with adding your routine name, please send this error to us with the name of your routine name.';
             break;
          case 4:
-            sendJSX = 'It looks like you forgot to add some days to your routine.';
+            errorMessage = 'It looks like you forgot to add some days to your routine.';
             break;
          case 5:
-            sendJSX = 'Hmm, it looks like either our server or your connection is down.';
+            errorMessage = 'Hmm, it looks like either our server or your connection is down.';
             break;
          default:
       }
 
       return (
          <div className="errorContainer">
-            <span className="errorLabel">Oops...</span> {sendJSX}
+            <span className="errorLabel">Oops...</span> {errorMessage}
          </div>
       );
    }

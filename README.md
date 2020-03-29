@@ -41,8 +41,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    [X] Format the look of exercises in the 'Add A Day' modal.
    [X] Format the look of all days in side routine creation load components.
    [X] Place errors under the instructions.
-[] Login Page.
-[] Register Page.
+[X] Login Page.
+[IP] Register Page.
 [] Transitions when loading new components.
 [X] Nav Bar when logged in and in mobile view is off.
 

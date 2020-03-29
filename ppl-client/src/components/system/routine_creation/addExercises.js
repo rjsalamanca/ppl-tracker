@@ -108,7 +108,7 @@ class AddExercises extends Component {
 
    displayExerciseModal = () => {
       const { show, exercise_error, sets } = this.state;
-      let error_message = "";
+      let errorMessage = "";
 
       ////////////////////////////
       //     ERROR MESSAGES:    //
@@ -119,9 +119,9 @@ class AddExercises extends Component {
       ////////////////////////////
 
       if (exercise_error === 1) {
-         error_message = "Please don't leave any sets blank.";
+         errorMessage = "Please don't leave any sets blank.";
       } else if (exercise_error === 2) {
-         error_message = "Please make sure to add an exercise name.";
+         errorMessage = "Please make sure to add an exercise name.";
       }
 
       return (
@@ -152,7 +152,7 @@ class AddExercises extends Component {
                      )}
                      <Button className="btn-outline-primary" variant="light" onClick={(e) => this.addSet(e)}>Add Set</Button>
                      <div className="exerciseError">
-                        <p>{error_message}</p>
+                        <p>{errorMessage}</p>
                      </div>
                   </div>
                </Form.Group>
