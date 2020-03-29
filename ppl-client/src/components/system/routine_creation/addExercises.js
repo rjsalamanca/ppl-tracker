@@ -29,7 +29,13 @@ class AddExercises extends Component {
    handleSetWeight = (e, idx) => {
       const { sets } = this.state;
       let newSets = [...sets];
-      newSets[idx].weight = e.target.value;
+
+      if (e.target.value === '') {
+         newSets[idx].weight = null;
+      } else {
+         newSets[idx].weight = e.target.value.match(/([0-9])/g).join('');
+      }
+
       this.setState({ sets: newSets });
    };
 
@@ -122,7 +128,7 @@ class AddExercises extends Component {
                      {sets.map((set, idx) =>
                         <div key={`set-${idx + 1}`} className="setContainer">
                            <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
-                           <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} />
+                           <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} value={sets[idx].weight === null ? '' : sets[idx].weight} />
                            <span className="weightRepsLabel">Reps:</span>
                            <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={sets[idx].reps === 0 && sets[idx].weight === null ? 1 : sets[idx].reps}>
                               {
