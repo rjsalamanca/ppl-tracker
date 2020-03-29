@@ -17,15 +17,26 @@ class Register extends Component {
    handlePassword = (e) => { this.setState({ password: e.target.value }) };
 
    createUser = async (e) => {
-      e.preventDefault();
-
+      console.log('bruh')
       const formCheck = document.getElementById('registerForm').checkValidity();
       const url = "http://localhost:3000/users/register"
 
       //formCheck returns true or false. If everything on the form is correct
       //connect to the database;
+
+      ////////////////////////////////////
+      //          ERROR CODES:          //
+      ////////////////////////////////////
+      // 0 = Success                    //
+      // 1 = User already in the system //
+      // 2 = Failed to add User         //
+      // 3 = URL to backend is bad      //
+      ////////////////////////////////////
+
       if (!!formCheck) {
          try {
+            e.preventDefault();
+
             const response = await fetch(url, {
                method: "POST",
                headers: {
@@ -37,14 +48,44 @@ class Register extends Component {
             })
 
             const data = await response.json();
-
+            console.log(data.errorCode)
             this.setState({ errorCode: data.errorCode });
-            console.log(this.state.errorCode);
          } catch (err) {
             // Can't connect to Database
-            this.setState({ errorCode: 6 });
+            this.setState({ errorCode: 3 });
          }
+      } else {
+
       }
+   }
+
+   displayError = () => {
+      const { errorCode } = this.state;
+      let errorMessage = '';
+      let errorMessageSecondary = ''
+      switch (errorCode) {
+         case 1:
+            errorMessage = 'This email is already in use.';
+            errorMessageSecondary = 'Please register with a different email.';
+            break;
+         case 2:
+            errorMessage = 'Uh Oh, we are currently having issues.';
+            errorMessageSecondary = `Please send let us know you have the following <b>Error Code: ${errorCode}</b>`;
+            break;
+         case 3:
+            errorMessage = 'Oops, something happened behind the scenes,';
+            errorMessageSecondary = `Please send let us know you have the following <b>Error Code: ${errorCode}</b>`;
+            break;
+         default:
+            errorMessage = '';
+            errorMessageSecondary = '';
+      }
+
+      return (
+         <Alert className="alert alert-dismissible alert-danger users-alert">
+            <strong>{errorMessage}</strong> {errorMessageSecondary}
+         </Alert>
+      );
    }
 
    render() {
@@ -65,39 +106,18 @@ class Register extends Component {
                      </Form.Group>
                      <Form.Label>Email address</Form.Label>
                      <Form.Control type="email" minLength="1" name="email" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" onChange={(e) => this.handleEmail(e)} required />
-                     <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                     <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone.</small>
                      <Form.Group controlId="formPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" autoComplete="on" name="password" className="form-control" placeholder="Password" onChange={(e) => this.handlePassword(e)} required />
                      </Form.Group>
-                     <Button className="mb-3" type="submit" variant={'danger'} onClick={(e) => this.createUser(e)}>Submit</Button>
+                     <Button className="mb-3" type="submit" variant={'danger'} onClick={(e) => { this.createUser(e) }}>Submit</Button>
                   </Form>
-                  {
-                     {
-                        0:
-                           // Success
-                           <Redirect to={{ pathname: '/login', errorCode }} />,
-                        3:
-                           // User is Already Created 
-                           <Alert className="alert alert-dismissible alert-danger users-alert">
-                              <strong>This email is already in use.</strong> Please register with a different email.
-                                    </Alert>,
-                        4:
-                           // Can't connect to database 
-                           <Alert className="alert alert-dismissible alert-danger users-alert">
-                              <strong>Uh Oh, we are currently having issues.</strong> Please send let us know you have the following <b>Error Code: {errorCode}</b>
-                           </Alert>,
-                        6:
-                           // Can't connect to the back end
-                           <Alert className="alert alert-dismissible alert-danger users-alert">
-                              <strong>Uh Oh, we are currently having issues.</strong> Please send let us know you have the following <b>Error Code: {errorCode}</b>
-                           </Alert>
-                     }[errorCode]
-                  }
-
+                  {errorCode !== -1 && this.displayError()}
                   <p className="mt-4">Already have an account? <Link to="/login"><b>Login Here</b></Link></p>
                </Card.Body>
             </Card >
+            {errorCode === 0 && <Redirect to={{ pathname: '/login', errorCode }} />}
          </div>
       );
    }

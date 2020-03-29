@@ -78,7 +78,6 @@ router.post('/login', async (req, res, next) => {
 router.post('/register', async (req, res) => {
    const { first_name, last_name, email, password } = req.body;
    const user = new UsersModel(null, first_name, last_name, email, null);
-   // console.log('bruh where are u: ', email)
    const checkUser = await UsersModel.checkUser(email);
 
    if (checkUser.rowCount === 0) {
@@ -89,10 +88,11 @@ router.post('/register', async (req, res) => {
          res.json({ errorCode: 0 })
       } else {
          //Failed To add User
-         res.json({ errorCode: 4 })
+         res.json({ errorCode: 2 })
       }
    } else {
-      res.json({ errorCode: 3 })
+      //User is already in the system
+      res.json({ errorCode: 1 })
    }
 })
 
