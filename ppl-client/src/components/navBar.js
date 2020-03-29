@@ -11,7 +11,7 @@ class NavBar extends Component {
 
    render() {
       return (
-         < Nav className="navbar navbar-expand-lg navbar-light bg-light" >
+         < Nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm" style={{ zIndex: 100 }} >
             <Link className="navbar-brand" to="/">PPL Tracker</Link>
             <Button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                <span className="navbar-toggler-icon"></span>

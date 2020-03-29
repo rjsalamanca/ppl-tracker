@@ -36,16 +36,16 @@ class Login extends Component {
          await this.props.checkLoginStatus()
          this.setState({ errorCode: data.errorCode });
 
-         /*
-             Error Codes:
-
-             0 = Success
-             1 = No User Found
-             2 = Password Incorrect
-             3 = User Already Created
-             4 = Database Error
-             5 = URL to backend is bad
-         */
+         /////////////////////
+         //    Error Codes:
+         ////////////////////
+         // 0 = Success
+         // 1 = No User Found
+         // 2 = Password Incorrect
+         // 3 = User Already Created
+         // 4 = Database Error
+         // 5 = URL to backend is bad
+         ///////////////////////
 
       } catch (err) {
          this.setState({ errorCode: 5 });
@@ -69,9 +69,7 @@ class Login extends Component {
                         <Form.Label>Password</Form.Label>
                         <Form.Control autoComplete="on" type="password" onChange={(e) => this.handlePassword(e)} placeholder="Password" />
                      </Form.Group>
-                     <Button className="mb-3" variant="danger" onClick={(e) => this.login()}>
-                        Sign In
-                            </Button>
+                     <Button className="mb-3" variant="danger" onClick={(e) => this.login()}>Sign In</Button>
                   </Form>
                   {
                      {
