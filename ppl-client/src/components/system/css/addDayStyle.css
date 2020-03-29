@@ -1,0 +1,50 @@
+.displayDaysContainer{
+   display:flex;
+   flex-direction: row;
+   justify-content: space-around;
+   margin-bottom:15px;
+   flex-wrap: wrap;
+   align-items: stretch;
+}
+
+.singleDayContainer{
+   border-radius:5px;
+   min-width:150px;
+   flex-basis:200px;
+   flex-grow: 1;
+   background-color:#E8E8E8;
+   margin: 5px;
+}
+
+.singleDayContainer ol{
+   display:inline-block;
+   list-style-type: none;
+
+   counter-reset: li;
+}
+
+.singleDayContainer ol li{
+   counter-increment: li;
+}
+
+.singleDayContainer ol li::before {
+   content: counter(li) ". "; 
+   color: #A9A9A9;
+   display: inline-block; width: 1em;
+   font-size:1.3em;
+   
+   margin-left: -1em;
+}
+
+.dayName{
+   border-radius:5px 5px 0 0;
+   background-color:red;
+   padding: 10px 5px;
+   background-image: url('/images/dayHeader.jpg');
+   background-size: cover;
+   color: white;
+}
+
+.exerciseHeader{
+   color:#585858;
+}

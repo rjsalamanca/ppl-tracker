@@ -110,6 +110,14 @@ class AddExercises extends Component {
       const { show, exercise_error, sets } = this.state;
       let error_message = "";
 
+      ////////////////////////////
+      //     ERROR MESSAGES:    //
+      ////////////////////////////
+      // 0: Pass                //
+      // 1: Blank sets detected //
+      // 2: No Exercise Name    //
+      ////////////////////////////
+
       if (exercise_error === 1) {
          error_message = "Please don't leave any sets blank.";
       } else if (exercise_error === 2) {
