@@ -36,11 +36,11 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 ************
 
 [] Landing page.
-[IP] Creation of Routines
+[X] Creation of Routines
    [X] Solved modal on top of modal with simple javascript (Possible rework with React?)
    [X] Format the look of exercises in the 'Add A Day' modal.
    [X] Format the look of all days in side routine creation load components.
-   [] Place errors under the instructions.
+   [X] Place errors under the instructions.
 [] Login Page.
 [] Register Page.
 [] Transitions when loading new components.

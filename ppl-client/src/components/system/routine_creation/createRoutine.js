@@ -79,6 +79,7 @@ class createRoutine extends Component {
    displayError = () => {
       const { error_code } = this.state;
       let sendJSX = '';
+
       switch (error_code) {
          case 1:
             sendJSX = 'You already have a routine with the same name, try using a different name';
@@ -97,9 +98,10 @@ class createRoutine extends Component {
             break;
          default:
       }
+
       return (
-         <div>
-            ERROR: {sendJSX}
+         <div className="errorContainer">
+            <span className="errorLabel">Oops...</span> {sendJSX}
          </div>
       );
    }
@@ -125,13 +127,13 @@ class createRoutine extends Component {
                      <li>Specify the weight for each set/rep.</li>
                      <li>Once you're done, click finish!</li>
                   </ol>
+                  {error_code !== 0 && this.displayError()}
                </div>
                <div className="routineCreationLoadComponents">
                   <AddRoutineName checkRoutineName={this.checkRoutineName} />
                   {this.loadProperComponents()}
                </div>
             </div>
-            {error_code !== 0 && this.displayError()}
             {!!redirect && <Redirect to="/profile/" />}
          </div >
       );

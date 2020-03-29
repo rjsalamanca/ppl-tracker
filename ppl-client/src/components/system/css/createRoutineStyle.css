@@ -23,30 +23,57 @@ html,body{
    width:80%;
    flex-wrap:nowrap;
    margin: 20px auto;
+   min-width:500px;
 }
 
 .routineCreationInstructions{
    color:white;
-   margin-top:40px;
    background-image: linear-gradient(#007bff,#0062cc);
-   max-height:200px;
    padding:10px;
    border-radius: 10px 0 0 10px;
    box-shadow: 0px 0px 10px #888888;
+   flex-basis:300px;
 }
 
 .routineInstructions{
    text-align: left;
-   width:80%;
+   width:75%;
    margin:0 auto;
+   list-style-type: none;
 }
 
+.routineInstructions li{
+   counter-increment: li;
+}
+
+.routineInstructions li::before {
+   content: counter(li); 
+   color: #004691;
+   display: inline-block; 
+   width: 0.8em;
+   font-size:1.7em;
+   
+   margin-left: -1em;
+}
 .routineCreationLoadComponents{
    margin:0 auto;
    background-color:white;
    flex-grow:2;
    padding:20px;
    min-height:300px;
-   border-radius: 10px;
+   border-radius: 0 10px 10px 0;
    box-shadow: 0px 0px 10px #888888;
+}
+
+.errorContainer{
+   margin:15px 5px;
+   border-radius: 5px;
+   padding:8px;
+   border:2px dotted red;
+}
+
+.errorLabel{
+   color:red;
+   font-weight: 600;
+   text-shadow: -1px 0px white;
 }
