@@ -68,7 +68,7 @@ class AddExercises extends Component {
    addSet = () => {
       const { sets } = this.state;
       let newSets = [...sets];
-      newSets.push({ weight: null, reps: 0 })
+      newSets.push({ weight: null, reps: 1 })
       this.setState({ sets: newSets });
    }
 

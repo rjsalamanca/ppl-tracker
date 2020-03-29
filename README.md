@@ -23,13 +23,13 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Workouts Schedule for Today not properly updating when calendar is changed.
 [X] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout.
    - Back end issue caused by using Math.ceil instead of Math.floor
-[IP] Select button does not change when selecting reps when creating a routine, but changes in the back end.
-   - Select bug is back. Need to work on ternary.
+[X] Select button does not change when selecting reps when creating a routine, but changes in the back end.
+   - Select bug is back. Need to work on ternary. FIXED - Just changed default value to 1.
 [X] Workouts before its start date should not be accessible.
    [X] Workouts Scheduled Today before date start
    [X] Current Routine Yesterday/Today/Tomorrow before date start
 [] Closing Modals is sometimes a bit too fast.
-[] Error handling for routine weight (should be a number)
+[X] Error handling for routine weight (should be a number)
 
 ************
 * STYLING: *
