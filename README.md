@@ -45,6 +45,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Register Page.
 [] Transitions when loading new components.
 [X] Nav Bar when logged in and in mobile view is off.
+[] Rework Profile Page look
+[] Add a default background
 
 **************************
 *  TO DO (New Features): *

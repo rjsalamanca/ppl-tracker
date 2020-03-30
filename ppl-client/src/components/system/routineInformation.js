@@ -37,7 +37,6 @@ class RoutineInformation extends Component {
             await this.setState({ date_between: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
             await this.getTodaysWorkout();
          }
-
       }
    }
 
@@ -64,32 +63,22 @@ class RoutineInformation extends Component {
 
       if (curr_day_ind === 0) {
          // cycle at the start
-         console.log('cycle in start');
+         // console.log('cycle in start');
          temp_days = { yesterday: days[days.length - 1], today: days[curr_day_ind] };
          (days.length - 1 === 0) ? temp_days['tomorrow'] = days[0] : temp_days['tomorrow'] = days[curr_day_ind + 1]
       } else if (curr_day_ind === days.length - 1) {
          //cycle at the end
-         console.log('cycle in end');
+         // console.log('cycle in end');
          temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[0] };
-         // temp_days = { today: days[curr_day_ind - 1], tomorrow: days[curr_day_ind], yesterday: days[days.length - 1] };
       } else {
          // cycle in between
-         console.log('cycle in between');
+         // console.log('cycle in between');
          temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1] };
       }
 
-
-      if (date_between <= 0) {
-         temp_days.yesterday = null;
-      }
-      if (date_between <= -1) {
-         temp_days.today = null;
-      }
-      if (date_between <= -2) {
-         temp_days.tomorrow = null;
-      }
-
-      console.log('temp days: ', temp_days)
+      if (date_between <= 0) temp_days.yesterday = null;
+      if (date_between <= -1) temp_days.today = null;
+      if (date_between <= -2) temp_days.tomorrow = null;
 
       await this.setState({ workout_days: temp_days });
    }
@@ -170,12 +159,9 @@ class RoutineInformation extends Component {
          routineDisplayContainer = '';
       }
 
-      return (
-         routineDisplayContainer
-      )
-
-
+      return routineDisplayContainer;
    }
+
    render() {
       return (
          <div>
