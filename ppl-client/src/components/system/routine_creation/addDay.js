@@ -47,6 +47,14 @@ class addDay extends Component {
       }
    }
 
+   addRestDay = () => {
+      const { days, } = this.state;
+      let temp_days = [...days];
+
+      temp_days.push({ name: 'Rest Day', exercises: [{ name: 'No exercises available.' }] });
+      this.setState({ days: temp_days });
+   }
+
    displayAddDayModal = () => {
       const { show, day_error } = this.state;
       let error_message = "";
@@ -87,12 +95,16 @@ class addDay extends Component {
       );
    }
 
+   displaySingleDay = (day) => {
+      console.log(day)
+   }
    displayDays = () => {
       const { days } = this.state;
 
       return days.map((day, dayIdx) =>
          <div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
             <h4 className="dayName h4">Day {dayIdx + 1} - {day.name}</h4>
+            {this.displaySingleDay(day)}
             <h6 className="exerciseHeader h6">Exercises:</h6>
             <ol>
                {day.exercises.map((exercise, idx) =>
@@ -106,9 +118,24 @@ class addDay extends Component {
                   </li>
                )}
             </ol>
+
          </div>
       )
    }
+
+   // <h6 className="exerciseHeader h6">Exercises:</h6>
+   // <ol>
+   //    {day.exercises.map((exercise, idx) =>
+   //       <li key={`exercise-${day.name}-${idx}`}>
+   //          {exercise.name}
+   //          {/* <ul>
+   //             {exercise.sets.map((set, idx) =>
+   //                <li key={`exercise-${day.name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x {set.reps}</li>
+   //             )}
+   //          </ul> */}
+   //       </li>
+   //    )}
+   // </ol>
 
    render() {
       const { days } = this.state;
@@ -120,6 +147,7 @@ class addDay extends Component {
             </div>
             <Form>
                <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => this.modalTrigger(e)}>Add A Day</Button>
+               <Button className="mb-3 ml-3 btn-outline-primary" variant="light" onClick={(e) => this.addRestDay(e)}>Add A Rest Day</Button>
                <Button className="btn-block" variant="primary" onClick={(e) => this.props.saveRoutine(days)}>Finish</Button>
             </Form>
          </div>
