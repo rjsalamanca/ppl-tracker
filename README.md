@@ -53,13 +53,13 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 **************************
 
 [] Indicator on Workouts Schedule for Today: Completed vs Non Completed.
-[] Rework login back end.
-[] Rework checking if still logged in.
+[IP] Rework login back end.
+[IP] Rework checking if still logged in.
 [X] Add Rest Days when creating routine.
 [X] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
 [X] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods
 [] Editing of routine/exericses/sets.
-[] Rework with hooks or redux for state management.
+[IP] Rework with hooks or redux for state management.
 [X] Rework creating of workout through components instead of redirects
 [X] Work on failsafes for routine creation
    [X] Fail Safe for routine name without any days
