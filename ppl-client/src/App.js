@@ -58,9 +58,9 @@ function App() {
             <Switch>
                <Route path="/" exact component={LandingPage} />
                <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
-               <Route path="/logout" exact render={(props) => <LogoutPage {...props} is_logged_in={this.state.is_logged_in} changeToLogout={this.changeToLogout} checkLoginStatus={this.checkLoginStatus} />} />
+               <Route path="/logout" exact render={(props) => <LogoutPage {...props} />} />
                <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
-               <Route path="/profile" exact render={(props) => <ProfilePage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
+               <Route path="/profile" exact render={(props) => <ProfilePage {...props} />} />
                <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
             </Switch>
          </UserContext.Provider>

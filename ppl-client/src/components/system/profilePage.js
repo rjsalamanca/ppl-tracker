@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
@@ -8,52 +8,88 @@ import WorkoutInformation from './workoutInformation';
 
 import './css/profilePageStyle.css'
 
-class Profile extends Component {
-   state = {
-      date: new Date(),
-      routines: [],
-      selectedRoutine: 'Select A Routine',
-      loadedRoutine: { routine_found: false },
-      selectedWorkout: {},
-      loadWorkout: false,
-      todaysWorkouts: []
-   }
+function Profile() {
+   const [date, setDate] = useState(new Date());
+   const [routines, setRoutines] = useState([]);
+   const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
+   const [selectedWorkout, setSelectedWorkout] = useState({});
+   const [todaysWorkouts, setTodaysWorkouts] = useState({});
+   const [loadedRoutine, setLoadedRoutine] = useState({ routine_found: false });
+   const [loadWorkout, setLoadWorkout] = useState(false);
+   const [loadRoutineInfo, setLoadRoutineInfo] = useState(true);
+   // state = {
+   //    date: new Date(),
+   //    routines: [],
+   //    selectedRoutine: 'Select A Routine',
+   //    loadedRoutine: { routine_found: false },
+   //    selectedWorkout: {},
+   //    loadWorkout: false,
+   //    todaysWorkouts: []
+   // }
 
-   componentDidMount() {
-      this.checkForRoutines();
-      this.loadTodaysWorkouts();
-   }
+   // componentDidMount() {
+   //    checkForRoutines();
+   //    loadTodaysWorkouts();
+   // }
 
-   handleRoutine = async (e) => {
-      await this.setState({
-         selectedRoutine: e.target.value,
-         loadedRoutine: { routine_found: false },
-         selectedWorkout: {},
-         loadWorkout: false,
-         loadRoutineInfo: true
-      });
-
-      if (this.state.selectedRoutine !== 'Select A Routine') {
-         await this.getFullRoutine();
+   useEffect(() => {
+      if (routines.length === 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {
+         checkForRoutines();
+         loadTodaysWorkouts();
       }
+   }, []);
+
+   useEffect(() => {
+      if (selectedRoutine !== 'Select A Routine') getFullRoutine();
+   }, [selectedRoutine]);
+
+   const handleRoutine = (e) => {
+      setSelectedRoutine(e.target.value);
+      setLoadedRoutine({ routine_found: false });
+      setSelectedWorkout({});
+      setLoadWorkout(false);
+      setLoadRoutineInfo(true)
+      // await setState({
+      //    selectedRoutine: e.target.value,
+      //    loadedRoutine: { routine_found: false },
+      //    selectedWorkout: {},
+      //    loadWorkout: false,
+      //    loadRoutineInfo: true
+      // });
+      // console.log(e.target.value)
+      // if
+      // // console.log(e.target.value)
+      // if (selectedRoutine !== 'Select A Routine') getFullRoutine();
    }
 
-   getFullRoutine = async () => {
-      const url = `http://localhost:3000/ppl/get_full_routine/${this.state.selectedRoutine}`;
+   const getFullRoutine = async () => {
+      console.log(selectedRoutine)
+      const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
       try {
          const response = await fetch(url, {
             method: "GET",
             credentials: "include"
          });
+
+
          const data = await response.json();
+
          console.log('this is loaded info: ', data)
-         !!data.routine_found ? this.setState({ loadedRoutine: data, loadRoutineInfo: false }) : this.setState({ loadedRoutine: { routine_found: false }, loadRoutineInfo: false });
+         if (!!data.routine_found) {
+            await setLoadedRoutine(data)
+         } else {
+            await setLoadedRoutine({ routine_found: false });
+         }
+
+         setLoadRoutineInfo(false);
+
+         // !!data.routine_found ? setState({ loadedRoutine: data, loadRoutineInfo: false }) : setState({ loadedRoutine: { routine_found: false }, loadRoutineInfo: false });
       } catch (err) {
          console.log(err);
       }
    }
 
-   checkForRoutines = async () => {
+   const checkForRoutines = async () => {
       const url = "http://localhost:3000/ppl/routine";
 
       try {
@@ -63,26 +99,32 @@ class Profile extends Component {
          });
 
          const data = await response.json();
-         if (data.routine_found === true) this.setState({ routines: data.routines });
+
+         if (data.routine_found === true) setRoutines(data.routines);
       } catch (err) {
          console.log(err);
       }
    }
 
-   onCalendarOnChange = async (date) => {
-      await this.setState({ date });
-      this.loadTodaysWorkouts();
+   const onCalendarOnChange = async (date) => {
+      await setDate(date);
+      loadTodaysWorkouts();
    }
 
-   getSelectedWorkout = async (workout) => {
+   const getSelectedWorkout = async (workout) => {
       //Resets
-      await this.setState({ selectedWorkout: {}, loadWorkout: false });
+      // await setState({ selectedWorkout: {}, loadWorkout: false });
+      await setSelectedWorkout({});
+      await setLoadWorkout(false);
+
       //Sets
-      await this.setState({ selectedWorkout: workout, loadWorkout: true });
+      // await setState({ selectedWorkout: workout, loadWorkout: true });
+      await setSelectedWorkout(workout)
+      await loadWorkout(true);
    }
 
-   loadRoutineComponent = () => {
-      const { selectedRoutine, loadRoutineInfo, loadedRoutine, date } = this.state;
+   const loadRoutineComponent = () => {
+      // const { selectedRoutine, loadRoutineInfo, loadedRoutine, date } = state;
       if (selectedRoutine === 'Select A Routine') {
          return (<div>Please select a routine above.</div>);
       } else if (!!loadRoutineInfo) {
@@ -96,18 +138,18 @@ class Profile extends Component {
       } else if (!loadedRoutine.routine_found) {
          return (<div>NO INFO FOUND</div>);
       } else {
-         return (<RoutineInformation calendar_date={date} routine={loadedRoutine} getSelectedWorkout={this.getSelectedWorkout} />)
+         return (<RoutineInformation calendar_date={date} routine={loadedRoutine} getSelectedWorkout={getSelectedWorkout} />)
       }
    }
 
-   loadWorkoutComponent = () => {
-      const { loadWorkout, selectedWorkout } = this.state;
+   const loadWorkoutComponent = () => {
+      // const { loadWorkout, selectedWorkout } = state;
       if (!!loadWorkout) {
          return (<WorkoutInformation selectedWorkout={selectedWorkout} />)
       }
    }
 
-   loadTodaysWorkouts = async () => {
+   const loadTodaysWorkouts = async () => {
       const url = 'http://localhost:3000/ppl/routine/currentDay';
       try {
          const response = await fetch(url, {
@@ -117,75 +159,77 @@ class Profile extends Component {
                "Content-Type": "application/json"
             },
             credentials: 'include',
-            body: JSON.stringify({ date: this.state.date })
+            body: JSON.stringify({ date })
          });
          let data = await response.json();
-         await this.setState({ todaysWorkouts: data.todays_workout })
+         // await setState({ todaysWorkouts: data.todays_workout })
+         await setTodaysWorkouts(data.todays_workout);
       } catch (err) {
          console.log(err);
       }
    }
 
-   render() {
-      const { routines, date, todaysWorkouts } = this.state;
-      return (
-         <div className="routineContainer">
-            <div className="routineDateInfo">
-               <Calendar
-                  onChange={this.onCalendarOnChange}
-                  value={date}
-               />
-               {
-                  todaysWorkouts.length > 0 &&
-                  <div>
-                     <h3 className="h5">Workouts Scheduled for Today:</h3>
-                     <ul className="list-group">
-                        {
-                           todaysWorkouts.map((workout, ind) =>
-                              <li key={`todays_workout_${workout.routine_name}_${ind}`} className="list-group-item">
-                                 {workout.routine_name}
-                                 <ul className="list-group">
-                                    <li className="list-group-item">{workout.current_workout.day_name}</li>
-                                 </ul>
-                              </li>
-                           )
-                        }
-                     </ul>
-                  </div>
-               }
-            </div>
-            <div className="routineSelection">
-               {
-                  routines.length === 0 ?
-                     <div>
-                        No Routine Found
-                           <Link className="nav-link" to="/ppl/create_routine">
-                           <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
-                        </Link>
-                     </div>
-                     :
-                     <div className="routineInformation">
-                        <Form>
-                           <Form.Control onChange={(e) => this.handleRoutine(e)} as="select">
-                              <option>Select A Routine</option>
-                              {
-                                 routines.length !== 0 ?
-                                    routines.map(routine =>
-                                       <option key={`routine${routine.id}`}>{routine.routine_name}</option>
-                                    )
-                                    :
-                                    <option disabled>Loading Routines...</option>
-                              }
-                           </Form.Control>
-                        </Form>
-                        {this.loadRoutineComponent()}
-                     </div>
-               }
-               {this.loadWorkoutComponent()}
-            </div>
+   // render() {
+   // const { routines, date, todaysWorkouts } = state;
+   return (
+      <div className="routineContainer">
+         <div className="routineDateInfo">
+            <Calendar
+               onChange={onCalendarOnChange}
+               value={date}
+            />
+            {
+               todaysWorkouts.length > 0 &&
+               <div>
+                  <h3 className="h5">Workouts Scheduled for Today:</h3>
+                  <ul className="list-group">
+                     {
+                        todaysWorkouts.map((workout, ind) =>
+                           <li key={`todays_workout_${workout.routine_name}_${ind}`} className="list-group-item">
+                              {workout.routine_name}
+                              <ul className="list-group">
+                                 <li className="list-group-item">{workout.current_workout.day_name}</li>
+                              </ul>
+                           </li>
+                        )
+                     }
+                  </ul>
+               </div>
+            }
          </div>
-      );
-   }
+         <div className="routineSelection">
+
+            {
+               routines.length === 0 ?
+                  <div>
+                     No Routine Found
+                           <Link className="nav-link" to="/ppl/create_routine">
+                        <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
+                     </Link>
+                  </div>
+                  :
+                  <div className="routineInformation">
+                     <Form>
+                        <Form.Control onChange={e => { handleRoutine(e) }} as="select" defaultValue={selectedRoutine}>
+                           <option value="Select A Routine">Select A Routine</option>
+                           {
+                              routines.length !== 0 ?
+                                 routines.map(routine =>
+                                    <option key={`routine${routine.id}`} value={routine.routine_name}>{routine.routine_name}</option>
+                                 )
+                                 :
+                                 <option disabled>Loading Routines...</option>
+                           }
+                        </Form.Control>
+                     </Form>
+                     {loadRoutineComponent()}
+                  </div>
+            }
+            {loadWorkoutComponent()}
+         </div>
+      </div>
+   );
+   // }
 }
 
 export default Profile;
