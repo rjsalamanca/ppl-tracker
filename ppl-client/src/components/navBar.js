@@ -1,65 +1,64 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import { Nav, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
 
-class NavBar extends Component {
-   state = { check: null };
+function NavBar() {
+   const { isLoggedIn } = useContext(UserContext);
 
-   componentDidMount = () => {
-      this.setState({ check: this.props.is_logged_in })
-   }
+   // componentDidMount = () => {
+   //    // this.setState({ check: this.props.is_logged_in })
+   // }
 
-   render() {
-      return (
-         < Nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm" style={{ zIndex: 100 }} >
-            <Link className="navbar-brand" to="/">PPL Tracker</Link>
-            <Button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-               <span className="navbar-toggler-icon"></span>
-            </Button>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown">
-               <Nav className="navbar-nav">
-                  <Nav.Item className="nav-item active">
-                     <Link className="nav-link" to='/'>Home <span className="sr-only">(current)</span></Link>
-                  </Nav.Item>
-                  {
-                     {
-                        true:
-                           <Nav className="navbar-nav">
-                              <Nav.Item className="nav-item active">
-                                 <Link className="nav-link" to="/ppl/create_routine">Create Routine</Link>
-                              </Nav.Item>
-                              <Nav.Item className="nav-item active">
-                                 <Link className="nav-link" to="/profile">Profile</Link>
-                              </Nav.Item>
-                           </Nav>
-                     }[this.props.is_logged_in]
-                  }
-
-               </Nav>
+   return (
+      < Nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm" style={{ zIndex: 100 }} >
+         <Link className="navbar-brand" to="/">PPL Tracker</Link>
+         <Button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+         </Button>
+         <div className="collapse navbar-collapse" id="navbarNavDropdown">
+            <Nav className="navbar-nav">
+               <Nav.Item className="nav-item active">
+                  <Link className="nav-link" to='/'>Home <span className="sr-only">(current)</span></Link>
+               </Nav.Item>
                {
                   {
                      true:
-                        <Nav className="navbar-nav ml-auto">
+                        <Nav className="navbar-nav">
                            <Nav.Item className="nav-item active">
-                              <Link className="nav-link" to="/logout">Logout</Link>
-                           </Nav.Item>
-                        </Nav>,
-                     false:
-                        <Nav className="navbar-nav ml-auto">
-                           <Nav.Item className="nav-item active">
-                              <Link className="nav-link" to="/login">Login</Link>
+                              <Link className="nav-link" to="/ppl/create_routine">Create Routine</Link>
                            </Nav.Item>
                            <Nav.Item className="nav-item active">
-                              <Link className="nav-link" to="/register">Register</Link>
+                              <Link className="nav-link" to="/profile">Profile</Link>
                            </Nav.Item>
                         </Nav>
-                  }[this.props.is_logged_in]
+                  }[isLoggedIn]
                }
-            </div>
-         </Nav >
 
-      );
-   }
+            </Nav>
+            {
+               {
+                  true:
+                     <Nav className="navbar-nav ml-auto">
+                        <Nav.Item className="nav-item active">
+                           <Link className="nav-link" to="/logout">Logout</Link>
+                        </Nav.Item>
+                     </Nav>,
+                  false:
+                     <Nav className="navbar-nav ml-auto">
+                        <Nav.Item className="nav-item active">
+                           <Link className="nav-link" to="/login">Login</Link>
+                        </Nav.Item>
+                        <Nav.Item className="nav-item active">
+                           <Link className="nav-link" to="/register">Register</Link>
+                        </Nav.Item>
+                     </Nav>
+               }[isLoggedIn]
+            }
+         </div>
+      </Nav >
+
+   );
 }
 
 export default NavBar;

@@ -1,24 +1,36 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
+import { UserContext } from '../../UserContext';
+
 import '../../App.css';
 
-class Login extends Component {
-   state = {
-      errorCode: -1,
-      email: '',
-      password: ''
-   }
+function Login(props) {
+   const [errorCode, setErrorCode] = useState(-1);
+   const [email, setEmail] = useState('');
+   const [password, setPassword] = useState('');
 
-   componentDidMount() {
-      (this.props.location.errorCode === 0) ? this.setState({ errorCode: 5 }) : this.setState({ errorCode: -1 });
-   }
+   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
 
-   handleEmail = (e) => { this.setState({ email: e.target.value }) }
-   handlePassword = (e) => { this.setState({ password: e.target.value }) }
+   useEffect(() => {
+      console.log(props.location.errorCode);
+      if (props.location.errorCode === 0 && isLoggedIn === false) setErrorCode(5);
+   });
+   // state = {
+   //    errorCode: -1,
+   //    email: '',
+   //    password: ''
+   // }
 
-   login = async (e) => {
+   // componentDidMount() {
+   //    (this.props.location.errorCode === 0) ? this.setState({ errorCode: 5 }) : this.setState({ errorCode: -1 });
+   // }
+
+   // const handleEmail = (e) => { this.setState({ email: e.target.value }) }
+   // const handlePassword = (e) => { this.setState({ password: e.target.value }) }
+
+   const login = async (e) => {
       const formCheck = document.getElementById('loginForm').checkValidity();
       const url = "http://localhost:3000/users/login";
 
@@ -32,12 +44,16 @@ class Login extends Component {
                   "Content-Type": "application/json"
                },
                credentials: "include",
-               body: JSON.stringify(this.state)
+               body: JSON.stringify({ email, password })
             })
 
             const data = await response.json();
-            await this.props.checkLoginStatus()
-            this.setState({ errorCode: data.errorCode });
+            // await this.props.checkLoginStatus()
+            if (data.errorCode === 0) {
+               setIsLoggedIn(true);
+            }
+            setErrorCode(data.errorCode);
+            console.log(errorCode)
 
             ///////////////////////////////////
             //          ERROR CODES:         //
@@ -52,13 +68,12 @@ class Login extends Component {
             ///////////////////////////////////
 
          } catch (err) {
-            this.setState({ errorCode: 4 });
+            setErrorCode(4);
          }
       }
    }
 
-   displayError = () => {
-      const { errorCode } = this.state;
+   const displayError = () => {
       let errorMessage = '';
       let errorMessageSecondary = ''
       switch (errorCode) {
@@ -97,35 +112,31 @@ class Login extends Component {
       );
    }
 
-   render() {
-      const { errorCode } = this.state;
-
-      return (
-         <div>
-            <Card className="loginSignUpContainer mt-5">
-               <Card.Header as="h5">Login</Card.Header>
-               <Card.Body>
-                  <Form id="loginForm">
-                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" onChange={(e) => this.handleEmail(e)} placeholder="Enter email" required />
-                     </Form.Group>
-                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control autoComplete="on" type="password" onChange={(e) => this.handlePassword(e)} placeholder="Password" required />
-                     </Form.Group>
-                     <Button className="mb-3" type="submit" variant="primary" onClick={(e) => this.login(e)}>Sign In</Button>
-                  </Form>
-                  {errorCode !== -1 && this.displayError()}
-                  <p className="mt-4">
-                     No Account? <Link to="/register"><b>Register</b></Link>
-                  </p>
-               </Card.Body>
-               {errorCode === 0 ? <Redirect to="/profile" /> : <div></div>}
-            </Card >
-         </div>
-      )
-   }
+   return (
+      <div>
+         <Card className="loginSignUpContainer mt-5">
+            <Card.Header as="h5">Login</Card.Header>
+            <Card.Body>
+               <Form id="loginForm">
+                  <Form.Group controlId="formBasicEmail">
+                     <Form.Label>Email address</Form.Label>
+                     <Form.Control type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" value={email} required />
+                  </Form.Group>
+                  <Form.Group controlId="formBasicPassword">
+                     <Form.Label>Password</Form.Label>
+                     <Form.Control autoComplete="on" type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" value={password} required />
+                  </Form.Group>
+                  <Button className="mb-3" type="submit" variant="primary" onClick={(e) => login(e)}>Sign In</Button>
+               </Form>
+               {errorCode !== -1 && displayError()}
+               <p className="mt-4">
+                  No Account? <Link to="/register"><b>Register</b></Link>
+               </p>
+            </Card.Body>
+            {errorCode === 0 ? <Redirect to="/profile" /> : <div></div>}
+         </Card >
+      </div>
+   )
 }
 
 export default Login;

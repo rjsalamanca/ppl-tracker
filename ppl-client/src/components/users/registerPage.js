@@ -1,22 +1,28 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link, Redirect } from "react-router-dom";
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 
-class Register extends Component {
-   state = {
-      errorCode: -1,
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: ''
-   }
+function Register() {
+   const [errorCode, setErrorCode] = useState(-1);
+   const [firstName, setFirstName] = useState('');
+   const [lastName, setLastName] = useState('');
+   const [email, setEmail] = useState('');
+   const [password, setPassword] = useState('');
 
-   handleFirstName = (e) => { this.setState({ first_name: e.target.value }) };
-   handleLastName = (e) => { this.setState({ last_name: e.target.value }) };
-   handleEmail = (e) => { this.setState({ email: e.target.value }) };
-   handlePassword = (e) => { this.setState({ password: e.target.value }) };
+   // state = {
+   //    errorCode: -1,
+   //    first_name: '',
+   //    last_name: '',
+   //    email: '',
+   //    password: ''
+   // }
 
-   createUser = async (e) => {
+   // handleFirstName = (e) =>  this.setState({ first_name: e.target.value }) };
+   // handleLastName = (e) => { this.setState({ last_name: e.target.value }) };
+   // handleEmail = (e) => { this.setState({ email: e.target.value }) };
+   // handlePassword = (e) => { this.setState({ password: e.target.value }) };
+
+   const createUser = async (e) => {
       console.log('bruh')
       const formCheck = document.getElementById('registerForm').checkValidity();
       const url = "http://localhost:3000/users/register"
@@ -44,23 +50,21 @@ class Register extends Component {
                   "Content-Type": "application/json"
                },
                credentials: 'include',
-               body: JSON.stringify(this.state)
+               body: JSON.stringify({ firstName, lastName, email, password })
             })
 
             const data = await response.json();
             console.log(data.errorCode)
-            this.setState({ errorCode: data.errorCode });
+            setErrorCode(data.errorCode);
          } catch (err) {
             // Can't connect to Database
-            this.setState({ errorCode: 3 });
+            setErrorCode(3);
          }
-      } else {
-
       }
    }
 
-   displayError = () => {
-      const { errorCode } = this.state;
+   const displayError = () => {
+      // const { errorCode } = this.state;
       let errorMessage = '';
       let errorMessageSecondary = ''
       switch (errorCode) {
@@ -70,11 +74,11 @@ class Register extends Component {
             break;
          case 2:
             errorMessage = 'Uh Oh, we are currently having issues.';
-            errorMessageSecondary = `Please send let us know you have the following <b>Error Code: ${errorCode}</b>`;
+            errorMessageSecondary = `Please send let us know you have the following Error Code: ${errorCode}`;
             break;
          case 3:
             errorMessage = 'Oops, something happened behind the scenes,';
-            errorMessageSecondary = `Please send let us know you have the following <b>Error Code: ${errorCode}</b>`;
+            errorMessageSecondary = `Please send let us know you have the following Error Code: ${errorCode}`;
             break;
          default:
             errorMessage = '';
@@ -88,39 +92,39 @@ class Register extends Component {
       );
    }
 
-   render() {
-      const { errorCode } = this.state;
-      return (
-         <div>
-            <Card className="loginSignUpContainer mt-5" >
-               <Card.Header as="h5">Register</Card.Header>
-               <Card.Body>
-                  <Form id="registerForm">
-                     <Form.Group controlId="formFirstName">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control type="text" name="f_name" className="form-control" placeholder="First Name" onChange={(e) => this.handleFirstName(e)} required />
-                     </Form.Group>
-                     <Form.Group controlId="formLastName">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control type="text" name="l_name" className="form-control" placeholder="Last Name" onChange={(e) => this.handleLastName(e)} required />
-                     </Form.Group>
-                     <Form.Label>Email address</Form.Label>
-                     <Form.Control type="email" minLength="1" name="email" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" onChange={(e) => this.handleEmail(e)} required />
-                     <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone.</small>
-                     <Form.Group controlId="formPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" autoComplete="on" name="password" className="form-control" placeholder="Password" onChange={(e) => this.handlePassword(e)} required />
-                     </Form.Group>
-                     <Button className="mb-3" type="submit" variant={'danger'} onClick={(e) => { this.createUser(e) }}>Submit</Button>
-                  </Form>
-                  {errorCode !== -1 && this.displayError()}
-                  <p className="mt-4">Already have an account? <Link to="/login"><b>Login Here</b></Link></p>
-               </Card.Body>
-            </Card >
-            {errorCode === 0 && <Redirect to={{ pathname: '/login', errorCode }} />}
-         </div>
-      );
-   }
+   // render() {
+   //    const { errorCode } = this.state;
+   return (
+      <div>
+         <Card className="loginSignUpContainer mt-5" >
+            <Card.Header as="h5">Register</Card.Header>
+            <Card.Body>
+               <Form id="registerForm">
+                  <Form.Group controlId="formFirstName">
+                     <Form.Label>First Name</Form.Label>
+                     <Form.Control type="text" name="f_name" className="form-control" placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} value={firstName} required />
+                  </Form.Group>
+                  <Form.Group controlId="formLastName">
+                     <Form.Label>Last Name</Form.Label>
+                     <Form.Control type="text" name="l_name" className="form-control" placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} value={lastName} required />
+                  </Form.Group>
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control type="email" minLength="1" name="email" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email} required />
+                  <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone.</small>
+                  <Form.Group controlId="formPassword">
+                     <Form.Label>Password</Form.Label>
+                     <Form.Control type="password" autoComplete="on" name="password" className="form-control" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} required />
+                  </Form.Group>
+                  <Button className="mb-3" type="submit" variant={'danger'} onClick={(e) => { createUser(e) }}>Submit</Button>
+               </Form>
+               {errorCode !== -1 && displayError()}
+               <p className="mt-4">Already have an account? <Link to="/login"><b>Login Here</b></Link></p>
+            </Card.Body>
+         </Card >
+         {errorCode === 0 && <Redirect to={{ pathname: '/login', errorCode }} />}
+      </div>
+   );
+   // }
 }
 
 export default Register;

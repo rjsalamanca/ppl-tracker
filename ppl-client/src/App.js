@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import NavBar from './components/navBar';
@@ -10,58 +10,63 @@ import RegisterPage from './components/users/registerPage';
 import ProfilePage from './components/system/profilePage';
 import CreateRoutine from './components/system/routine_creation/createRoutine';
 
-// import AddExercises from './components/system/addExercises';
+import { UserContext } from './UserContext';
 
 import './App.css';
 
-class App extends Component {
-   state = {
-      is_logged_in: false
-   }
+function App() {
+   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const value = useMemo(() => ({ isLoggedIn, setIsLoggedIn }), [isLoggedIn, setIsLoggedIn]);
 
-   changeToLogout = async () => {
-      this.setState({ is_logged_in: false });
-   }
+   // state = {
+   //    is_logged_in: false
+   // }
 
-   checkLoginStatus = async () => {
-      const url = "http://localhost:3000/users/loginStatus";
+   // const changeToLogout = async () => {
+   //    setIs_logged_in(false);
+   // }
 
-      try {
-         const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-               "Accept": "application/json",
-               "Content-Type": "application/json"
-            },
-            credentials: 'include'
-         })
+   // const checkLoginStatus = async () => {
+   //    const url = "http://localhost:3000/users/loginStatus";
 
-         const data = await response.json();
-         this.setState({ is_logged_in: data.is_logged_in })
+   //    try {
+   //       const response = await fetch(url, {
+   //          method: 'GET',
+   //          headers: {
+   //             "Accept": "application/json",
+   //             "Content-Type": "application/json"
+   //          },
+   //          credentials: 'include'
+   //       })
 
-         return 'yes';
-      } catch (err) {
-         console.log(this.state.is_logged_in)
-         return err.message;
-      }
-   }
+   //       const data = await response.json();
+   //       setIs_logged_in(data.is_logged_in)
+   //       // this.setState({ is_logged_in: data.is_logged_in })
 
-   render() {
+   //       return 'yes';
+   //    } catch (err) {
+   //       // console.log(this.state.is_logged_in)
+   //       return err.message;
+   //    }
+   // }
 
-      return (
-         <Router>
-            <NavBar is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />
+
+   return (
+      <Router>
+         <UserContext.Provider value={value}>
+            <NavBar />
             <Switch>
                <Route path="/" exact component={LandingPage} />
-               <Route path="/login" exact render={(props) => <LoginPage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
+               <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
                <Route path="/logout" exact render={(props) => <LogoutPage {...props} is_logged_in={this.state.is_logged_in} changeToLogout={this.changeToLogout} checkLoginStatus={this.checkLoginStatus} />} />
                <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
                <Route path="/profile" exact render={(props) => <ProfilePage {...props} is_logged_in={this.state.is_logged_in} checkLoginStatus={this.checkLoginStatus} />} />
                <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
             </Switch>
-         </Router>
-      );
-   }
+         </UserContext.Provider>
+
+      </Router>
+   );
 }
 
 export default App;

@@ -76,8 +76,9 @@ router.post('/login', async (req, res, next) => {
 });
 
 router.post('/register', async (req, res) => {
-   const { first_name, last_name, email, password } = req.body;
-   const user = new UsersModel(null, first_name, last_name, email, null);
+   const { firstName, lastName, email, password } = req.body;
+   console.log(req.body)
+   const user = new UsersModel(null, firstName, lastName, email, null);
    const checkUser = await UsersModel.checkUser(email);
 
    if (checkUser.rowCount === 0) {
