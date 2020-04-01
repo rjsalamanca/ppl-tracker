@@ -13,13 +13,13 @@ import { UserContext } from '../../UserContext';
 import './css/routineInformationStyle.css'
 
 function RoutineInformation(props) {
-   const [loadedProps, setLoadedProps] = useState(false);
-   const [routineInfo, setRoutineInfo] = useState({});
+   // const [loadedProps, setLoadedProps] = useState(false);
+   // const [routineInfo, setRoutineInfo] = useState({});
    const [dateBetween, setDateBetween] = useState(null);
    const [workoutDays, setWorkoutDays] = useState({});
-   const [date, setDate] = useState('');
+   // const [date, setDate] = useState('');
 
-   const { selectedWorkout, setSelectedWorkout } = useContext(UserContext);
+   const { selectedWorkout, setSelectedWorkout, date, fullRoutine } = useContext(UserContext);
 
    // state = {
    //    loadedProps: false,
@@ -81,26 +81,25 @@ function RoutineInformation(props) {
       //    selectedWorkout: {},
       //    date: this.props.calendar_date
       // });
-      setLoadedProps(true);
-      setRoutineInfo(props.routine)
+      // setRoutineInfo(props.routine)
       setWorkoutDays({})
-      setDate(props.calendar_date)
+      // setDate(props.calendar_date)
 
-      let start_date = moment(props.routine.date_started);
+      let start_date = moment(fullRoutine.routine.date_started);
       let current = moment(date, "YYYY-MM-DD");
       setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
       // await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
       // getTodaysWorkout();
-      if (routineInfo.hasOwnProperty('routine_found') && date !== '' && !isNaN(dateBetween)) {
+      if (!isNaN(dateBetween)) {
          console.log(dateBetween)
          getTodaysWorkout();
       }
 
-   }, [loadedProps, routineInfo, date, dateBetween])
+   }, [dateBetween])
 
    const getTodaysWorkout = () => {
       // const { routineInfo, dateBetween } = this.state;
-      const days = routineInfo.routine.routine_days;
+      const days = fullRoutine.routine.routine_days;
       const currDayInd = dateBetween % days.length;
       let temp_days = {};
 
@@ -156,7 +155,7 @@ function RoutineInformation(props) {
                                           </li>
                                        )}
                                     </ul>
-                                    <Button onClick={(e) => this.props.getSelectedWorkout(workoutDays[day])}>Start</Button>
+                                    <Button onClick={(e) => props.getSelectedWorkout(workoutDays[day])}>Start</Button>
                                  </div>
                            }
                         </div>
@@ -174,7 +173,7 @@ function RoutineInformation(props) {
       let routineDisplayContainer = '';
       let routineDisplayWorkoutsAvaiable = '';
 
-      if (!!routineInfo.routine_found) {
+      if (!!fullRoutine.routine_found) {
          if (!!workoutDays.hasOwnProperty('today')) {
             routineDisplayWorkoutsAvaiable = (
                <div className="container">
@@ -193,7 +192,7 @@ function RoutineInformation(props) {
             <div>
                <section id="section-pricing" className="section-pricing">
                   <h2 className="routineName text-center">
-                     {routineInfo.routine.routine_name}
+                     {fullRoutine.routine.routine_name}
                   </h2>
                   {routineDisplayWorkoutsAvaiable}
                </section>

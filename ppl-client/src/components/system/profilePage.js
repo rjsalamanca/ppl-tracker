@@ -11,21 +11,21 @@ import { UserContext } from '../../UserContext';
 import './css/profilePageStyle.css'
 
 function Profile() {
-   const [date, setDate] = useState(new Date());
+   // const [date, setDate] = useState(new Date());
    const [routines, setRoutines] = useState([]);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
    const [todaysWorkouts, setTodaysWorkouts] = useState({});
-   const [loadedRoutine, setLoadedRoutine] = useState({ routine_found: false });
+   // const [fullRoutine, setFullRoutine] = useState({ routine_found: false });
    const [loadWorkout, setLoadWorkout] = useState(false);
    const [loadRoutineInfo, setLoadRoutineInfo] = useState(true);
 
-   const { setSelectedWorkout } = useContext(UserContext);
+   const { setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(UserContext);
 
    // state = {
    //    date: new Date(),
    //    routines: [],
    //    selectedRoutine: 'Select A Routine',
-   //    loadedRoutine: { routine_found: false },
+   //    fullRoutine: { routine_found: false },
    //    selectedWorkout: {},
    //    loadWorkout: false,
    //    todaysWorkouts: []
@@ -55,15 +55,14 @@ function Profile() {
             });
 
             const data = await response.json();
-
             if (!!data.routine_found) {
-               await setLoadedRoutine(data)
+               await setFullRoutine(data)
             } else {
-               await setLoadedRoutine({ routine_found: false });
+               await setFullRoutine({ routine_found: false });
             }
 
             setLoadRoutineInfo(false);
-            // !!data.routine_found ? setState({ loadedRoutine: data, loadRoutineInfo: false }) : setState({ loadedRoutine: { routine_found: false }, loadRoutineInfo: false });
+            // !!data.routine_found ? setState({ fullRoutine: data, loadRoutineInfo: false }) : setState({ fullRoutine: { routine_found: false }, loadRoutineInfo: false });
          } catch (err) {
             console.log(err);
          }
@@ -76,13 +75,13 @@ function Profile() {
 
    const handleRoutine = (e) => {
       setSelectedRoutine(e.target.value);
-      setLoadedRoutine({ routine_found: false });
+      setFullRoutine({ routine_found: false });
       setSelectedWorkout({});
       setLoadWorkout(false);
       setLoadRoutineInfo(true)
       // await setState({
       //    selectedRoutine: e.target.value,
-      //    loadedRoutine: { routine_found: false },
+      //    fullRoutine: { routine_found: false },
       //    selectedWorkout: {},
       //    loadWorkout: false,
       //    loadRoutineInfo: true
@@ -128,7 +127,7 @@ function Profile() {
    }
 
    const loadRoutineComponent = () => {
-      // const { selectedRoutine, loadRoutineInfo, loadedRoutine, date } = state;
+      // const { selectedRoutine, loadRoutineInfo, fullRoutine, date } = state;
       if (selectedRoutine === 'Select A Routine') {
          return (<div>Please select a routine above.</div>);
       } else if (!!loadRoutineInfo) {
@@ -139,10 +138,12 @@ function Profile() {
                }
             </div>
          );
-      } else if (!loadedRoutine.routine_found) {
+      } else if (!fullRoutine.routine_found) {
          return (<div>NO INFO FOUND</div>);
       } else {
-         return (<RoutineInformation calendar_date={date} routine={loadedRoutine} getSelectedWorkout={getSelectedWorkout} />)
+         return (<RoutineInformation getSelectedWorkout={getSelectedWorkout} />)
+
+         // return (<RoutineInformation calendar_date={date} routine={fullRoutine} getSelectedWorkout={getSelectedWorkout} />)
       }
    }
 

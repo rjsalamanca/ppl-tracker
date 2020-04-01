@@ -16,8 +16,11 @@ import './App.css';
 function App() {
    const [isLoggedIn, setIsLoggedIn] = useState(false);
    const [selectedWorkout, setSelectedWorkout] = useState({});
+   const [date, setDate] = useState(new Date());
+   const [fullRoutine, setFullRoutine] = useState({ routine_found: false });
 
-   const value = useMemo(() => ({ isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout }), [isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout]);
+
+   const value = useMemo(() => ({ isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine }), [isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine]);
 
    // state = {
    //    is_logged_in: false
