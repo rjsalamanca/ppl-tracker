@@ -4,8 +4,20 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 function NavBar() {
-   const { isLoggedIn } = useContext(UserContext);
-
+   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+   const loggedInToLogout = () => {
+      const url = "http://localhost:3000/users/logout";
+      try {
+         fetch(url, {
+            method: 'GET',
+            credentials: "include"
+         }).then((data) => {
+            setIsLoggedIn(false);
+         })
+      } catch (err) {
+         console.log('cant logout')
+      }
+   }
    // componentDidMount = () => {
    //    // this.setState({ check: this.props.is_logged_in })
    // }
@@ -41,7 +53,7 @@ function NavBar() {
                   true:
                      <Nav className="navbar-nav ml-auto">
                         <Nav.Item className="nav-item active">
-                           <Link className="nav-link" to="/logout">Logout</Link>
+                           <Link className="nav-link" to="/" onClick={() => loggedInToLogout()}>Logout</Link>
                         </Nav.Item>
                      </Nav>,
                   false:
