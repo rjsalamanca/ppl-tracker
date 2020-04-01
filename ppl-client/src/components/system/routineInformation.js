@@ -1,90 +1,100 @@
-import React, { Component } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
 // import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 
+import { UserContext } from '../../UserContext';
+
 import './css/routineInformationStyle.css'
 
-class RoutineInformation extends Component {
-   state = {
-      loadedProps: false,
-      routine_info: {},
-      date_between: 0,
-      workout_days: {},
-      selectedWorkout: {},
-      date: ''
-   }
+function RoutineInformation() {
+   const [loadedProps, setLoadedProps] = useState(false);
+   const [routineInfo, setRoutineInfo] = useState({});
+   const [dateBetween, setDateBetween] = useState(0);
+   const [workoutDays, setWorkoutDays] = useState({});
+   const [date, setDate] = useState('');
 
-   static getDerivedStateFromProps(nextProps, prevState) {
-      if (nextProps.calendar_date !== prevState.date) {
-         return { date: nextProps.calendar_date };
-      } else return null;
-   }
+   const { selectedWorkout, setSelectedWorkout } = useContext(UserContext);
 
-   async componentDidUpdate(prevProps, prevState) {
-      if (prevProps.calendar_date !== this.props.calendar_date) {
-         await this.setState({
-            loadedProps: true,
-            routine_info: this.props.routine,
-            workout_days: {},
-            selectedWorkout: {}
-         });
+   // state = {
+   //    loadedProps: false,
+   //    routineInfo: {},
+   //    dateBetween: 0,
+   //    workoutDays: {},
+   //    selectedWorkout: {},
+   //    date: ''
+   // }
 
-         if (!!this.state.routine_info.routine_found) {
-            let start_date = moment(this.state.routine_info.routine.date_started);
-            let current = moment(this.state.date, "YYYY-MM-DD")
+   // static getDerivedStateFromProps(nextProps, prevState) {
+   //    if (nextProps.calendar_date !== prevState.date) {
+   //       return { date: nextProps.calendar_date };
+   //    } else return null;
+   // }
 
-            await this.setState({ date_between: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
-            await this.getTodaysWorkout();
-         }
-      }
-   }
+   // async componentDidUpdate(prevProps, prevState) {
+   //    if (prevProps.calendar_date !== this.props.calendar_date) {
+   //       await this.setState({
+   //          loadedProps: true,
+   //          routineInfo: this.props.routine,
+   //          workoutDays: {},
+   //          selectedWorkout: {}
+   //       });
 
-   async componentDidMount() {
-      await this.setState({
-         loadedProps: true,
-         routine_info: this.props.routine,
-         workout_days: {},
-         selectedWorkout: {},
-         date: this.props.calendar_date
-      });
-      let start_date = moment(this.state.routine_info.routine.date_started);
-      let current = moment(this.state.date, "YYYY-MM-DD");
+   //       if (!!this.state.routineInfo.routine_found) {
+   //          let start_date = moment(this.state.routineInfo.routine.date_started);
+   //          let current = moment(this.state.date, "YYYY-MM-DD")
 
-      await this.setState({ date_between: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
-      await this.getTodaysWorkout();
-   }
+   //          await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
+   //          await this.getTodaysWorkout();
+   //       }
+   //    }
+   // }
 
-   getTodaysWorkout = async () => {
-      const { routine_info, date_between } = this.state;
-      const days = routine_info.routine.routine_days;
-      const curr_day_ind = date_between % days.length;
+   // async componentDidMount() {
+   //    await this.setState({
+   //       loadedProps: true,
+   //       routineInfo: this.props.routine,
+   //       workoutDays: {},
+   //       selectedWorkout: {},
+   //       date: this.props.calendar_date
+   //    });
+   //    let start_date = moment(this.state.routineInfo.routine.date_started);
+   //    let current = moment(this.state.date, "YYYY-MM-DD");
+
+   //    await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
+   //    await this.getTodaysWorkout();
+   // }
+
+   const getTodaysWorkout = () => {
+      // const { routineInfo, dateBetween } = this.state;
+      const days = routineInfo.routine.routine_days;
+      const currDayInd = dateBetween % days.length;
       let temp_days = {};
 
-      if (curr_day_ind === 0) {
+      if (currDayInd === 0) {
          // cycle at the start
          // console.log('cycle in start');
-         temp_days = { yesterday: days[days.length - 1], today: days[curr_day_ind] };
-         (days.length - 1 === 0) ? temp_days['tomorrow'] = days[0] : temp_days['tomorrow'] = days[curr_day_ind + 1]
-      } else if (curr_day_ind === days.length - 1) {
+         temp_days = { yesterday: days[days.length - 1], today: days[currDayInd] };
+         (days.length - 1 === 0) ? temp_days['tomorrow'] = days[0] : temp_days['tomorrow'] = days[currDayInd + 1]
+      } else if (currDayInd === days.length - 1) {
          //cycle at the end
          // console.log('cycle in end');
-         temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[0] };
+         temp_days = { yesterday: days[currDayInd - 1], today: days[currDayInd], tomorrow: days[0] };
       } else {
          // cycle in between
          // console.log('cycle in between');
-         temp_days = { yesterday: days[curr_day_ind - 1], today: days[curr_day_ind], tomorrow: days[curr_day_ind + 1] };
+         temp_days = { yesterday: days[currDayInd - 1], today: days[currDayInd], tomorrow: days[currDayInd + 1] };
       }
 
-      if (date_between <= 0) temp_days.yesterday = null;
-      if (date_between <= -1) temp_days.today = null;
-      if (date_between <= -2) temp_days.tomorrow = null;
+      if (dateBetween <= 0) temp_days.yesterday = null;
+      if (dateBetween <= -1) temp_days.today = null;
+      if (dateBetween <= -2) temp_days.tomorrow = null;
 
-      await this.setState({ workout_days: temp_days });
+      setWorkoutDays(temp_days);
    }
 
-   displayWorkoutDays = (day) => {
-      const { workout_days } = this.state;
+   const displayWorkoutDays = (day) => {
+      // const { workoutDays } = this.state;
 
       return (
          <div className="packageCol">
@@ -94,24 +104,24 @@ class RoutineInformation extends Component {
                </div>
                <div className="package-features text-center">
                   {
-                     workout_days[day] !== null ?
+                     workoutDays[day] !== null ?
                         <div>
-                           Workout: {workout_days[day].day_name}
+                           Workout: {workoutDays[day].day_name}
                            {
-                              workout_days[day].day_name === "Rest Day" ?
+                              workoutDays[day].day_name === "Rest Day" ?
                                  <p className="m-3">
                                     <b>Sit back and relax, on your rest day.</b>
                                  </p>
                                  :
                                  <div>
                                     <ul>
-                                       {workout_days[day].exercises.map((exercise, idx) =>
-                                          <li key={`exercise-${workout_days[day].day_name}-${idx}`}>
+                                       {workoutDays[day].exercises.map((exercise, idx) =>
+                                          <li key={`exercise-${workoutDays[day].day_name}-${idx}`}>
                                              {exercise.exercise_name}
                                           </li>
                                        )}
                                     </ul>
-                                    <Button onClick={(e) => this.props.getSelectedWorkout(workout_days[day])}>Start</Button>
+                                    <Button onClick={(e) => this.props.getSelectedWorkout(workoutDays[day])}>Start</Button>
                                  </div>
                            }
                         </div>
@@ -124,20 +134,20 @@ class RoutineInformation extends Component {
       );
    }
 
-   displayRoutineDays = () => {
-      const { routine_info, workout_days } = this.state;
+   const displayRoutineDays = () => {
+      // const { routineInfo, workoutDays } = this.state;
       let routineDisplayContainer = '';
       let routineDisplayWorkoutsAvaiable = '';
 
-      if (!!this.state.routine_info.routine_found) {
-         if (!!workout_days.hasOwnProperty('today')) {
+      if (!!routineInfo.routine_found) {
+         if (!!workoutDays.hasOwnProperty('today')) {
             routineDisplayWorkoutsAvaiable = (
                <div className="container">
                   <div className="pricing-table">
                      <div className="row center-row">
-                        {this.displayWorkoutDays('yesterday')}
-                        {this.displayWorkoutDays('today')}
-                        {this.displayWorkoutDays('tomorrow')}
+                        {displayWorkoutDays('yesterday')}
+                        {displayWorkoutDays('today')}
+                        {displayWorkoutDays('tomorrow')}
                      </div>
                   </div>
                </div>
@@ -148,7 +158,7 @@ class RoutineInformation extends Component {
             <div>
                <section id="section-pricing" className="section-pricing">
                   <h2 className="routineName text-center">
-                     {routine_info.routine.routine_name}
+                     {routineInfo.routine.routine_name}
                   </h2>
                   {routineDisplayWorkoutsAvaiable}
                </section>
@@ -162,13 +172,13 @@ class RoutineInformation extends Component {
       return routineDisplayContainer;
    }
 
-   render() {
-      return (
-         <div>
-            {this.displayRoutineDays()}
-         </div>
-      );
-   }
+   // render() {
+   return (
+      <div>
+         {displayRoutineDays()}
+      </div>
+   );
+   // }
 }
 
 export default RoutineInformation;
