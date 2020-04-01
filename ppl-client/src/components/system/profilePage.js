@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Calendar from 'react-calendar';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
@@ -6,17 +6,21 @@ import { Link } from "react-router-dom";
 import RoutineInformation from './routineInformation';
 import WorkoutInformation from './workoutInformation';
 
+import { UserContext } from '../../UserContext';
+
 import './css/profilePageStyle.css'
 
 function Profile() {
    const [date, setDate] = useState(new Date());
    const [routines, setRoutines] = useState([]);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
-   const [selectedWorkout, setSelectedWorkout] = useState({});
    const [todaysWorkouts, setTodaysWorkouts] = useState({});
    const [loadedRoutine, setLoadedRoutine] = useState({ routine_found: false });
    const [loadWorkout, setLoadWorkout] = useState(false);
    const [loadRoutineInfo, setLoadRoutineInfo] = useState(true);
+
+   const { setSelectedWorkout } = useContext(UserContext);
+
    // state = {
    //    date: new Date(),
    //    routines: [],
@@ -116,13 +120,13 @@ function Profile() {
    const getSelectedWorkout = async (workout) => {
       //Resets
       // await setState({ selectedWorkout: {}, loadWorkout: false });
-      await setSelectedWorkout({});
+      setSelectedWorkout({});
       await setLoadWorkout(false);
 
       //Sets
       // await setState({ selectedWorkout: workout, loadWorkout: true });
-      await setSelectedWorkout(workout)
-      await loadWorkout(true);
+      setSelectedWorkout(workout)
+      await setLoadWorkout(true);
    }
 
    const loadRoutineComponent = () => {
@@ -147,7 +151,7 @@ function Profile() {
    const loadWorkoutComponent = () => {
       // const { loadWorkout, selectedWorkout } = state;
       if (!!loadWorkout) {
-         return (<WorkoutInformation selectedWorkout={selectedWorkout} />)
+         return (<WorkoutInformation />)
       }
    }
 
