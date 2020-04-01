@@ -134,7 +134,7 @@ class createRoutine extends Component {
                   {this.loadProperComponents()}
                </div>
             </div>
-            {!!redirect && <Redirect to="/profile/" />}
+            {/* {!!redirect && <Redirect to="/profile/" />} */}
          </div >
       );
    }

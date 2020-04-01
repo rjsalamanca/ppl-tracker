@@ -171,44 +171,104 @@ class PPL_System {
       }
    }
 
-   async addRoutineDay(day) {
+   async addRoutineDays(days) {
+      let buildDays = days.map(day => `('${day.name}', ${this.routine_id})`).join(',')
+
       try {
          const response = await db.result(`
             INSERT INTO routine_day(day_name, routine_id)
-            VALUES($1, $2)
-               `, [day.name, this.routine_id]);
+            VALUES ${buildDays}`);
          return response;
       } catch (err) {
          return err.msg;
       }
    }
 
-   async addExercise(day, exercise) {
+   async addExercises(day) {
+      let buildExercises = day.exercises.map(exercise => `('${exercise.name}', (SELECT id FROM routine_day WHERE day_name = '${day.name}' AND routine_id = ${this.routine_id})) `).join(',')
+      console.log(buildExercises)
       try {
          const response = await db.result(`
             INSERT INTO exercises(exercise_name, routine_day_id)
-            VALUES($1, (SELECT id from routine_day WHERE day_name = $2 AND routine_id = $3))
-            `, [exercise.name, day.name, this.routine_id]);
+            VALUES ${buildExercises}`);
+         // const response = await db.result(`
+         //    INSERT INTO exercises(exercise_name, routine_day_id)
+         //    VALUES($1, (SELECT id from routine_day WHERE day_name = $2 AND routine_id = $3))
+         //    `, [exercise.name, day.name, this.routine_id]);
          return response;
       } catch (err) {
+         // console.log('being sent: $1 $2 $3', [exercise.name, day.name, this.routine_id])
+         // console.log('in add exercise err:', err);
+
          return err.msg;
       }
    }
 
-   async addExerciseSet(exercise, set, set_info, day) {
+   // exercise, (idx + 1), set, day
+   async addExerciseSets(exercise, day) {
+      let buildSets = exercise.sets.map((set, setIdx) => `
+         (${parseInt(set.weight)}, ${setIdx + 1}, ${set.reps},
+            (SELECT id from exercises WHERE exercise_name = '${exercise.name}' AND routine_day_id =
+               (SELECT id from routine_day WHERE day_name = '${day.name}' AND routine_id = ${this.routine_id})))`).join(',');
       try {
          const response = await db.result(`
          INSERT INTO exercise_sets(weight,set_num, reps, exercise_id)
-         VALUES($1, $2, $3,
-            (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id =
-         (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6)))
-         `, [parseInt(set_info.weight), set, set_info.reps, exercise.name, day.name, this.routine_id]);
+         VALUES ${buildSets}`);
+         // INSERT INTO exercise_sets(weight,set_num, reps, exercise_id)
+         // VALUES($1, $2, $3,
+         //    (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id =
+         //       (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6)))
+         // `, [parseInt(set_info.weight), set, set_info.reps, exercise.name, day.name, this.routine_id]);
 
          return response;
       } catch (err) {
+         // console.log(err.msg)
+
          return err.msg;
       }
    }
+
+   // async addExercise(day, exercise) {
+   //    try {
+   //       const response = await db.result(`
+   //          INSERT INTO exercises(exercise_name, routine_day_id)
+   //          VALUES($1, (SELECT id from routine_day WHERE day_name = $2 AND routine_id = $3))
+   //          `, [exercise.name, day.name, this.routine_id]);
+   //       return response;
+   //    } catch (err) {
+   //       return err.msg;
+   //    }
+   // }
+
+   // async addRoutineDay(day) {
+   //    try {
+   //       const response = await db.result(`
+   //          INSERT INTO routine_day(day_name, routine_id)
+   //          VALUES($1, $2)
+   //             `, [day.name, this.routine_id]);
+   //       return response;
+   //    } catch (err) {
+   //       return err.msg;
+   //    }
+   // }
+
+
+   // async addExerciseSet(exercise, set, set_info, day) {
+   //    try {
+   //       const response = await db.result(`
+   //       INSERT INTO exercise_sets(weight,set_num, reps, exercise_id)
+   //       VALUES($1, $2, $3,
+   //          (SELECT id from exercises WHERE exercise_name = $4 AND routine_day_id =
+   //       (SELECT id from routine_day WHERE day_name = $5 AND routine_id = $6)))
+   //       `, [parseInt(set_info.weight), set, set_info.reps, exercise.name, day.name, this.routine_id]);
+
+   //       return response;
+   //    } catch (err) {
+   //       console.log(err.msg)
+
+   //       return err.msg;
+   //    }
+   // }
 }
 
 module.exports = PPL_System;

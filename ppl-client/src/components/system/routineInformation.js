@@ -133,7 +133,8 @@ function RoutineInformation(props) {
 
    const displayWorkoutDays = (day) => {
       // const { workoutDays } = this.state;
-
+      console.log(fullRoutine)
+      console.log(workoutDays)
       return (
          <div className="packageCol">
             <div className="package">

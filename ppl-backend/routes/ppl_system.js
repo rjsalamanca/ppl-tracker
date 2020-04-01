@@ -56,19 +56,91 @@ router.post('/routine/add_routine', async (req, res) => {
       if (addRoutine.rowCount === 1) {
          const addingRoutineModel = new pplSystemModel(getRoutineInfo.id, getRoutineInfo.routine_name, days, getRoutineInfo.date_started, user_id);
          try {
-            days.forEach(async (day) => {
-               let addDay = await addingRoutineModel.addRoutineDay(day);
-               if (addDay.rowCount >= 1) {
-                  day.exercises.forEach(async (exercise) => {
-                     let addExercise = await addingRoutineModel.addExercise(day, exercise);
-                     if (addExercise.rowCount >= 1) {
-                        exercise.sets.forEach(async (set, idx) => {
-                           await addingRoutineModel.addExerciseSet(exercise, (idx + 1), set, day);
-                        })
-                     }
-                  })
-               }
-            });
+            // add all days
+            let addDays = await addingRoutineModel.addRoutineDays(days);
+
+            if (addDays.rowCount >= 1) {
+               // add exercises
+               days.forEach(async day => {
+                  let addExercises = await addingRoutineModel.addExercises(day);
+
+                  // Successful insert and is not a rest day, we add sets.
+                  if (!day.hasOwnProperty('rest_day') && addExercises.rowCount >= 1) {
+                     day.exercises.map(exercise => {
+                        addingRoutineModel.addExerciseSets(exercise, day);
+                        // console.log(exercise)
+                     });
+                     // exercise.sets.forEach((set, idx) => {
+                     //    addingRoutineModel.addExerciseSet(exercise, (idx + 1), set, day);
+                     // })
+                  }
+               })
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // await days.forEach(async (day) => {
+            //    console.log(day)
+            //    await addingRoutineModel.addRoutineDay(day).then(response => {
+            //       console.log('row count 1')
+            //       if (response.rowCount >= 1) {
+            //          day.exercises.forEach((exercise) => {
+            //             console.log(exercise)
+            //             //          console.log(`day: ${day} exercise: ${exercise}`)
+            //             addingRoutineModel.addExercise(day, exercise).then(response => {
+            //                // console.log('row count 2')
+            //                // console.log('response:', response)
+            //                if (response !== undefined) {
+            //                   if (response.rowCount >= 1) {
+            //                      if (exercise.hasOwnProperty('sets')) {
+            //                         exercise.sets.forEach((set, idx) => {
+            //                            addingRoutineModel.addExerciseSet(exercise, (idx + 1), set, day);
+            //                         })
+            //                      }
+            //                   }
+            //                }
+            //             });
+            //          });
+            //       }
+            //    });
+
+            // console.log('add day:', addDay)
+            // if (addDay.rowCount >= 1) {
+            //    day.exercises.forEach(async (exercise) => {
+            //       let addExercise = await addingRoutineModel.addExercise(day, exercise);
+            //       if (addExercise.rowCount >= 1) {
+            //          exercise.sets.forEach(async (set, idx) => {
+            //             await addingRoutineModel.addExerciseSet(exercise, (idx + 1), set, day);
+            //          })
+            //       }
+            //    })
+            // }
+            // });
+
             // No failures, we successfully added a routine.
             res.json({ routine_added: true })
          } catch (err) {

@@ -50,8 +50,9 @@ class addDay extends Component {
    addRestDay = () => {
       const { days, } = this.state;
       let temp_days = [...days];
+      let currentAmountOfRestDays = temp_days.filter(e => e.name.includes('Rest Day')).length;
 
-      temp_days.push({ name: 'Rest Day', exercises: [{ name: 'No exercises available.' }] });
+      temp_days.push({ name: `Rest Day #${currentAmountOfRestDays + 1}`, rest_day: true, exercises: [{ name: 'No exercises available.' }] });
       this.setState({ days: temp_days });
    }
 
