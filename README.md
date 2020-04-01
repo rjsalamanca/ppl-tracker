@@ -23,10 +23,10 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Workouts Schedule for Today not properly updating when calendar is changed.
 [X] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout.
    - Back end issue caused by using Math.ceil instead of Math.floor
-   [IP] Bug is back after reworking hooks. Look at INSERT ISSUE BUG
+   [X] Bug is back after reworking hooks. Look at INSERT ISSUE BUG
 [X] Select button does not change when selecting reps when creating a routine, but changes in the back end.
    [X] Select bug is back. Need to work on ternary. FIXED - Just changed default value to 1.
-   [IP] Select bug is back AGAIN, after changing hooks. Look at INSERT ISSUE BUG
+   [X] Select bug is back AGAIN, after changing hooks. Look at INSERT ISSUE BUG
 [X] Workouts before its start date should not be accessible.
    [X] Workouts Scheduled Today before date start
    [X] Current Routine Yesterday/Today/Tomorrow before date start
@@ -35,11 +35,11 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    [X] Accepts Number
    [X] Breaks on first value not a number
 [] Ability to create a routine without sets
-[IP] INSERT ISSUE BUG
+[X] INSERT ISSUE BUG
    [X] Bug caused by async await. Removed async and now using .then to solve issue
-   [] Rest Days have no exercise sets, error on back end needs fixing.
+   [X] Rest Days have no exercise sets, error on back end needs fixing.
    - Inserting of days are not in order. Rework of insertions need to be sequential according to the day.
-[] Start button on rest days
+[X] Start button on rest days
 
 ************
 * STYLING: *

@@ -147,7 +147,7 @@ function RoutineInformation(props) {
                         <div>
                            Workout: {workoutDays[day].day_name}
                            {
-                              workoutDays[day].day_name === "Rest Day" ?
+                              workoutDays[day].day_name.includes("Rest Day #") ?
                                  <p className="m-3">
                                     <b>Sit back and relax, on your rest day.</b>
                                  </p>
