@@ -7,7 +7,6 @@ import { Button } from 'react-bootstrap';
 //BEING PASSED AS PROPS
 // return (<RoutineInformation calendar_date={date} routine={loadedRoutine} getSelectedWorkout={getSelectedWorkout} />)
 
-
 import { UserContext } from '../../UserContext';
 
 import './css/routineInformationStyle.css'
@@ -96,11 +95,11 @@ function RoutineInformation(props) {
 
       let start_date = moment(fullRoutine.routine.date_started);
       let current = moment(date, "YYYY-MM-DD");
+      console.log(fullRoutine)
       setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
       // await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
       // getTodaysWorkout();
       if (!isNaN(dateBetween)) {
-         console.log(dateBetween)
          getTodaysWorkout();
       }
    }, [dateBetween])
@@ -110,9 +109,6 @@ function RoutineInformation(props) {
       const days = fullRoutine.routine.routine_days;
       const currDayInd = dateBetween % days.length;
       let temp_days = {};
-
-      console.log('days:', days)
-      console.log(dateBetween)
       if (currDayInd === 0) {
          // cycle at the start
          // console.log('cycle in start');
@@ -131,7 +127,7 @@ function RoutineInformation(props) {
       if (dateBetween <= 0) temp_days.yesterday = null;
       if (dateBetween <= -1) temp_days.today = null;
       if (dateBetween <= -2) temp_days.tomorrow = null;
-      console.log(temp_days)
+
       setWorkoutDays(temp_days);
    }
 

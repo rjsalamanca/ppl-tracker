@@ -20,7 +20,21 @@ function App() {
    const [fullRoutine, setFullRoutine] = useState({ routine_found: false });
 
 
-   const value = useMemo(() => ({ isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine }), [isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine]);
+   const value = useMemo(() => (
+      {
+         isLoggedIn, setIsLoggedIn,
+         selectedWorkout, setSelectedWorkout,
+         date, setDate,
+         fullRoutine, setFullRoutine
+      }
+   ),
+      [
+         isLoggedIn, setIsLoggedIn,
+         selectedWorkout, setSelectedWorkout,
+         date, setDate,
+         fullRoutine, setFullRoutine
+      ]
+   );
 
    // state = {
    //    is_logged_in: false
