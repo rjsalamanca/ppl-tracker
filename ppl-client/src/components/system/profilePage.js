@@ -37,10 +37,39 @@ function Profile() {
          checkForRoutines();
          loadTodaysWorkouts();
       }
-   }, []);
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [routines, todaysWorkouts]);
 
    useEffect(() => {
-      if (selectedRoutine !== 'Select A Routine') getFullRoutine();
+      const getFullRoutine = async () => {
+         console.log(selectedRoutine)
+         const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
+         try {
+            const response = await fetch(url, {
+               method: "GET",
+               credentials: "include"
+            });
+
+            const data = await response.json();
+
+            if (!!data.routine_found) {
+               await setLoadedRoutine(data)
+            } else {
+               await setLoadedRoutine({ routine_found: false });
+            }
+
+            setLoadRoutineInfo(false);
+            // !!data.routine_found ? setState({ loadedRoutine: data, loadRoutineInfo: false }) : setState({ loadedRoutine: { routine_found: false }, loadRoutineInfo: false });
+         } catch (err) {
+            console.log(err);
+         }
+      }
+
+      if (selectedRoutine !== 'Select A Routine') {
+         getFullRoutine();
+      }
+
    }, [selectedRoutine]);
 
    const handleRoutine = (e) => {
@@ -60,33 +89,6 @@ function Profile() {
       // if
       // // console.log(e.target.value)
       // if (selectedRoutine !== 'Select A Routine') getFullRoutine();
-   }
-
-   const getFullRoutine = async () => {
-      console.log(selectedRoutine)
-      const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
-      try {
-         const response = await fetch(url, {
-            method: "GET",
-            credentials: "include"
-         });
-
-
-         const data = await response.json();
-
-         console.log('this is loaded info: ', data)
-         if (!!data.routine_found) {
-            await setLoadedRoutine(data)
-         } else {
-            await setLoadedRoutine({ routine_found: false });
-         }
-
-         setLoadRoutineInfo(false);
-
-         // !!data.routine_found ? setState({ loadedRoutine: data, loadRoutineInfo: false }) : setState({ loadedRoutine: { routine_found: false }, loadRoutineInfo: false });
-      } catch (err) {
-         console.log(err);
-      }
    }
 
    const checkForRoutines = async () => {

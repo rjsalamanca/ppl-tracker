@@ -16,7 +16,7 @@ function Login(props) {
    useEffect(() => {
       console.log(props.location.errorCode);
       if (props.location.errorCode === 0 && isLoggedIn === false) setErrorCode(5);
-   });
+   }, [props.location.errorCode, isLoggedIn]);
    // state = {
    //    errorCode: -1,
    //    email: '',
