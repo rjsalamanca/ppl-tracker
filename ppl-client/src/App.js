@@ -15,7 +15,8 @@ import './App.css';
 
 function App() {
    const [isLoggedIn, setIsLoggedIn] = useState(false);
-   const [selectedWorkout, setSelectedWorkout] = useState({})
+   const [selectedWorkout, setSelectedWorkout] = useState({});
+
    const value = useMemo(() => ({ isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout }), [isLoggedIn, setIsLoggedIn, selectedWorkout, setSelectedWorkout]);
 
    // state = {

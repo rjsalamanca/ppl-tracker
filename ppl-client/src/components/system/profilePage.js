@@ -41,7 +41,6 @@ function Profile() {
          checkForRoutines();
          loadTodaysWorkouts();
       }
-
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [routines, todaysWorkouts]);
 
@@ -73,7 +72,6 @@ function Profile() {
       if (selectedRoutine !== 'Select A Routine') {
          getFullRoutine();
       }
-
    }, [selectedRoutine]);
 
    const handleRoutine = (e) => {

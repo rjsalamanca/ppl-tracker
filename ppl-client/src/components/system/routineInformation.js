@@ -1,16 +1,21 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
 // import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
+
+
+//BEING PASSED AS PROPS
+// return (<RoutineInformation calendar_date={date} routine={loadedRoutine} getSelectedWorkout={getSelectedWorkout} />)
+
 
 import { UserContext } from '../../UserContext';
 
 import './css/routineInformationStyle.css'
 
-function RoutineInformation() {
+function RoutineInformation(props) {
    const [loadedProps, setLoadedProps] = useState(false);
    const [routineInfo, setRoutineInfo] = useState({});
-   const [dateBetween, setDateBetween] = useState(0);
+   const [dateBetween, setDateBetween] = useState(null);
    const [workoutDays, setWorkoutDays] = useState({});
    const [date, setDate] = useState('');
 
@@ -50,6 +55,8 @@ function RoutineInformation() {
    //    }
    // }
 
+
+
    // async componentDidMount() {
    //    await this.setState({
    //       loadedProps: true,
@@ -65,12 +72,40 @@ function RoutineInformation() {
    //    await this.getTodaysWorkout();
    // }
 
+
+   useEffect(() => {
+      // await this.setState({
+      //    loadedProps: true,
+      //    routineInfo: this.props.routine,
+      //    workoutDays: {},
+      //    selectedWorkout: {},
+      //    date: this.props.calendar_date
+      // });
+      setLoadedProps(true);
+      setRoutineInfo(props.routine)
+      setWorkoutDays({})
+      setDate(props.calendar_date)
+
+      let start_date = moment(props.routine.date_started);
+      let current = moment(date, "YYYY-MM-DD");
+      setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
+      // await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
+      // getTodaysWorkout();
+      if (routineInfo.hasOwnProperty('routine_found') && date !== '' && !isNaN(dateBetween)) {
+         console.log(dateBetween)
+         getTodaysWorkout();
+      }
+
+   }, [loadedProps, routineInfo, date, dateBetween])
+
    const getTodaysWorkout = () => {
       // const { routineInfo, dateBetween } = this.state;
       const days = routineInfo.routine.routine_days;
       const currDayInd = dateBetween % days.length;
       let temp_days = {};
 
+      console.log('days:', days)
+      console.log(dateBetween)
       if (currDayInd === 0) {
          // cycle at the start
          // console.log('cycle in start');
@@ -89,7 +124,7 @@ function RoutineInformation() {
       if (dateBetween <= 0) temp_days.yesterday = null;
       if (dateBetween <= -1) temp_days.today = null;
       if (dateBetween <= -2) temp_days.tomorrow = null;
-
+      console.log(temp_days)
       setWorkoutDays(temp_days);
    }
 
