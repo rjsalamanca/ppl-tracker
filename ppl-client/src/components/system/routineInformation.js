@@ -71,6 +71,15 @@ function RoutineInformation(props) {
    //    await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
    //    await this.getTodaysWorkout();
    // }
+   useEffect(() => {
+      setWorkoutDays({})
+      // setDate(props.calendar_date)
+
+      let start_date = moment(fullRoutine.routine.date_started);
+      let current = moment(date, "YYYY-MM-DD");
+      setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
+      getTodaysWorkout();
+   }, [date]);
 
 
    useEffect(() => {
@@ -94,7 +103,6 @@ function RoutineInformation(props) {
          console.log(dateBetween)
          getTodaysWorkout();
       }
-
    }, [dateBetween])
 
    const getTodaysWorkout = () => {

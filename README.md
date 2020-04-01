@@ -30,6 +30,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    [X] Current Routine Yesterday/Today/Tomorrow before date start
 [] Closing Modals is sometimes a bit too fast.
 [X] Error handling for routine weight (should be a number)
+   [X] Accepts Number
+   [X] Breaks on first value not a number
+[] Ability to create a routine without sets
 
 ************
 * STYLING: *

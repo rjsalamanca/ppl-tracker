@@ -30,7 +30,7 @@ class AddExercises extends Component {
       const { sets } = this.state;
       let newSets = [...sets];
 
-      if (e.target.value === '') {
+      if (e.target.value === '' || e.target.value.match(/([^0-9])/g)) {
          newSets[idx].weight = null;
       } else {
          newSets[idx].weight = e.target.value.match(/([0-9])/g).join('');

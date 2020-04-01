@@ -114,16 +114,16 @@ function Profile() {
       loadTodaysWorkouts();
    }
 
-   const getSelectedWorkout = async (workout) => {
+   const getSelectedWorkout = (workout) => {
       //Resets
       // await setState({ selectedWorkout: {}, loadWorkout: false });
       setSelectedWorkout({});
-      await setLoadWorkout(false);
+      setLoadWorkout(false);
 
       //Sets
       // await setState({ selectedWorkout: workout, loadWorkout: true });
       setSelectedWorkout(workout)
-      await setLoadWorkout(true);
+      setLoadWorkout(true);
    }
 
    const loadRoutineComponent = () => {
