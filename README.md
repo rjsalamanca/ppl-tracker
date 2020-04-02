@@ -34,12 +34,13 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Error handling for routine weight (should be a number)
    [X] Accepts Number
    [X] Breaks on first value not a number
-[] Ability to create a routine without sets
+[X] Ability to create a routine without sets
 [X] INSERT ISSUE BUG
    [X] Bug caused by async await. Removed async and now using .then to solve issue
    [X] Rest Days have no exercise sets, error on back end needs fixing.
    - Inserting of days are not in order. Rework of insertions need to be sequential according to the day.
-[X] Start button on rest days
+[X] Start button displaying on rest days
+[IP] Error when fetching scheduled workouts for today
 
 ************
 * STYLING: *
