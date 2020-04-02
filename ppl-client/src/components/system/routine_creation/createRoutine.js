@@ -1,37 +1,48 @@
-import React, { Component } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import { Redirect } from "react-router-dom";
 
 import AddRoutineName from './addRoutineName';
 import AddDay from './addDay';
 
+import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
+
 import '../css/createRoutineStyle.css';
 
-class createRoutine extends Component {
-   state = {
-      redirect: false,
-      error_code: 0,
-      routine_name: '',
-      todays_date: moment(new Date()).format("YYYY-MM-DD"),
-      routine_name_check: false,
+function CreateRoutine() {
+   const [redirect, setRedirect] = useState(false);
+   const [errorCode, setErrorCode] = useState(0);
+   const [date] = useState(moment(new Date()).format("YYYY-MM-DD"));
+   // const [routineNameCheck, setRoutineNameCheck] = useState(false);
 
-   };
+   const { routineName } = useContext(CreateRoutineContext);
 
-   checkRoutineName = (e) => {
-      if (e.target.value.length >= 3) {
-         this.setState({
-            routine_name: e.target.value.trim(),
-            routine_name_check: true
-         });
-      } else {
-         this.setState({ routine_name_check: false });
-      }
-   }
+   // state = {
+   //    redirect: false,
+   //    error_code: 0,
+   //    routine_name: '',
+   //    todays_date: moment(new Date()).format("YYYY-MM-DD"),
+   //    routine_name_check: false,
+   // };
 
-   saveRoutine = async (days) => {
+   // const checkRoutineName = (e) => {
+   //    if (e.target.value.length >= 3) {
+   //       // this.setState({
+   //       //    routine_name: e.target.value.trim(),
+   //       //    routine_name_check: true
+   //       // });
+   //       setRoutineName(e.target.value.trim())
+   //       setRoutineNameCheck(true);
+   //    } else {
+   //       // this.setState({ routine_name_check: false });
+   //       setRoutineNameCheck(false);
+   //    }
+   // }
+
+   const saveRoutine = async (days) => {
       let send_info = {
-         routine_name: this.state.routine_name,
-         todays_date: this.state.todays_date,
+         routine_name: routineName,
+         todays_date: date,
          days
       }
 
@@ -62,25 +73,29 @@ class createRoutine extends Component {
 
             const data = await response.json();
             if (!!data.routine_added) {
-               this.setState({ redirect: true })
+               // this.setState({ redirect: true })
+               setRedirect(true);
             } else {
-               this.setState({ error_code: data.error_code })
+               // this.setState({ error_code: data.error_code })
+               setErrorCode(data.error_code)
             }
          } catch (err) {
             // back end connection error
-            this.setState({ error_code: 5 })
+            // this.setState({ error_code: 5 })
+            setErrorCode(5)
          }
       } else {
          // no days error
-         this.setState({ error_code: 4 })
+         // this.setState({ error_code: 4 })
+         setErrorCode(4)
       }
    }
 
-   displayError = () => {
-      const { error_code } = this.state;
+   const displayError = () => {
+      // const { error_code } = this.state;
       let errorMessage = '';
 
-      switch (error_code) {
+      switch (errorCode) {
          case 1:
             errorMessage = 'You already have a routine with the same name, try using a different name';
             break;
@@ -106,38 +121,38 @@ class createRoutine extends Component {
       );
    }
 
-   loadProperComponents = () => {
-      const { routine_name_check } = this.state;
-      if (!!routine_name_check) {
-         return <AddDay saveRoutine={this.saveRoutine} />
+   const loadProperComponents = () => {
+      // const { routine_name_check } = this.state;
+      if (routineName.length >= 3) {
+         return <AddDay saveRoutine={saveRoutine} />
       }
    }
 
-   render() {
-      const { error_code, redirect } = this.state;
-      return (
-         <div id="routineCreationMainContainer">
-            <div className="routineCreationFlexContainer">
-               <div className="routineCreationInstructions">
-                  <h1 className="routineHeader h4">Lets Create A Routine</h1>
-                  <ol className="routineInstructions">
-                     <li>Start off by creaing a routine name.</li>
-                     <li>You can then add days to your routine.</li>
-                     <li>When you're adding days you can then add exercises.</li>
-                     <li>Specify the weight for each set/rep.</li>
-                     <li>Once you're done, click finish!</li>
-                  </ol>
-                  {error_code !== 0 && this.displayError()}
-               </div>
-               <div className="routineCreationLoadComponents">
-                  <AddRoutineName checkRoutineName={this.checkRoutineName} />
-                  {this.loadProperComponents()}
-               </div>
+   // render() {
+   // const { error_code, redirect } = this.state;
+   return (
+      <div id="routineCreationMainContainer">
+         <div className="routineCreationFlexContainer">
+            <div className="routineCreationInstructions">
+               <h1 className="routineHeader h4">Lets Create A Routine</h1>
+               <ol className="routineInstructions">
+                  <li>Start off by creaing a routine name.</li>
+                  <li>You can then add days to your routine.</li>
+                  <li>When you're adding days you can then add exercises.</li>
+                  <li>Specify the weight for each set/rep.</li>
+                  <li>Once you're done, click finish!</li>
+               </ol>
+               {errorCode !== 0 && displayError()}
             </div>
-            {!!redirect && <Redirect to="/profile/" />}
-         </div >
-      );
-   }
+            <div className="routineCreationLoadComponents">
+               <AddRoutineName />
+               {loadProperComponents()}
+            </div>
+         </div>
+         {!!redirect && <Redirect to="/profile/" />}
+      </div >
+   );
+   // }
 }
 
-export default createRoutine;
+export default CreateRoutine;
