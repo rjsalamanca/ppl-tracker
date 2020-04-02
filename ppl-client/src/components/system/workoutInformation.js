@@ -51,13 +51,13 @@ function WorkoutInformation() {
 
             const data = await response.json();
             if (!!data.completed_workout) {
-               await setTimeout(() => {
+               await setTimeout(async () => {
                   setShowSaving(false);
+                  await setTimeout(() => {
+                     setCompletedWorkout(true);
+                  }, 500);
                }, 1000);
 
-               await setTimeout(() => {
-                  setCompletedWorkout(true);
-               }, 500);
             }
          } catch (err) {
             console.log(err.message);

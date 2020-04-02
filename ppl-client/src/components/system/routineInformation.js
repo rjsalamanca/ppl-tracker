@@ -1,21 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
-// import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
-
-
-//BEING PASSED AS PROPS
-// return (<RoutineInformation calendar_date={date} routine={loadedRoutine} getSelectedWorkout={getSelectedWorkout} />)
 
 import { UserContext } from '../../UserContext';
 
 import './css/routineInformationStyle.css'
 
-function RoutineInformation(props) {
+function RoutineInformation() {
    const [dateBetween, setDateBetween] = useState(null);
    const [workoutDays, setWorkoutDays] = useState({});
 
-   const { date, fullRoutine } = useContext(UserContext);
+   const { setSelectedWorkout, date, fullRoutine } = useContext(UserContext);
 
    useEffect(() => {
       let start_date = moment(fullRoutine.routine.date_started);
@@ -65,6 +60,15 @@ function RoutineInformation(props) {
       setWorkoutDays(temp_days);
    }
 
+
+   const getSelectedWorkout = (workout) => {
+      //Resets
+      setSelectedWorkout({});
+
+      //Sets
+      setSelectedWorkout(workout)
+   }
+
    const displayWorkoutDays = (day) => {
       return (
          <div className="packageCol">
@@ -91,7 +95,7 @@ function RoutineInformation(props) {
                                           </li>
                                        )}
                                     </ul>
-                                    <Button onClick={(e) => props.getSelectedWorkout(workoutDays[day])}>Start</Button>
+                                    <Button onClick={(e) => getSelectedWorkout(workoutDays[day])}>Start</Button>
                                  </div>
                            }
                         </div>

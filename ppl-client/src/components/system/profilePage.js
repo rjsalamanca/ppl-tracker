@@ -14,10 +14,9 @@ function Profile() {
    const [routines, setRoutines] = useState([]);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
    const [todaysWorkouts, setTodaysWorkouts] = useState({});
-   const [loadWorkout, setLoadWorkout] = useState(false);
    const [loadRoutineInfo, setLoadRoutineInfo] = useState(true);
 
-   const { setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(UserContext);
+   const { selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(UserContext);
 
    useEffect(() => {
       if (routines.length === 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {
@@ -59,7 +58,7 @@ function Profile() {
       setSelectedRoutine(e.target.value);
       setFullRoutine({ routine_found: false });
       setSelectedWorkout({});
-      setLoadWorkout(false);
+      // setLoadWorkout(false);
       setLoadRoutineInfo(true)
    }
 
@@ -85,16 +84,6 @@ function Profile() {
       loadTodaysWorkouts();
    }
 
-   const getSelectedWorkout = (workout) => {
-      //Resets
-      setSelectedWorkout({});
-      setLoadWorkout(false);
-
-      //Sets
-      setSelectedWorkout(workout)
-      setLoadWorkout(true);
-   }
-
    const loadRoutineComponent = () => {
       if (selectedRoutine === 'Select A Routine') {
          return (<div>Please select a routine above.</div>);
@@ -109,12 +98,12 @@ function Profile() {
       } else if (!fullRoutine.routine_found) {
          return (<div>NO INFO FOUND</div>);
       } else {
-         return (<RoutineInformation getSelectedWorkout={getSelectedWorkout} />)
+         return (<RoutineInformation />)
       }
    }
 
    const loadWorkoutComponent = () => {
-      if (!!loadWorkout) {
+      if (selectedWorkout.hasOwnProperty('day_name')) {
          return (<WorkoutInformation />)
       }
    }
