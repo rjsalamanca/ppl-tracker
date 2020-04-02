@@ -71,7 +71,7 @@ function Profile() {
       if (selectedRoutine !== 'Select A Routine') {
          getFullRoutine();
       }
-   }, [selectedRoutine]);
+   }, [setFullRoutine, selectedRoutine]);
 
    const handleRoutine = (e) => {
       setSelectedRoutine(e.target.value);

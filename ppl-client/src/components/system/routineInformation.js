@@ -18,7 +18,7 @@ function RoutineInformation(props) {
    const [workoutDays, setWorkoutDays] = useState({});
    // const [date, setDate] = useState('');
 
-   const { selectedWorkout, setSelectedWorkout, date, fullRoutine } = useContext(UserContext);
+   const { date, fullRoutine } = useContext(UserContext);
 
    // state = {
    //    loadedProps: false,
@@ -78,7 +78,9 @@ function RoutineInformation(props) {
       let current = moment(date, "YYYY-MM-DD");
       setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
       getTodaysWorkout();
-   }, [date]);
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [workoutDays, date, fullRoutine]);
 
 
    useEffect(() => {
@@ -102,7 +104,9 @@ function RoutineInformation(props) {
       if (!isNaN(dateBetween)) {
          getTodaysWorkout();
       }
-   }, [dateBetween])
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [date, fullRoutine, workoutDays, dateBetween])
 
    const getTodaysWorkout = () => {
       // const { routineInfo, dateBetween } = this.state;
