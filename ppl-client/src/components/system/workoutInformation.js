@@ -7,41 +7,19 @@ import { UserContext } from '../../UserContext';
 
 import './css/workoutInformationStyle.css'
 
-function WorkoutInformation(props) {
-   // const [workout, setWorkout] = useState({});
+function WorkoutInformation() {
    const [showEndEarly, setShowEndEarly] = useState(false);
    const [showSaving, setShowSaving] = useState(false);
-   // const [saving, setSaving] = useState(false);
    const [completedWorkout, setCompletedWorkout] = useState(false);
 
    const { selectedWorkout } = useContext(UserContext);
-   // state = {
-   //    workout: {},
-   //    showEndEarly: false,
-   //    showSaving: false,
-   //    saving: false,
-   //    completed: false
-   // }
-
-   // componentDidMount() {
-   //    this.setState({ workout: this.props.selectedWorkout })
-   // }
-
-   // useEffect(() => {
-   //    setWorkout(props.selectedWorkout);
-   //    console.log(props);
-   // }, [workout])
 
 
    const handleClose = () => {
       setShowEndEarly(false);
       setShowSaving(false);
-      // this.setState({ showEndEarly: false, showSaving: false });
    }
    const handleShowEndEarly = () => setShowEndEarly(true);
-   // const handleShowSaving = () => setShowSaving(true);
-   // handleShowEndEarly = () => this.setState({ showEndEarly: true });
-   // handleShowSaving = () => this.setState({ showSaving: true });
 
    const setCompleted = (e) => {
       let rowNode = e.target.parentNode.parentNode;
@@ -89,9 +67,6 @@ function WorkoutInformation(props) {
       }
    }
 
-   // render() {
-   // const { workout, showEndEarly, showSaving, completed } = this.state;
-   // console.log(workout)
    return (
       <div className="workoutInfoContainer">
          {!!completedWorkout && <Redirect to="/" />}
@@ -179,7 +154,6 @@ function WorkoutInformation(props) {
          </div>
       </div>
    )
-   // }
 }
 
 export default WorkoutInformation;

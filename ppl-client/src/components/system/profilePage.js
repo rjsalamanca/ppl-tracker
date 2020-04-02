@@ -11,42 +11,25 @@ import { UserContext } from '../../UserContext';
 import './css/profilePageStyle.css'
 
 function Profile() {
-   // const [date, setDate] = useState(new Date());
    const [routines, setRoutines] = useState([]);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
    const [todaysWorkouts, setTodaysWorkouts] = useState({});
-   // const [fullRoutine, setFullRoutine] = useState({ routine_found: false });
    const [loadWorkout, setLoadWorkout] = useState(false);
    const [loadRoutineInfo, setLoadRoutineInfo] = useState(true);
 
    const { setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(UserContext);
-
-   // state = {
-   //    date: new Date(),
-   //    routines: [],
-   //    selectedRoutine: 'Select A Routine',
-   //    fullRoutine: { routine_found: false },
-   //    selectedWorkout: {},
-   //    loadWorkout: false,
-   //    todaysWorkouts: []
-   // }
-
-   // componentDidMount() {
-   //    checkForRoutines();
-   //    loadTodaysWorkouts();
-   // }
 
    useEffect(() => {
       if (routines.length === 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {
          checkForRoutines();
          loadTodaysWorkouts();
       }
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [routines, todaysWorkouts]);
 
    useEffect(() => {
       const getFullRoutine = async () => {
-         console.log(selectedRoutine)
          const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
          try {
             const response = await fetch(url, {
@@ -62,16 +45,15 @@ function Profile() {
             }
 
             setLoadRoutineInfo(false);
-            // !!data.routine_found ? setState({ fullRoutine: data, loadRoutineInfo: false }) : setState({ fullRoutine: { routine_found: false }, loadRoutineInfo: false });
          } catch (err) {
             console.log(err);
          }
       }
 
-      if (selectedRoutine !== 'Select A Routine') {
+      if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') {
          getFullRoutine();
       }
-   }, [setFullRoutine, selectedRoutine]);
+   }, [fullRoutine, setFullRoutine, selectedRoutine]);
 
    const handleRoutine = (e) => {
       setSelectedRoutine(e.target.value);
@@ -79,17 +61,6 @@ function Profile() {
       setSelectedWorkout({});
       setLoadWorkout(false);
       setLoadRoutineInfo(true)
-      // await setState({
-      //    selectedRoutine: e.target.value,
-      //    fullRoutine: { routine_found: false },
-      //    selectedWorkout: {},
-      //    loadWorkout: false,
-      //    loadRoutineInfo: true
-      // });
-      // console.log(e.target.value)
-      // if
-      // // console.log(e.target.value)
-      // if (selectedRoutine !== 'Select A Routine') getFullRoutine();
    }
 
    const checkForRoutines = async () => {
@@ -116,18 +87,15 @@ function Profile() {
 
    const getSelectedWorkout = (workout) => {
       //Resets
-      // await setState({ selectedWorkout: {}, loadWorkout: false });
       setSelectedWorkout({});
       setLoadWorkout(false);
 
       //Sets
-      // await setState({ selectedWorkout: workout, loadWorkout: true });
       setSelectedWorkout(workout)
       setLoadWorkout(true);
    }
 
    const loadRoutineComponent = () => {
-      // const { selectedRoutine, loadRoutineInfo, fullRoutine, date } = state;
       if (selectedRoutine === 'Select A Routine') {
          return (<div>Please select a routine above.</div>);
       } else if (!!loadRoutineInfo) {
@@ -142,13 +110,10 @@ function Profile() {
          return (<div>NO INFO FOUND</div>);
       } else {
          return (<RoutineInformation getSelectedWorkout={getSelectedWorkout} />)
-
-         // return (<RoutineInformation calendar_date={date} routine={fullRoutine} getSelectedWorkout={getSelectedWorkout} />)
       }
    }
 
    const loadWorkoutComponent = () => {
-      // const { loadWorkout, selectedWorkout } = state;
       if (!!loadWorkout) {
          return (<WorkoutInformation />)
       }
@@ -167,15 +132,13 @@ function Profile() {
             body: JSON.stringify({ date })
          });
          let data = await response.json();
-         // await setState({ todaysWorkouts: data.todays_workout })
+
          await setTodaysWorkouts(data.todays_workout);
       } catch (err) {
          console.log(err);
       }
    }
 
-   // render() {
-   // const { routines, date, todaysWorkouts } = state;
    return (
       <div className="routineContainer">
          <div className="routineDateInfo">
@@ -234,7 +197,6 @@ function Profile() {
          </div>
       </div>
    );
-   // }
 }
 
 export default Profile;

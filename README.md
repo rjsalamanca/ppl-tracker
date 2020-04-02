@@ -71,6 +71,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Editing of routine/exericses/sets.
 [IP] Rework with hooks or redux for state management.
    - We're using hooks
+   [X] Convert Profile Route and all children components.
+   [IP] Convert routine creation and all children components.
+   [X] Convert login/register routes.
 [X] Rework creating of workout through components instead of redirects
 [X] Work on failsafes for routine creation
    [X] Fail Safe for routine name without any days

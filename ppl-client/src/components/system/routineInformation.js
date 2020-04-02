@@ -12,119 +12,49 @@ import { UserContext } from '../../UserContext';
 import './css/routineInformationStyle.css'
 
 function RoutineInformation(props) {
-   // const [loadedProps, setLoadedProps] = useState(false);
-   // const [routineInfo, setRoutineInfo] = useState({});
    const [dateBetween, setDateBetween] = useState(null);
    const [workoutDays, setWorkoutDays] = useState({});
-   // const [date, setDate] = useState('');
 
    const { date, fullRoutine } = useContext(UserContext);
 
-   // state = {
-   //    loadedProps: false,
-   //    routineInfo: {},
-   //    dateBetween: 0,
-   //    workoutDays: {},
-   //    selectedWorkout: {},
-   //    date: ''
-   // }
-
-   // static getDerivedStateFromProps(nextProps, prevState) {
-   //    if (nextProps.calendar_date !== prevState.date) {
-   //       return { date: nextProps.calendar_date };
-   //    } else return null;
-   // }
-
-   // async componentDidUpdate(prevProps, prevState) {
-   //    if (prevProps.calendar_date !== this.props.calendar_date) {
-   //       await this.setState({
-   //          loadedProps: true,
-   //          routineInfo: this.props.routine,
-   //          workoutDays: {},
-   //          selectedWorkout: {}
-   //       });
-
-   //       if (!!this.state.routineInfo.routine_found) {
-   //          let start_date = moment(this.state.routineInfo.routine.date_started);
-   //          let current = moment(this.state.date, "YYYY-MM-DD")
-
-   //          await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
-   //          await this.getTodaysWorkout();
-   //       }
-   //    }
-   // }
-
-
-
-   // async componentDidMount() {
-   //    await this.setState({
-   //       loadedProps: true,
-   //       routineInfo: this.props.routine,
-   //       workoutDays: {},
-   //       selectedWorkout: {},
-   //       date: this.props.calendar_date
-   //    });
-   //    let start_date = moment(this.state.routineInfo.routine.date_started);
-   //    let current = moment(this.state.date, "YYYY-MM-DD");
-
-   //    await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
-   //    await this.getTodaysWorkout();
-   // }
    useEffect(() => {
-      setWorkoutDays({})
-      // setDate(props.calendar_date)
-
       let start_date = moment(fullRoutine.routine.date_started);
       let current = moment(date, "YYYY-MM-DD");
+
       setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
-      getTodaysWorkout();
+
+      if (!workoutDays.hasOwnProperty('today')) getTodaysWorkout();
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [workoutDays, date, fullRoutine]);
+   }, [date, fullRoutine, workoutDays]);
 
 
    useEffect(() => {
-      // await this.setState({
-      //    loadedProps: true,
-      //    routineInfo: this.props.routine,
-      //    workoutDays: {},
-      //    selectedWorkout: {},
-      //    date: this.props.calendar_date
-      // });
-      // setRoutineInfo(props.routine)
-      setWorkoutDays({})
-      // setDate(props.calendar_date)
-
       let start_date = moment(fullRoutine.routine.date_started);
       let current = moment(date, "YYYY-MM-DD");
-      console.log(fullRoutine)
-      setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
-      // await this.setState({ dateBetween: Math.floor(moment.duration(current.diff(start_date)).asDays()) })
-      // getTodaysWorkout();
-      if (!isNaN(dateBetween)) {
+      setWorkoutDays({});
+
+      if (dateBetween === null) {
+         setDateBetween(Math.floor(moment.duration(current.diff(start_date)).asDays()));
          getTodaysWorkout();
       }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [date, fullRoutine, workoutDays, dateBetween])
+   }, [date, dateBetween, fullRoutine]);
 
    const getTodaysWorkout = () => {
-      // const { routineInfo, dateBetween } = this.state;
       const days = fullRoutine.routine.routine_days;
       const currDayInd = dateBetween % days.length;
       let temp_days = {};
       if (currDayInd === 0) {
          // cycle at the start
-         // console.log('cycle in start');
          temp_days = { yesterday: days[days.length - 1], today: days[currDayInd] };
          (days.length - 1 === 0) ? temp_days['tomorrow'] = days[0] : temp_days['tomorrow'] = days[currDayInd + 1]
       } else if (currDayInd === days.length - 1) {
          //cycle at the end
-         // console.log('cycle in end');
          temp_days = { yesterday: days[currDayInd - 1], today: days[currDayInd], tomorrow: days[0] };
       } else {
          // cycle in between
-         // console.log('cycle in between');
          temp_days = { yesterday: days[currDayInd - 1], today: days[currDayInd], tomorrow: days[currDayInd + 1] };
       }
 
@@ -136,9 +66,6 @@ function RoutineInformation(props) {
    }
 
    const displayWorkoutDays = (day) => {
-      // const { workoutDays } = this.state;
-      console.log(fullRoutine)
-      console.log(workoutDays)
       return (
          <div className="packageCol">
             <div className="package">
@@ -178,7 +105,6 @@ function RoutineInformation(props) {
    }
 
    const displayRoutineDays = () => {
-      // const { routineInfo, workoutDays } = this.state;
       let routineDisplayContainer = '';
       let routineDisplayWorkoutsAvaiable = '';
 
@@ -207,7 +133,6 @@ function RoutineInformation(props) {
                </section>
             </div >
          );
-
       } else {
          routineDisplayContainer = '';
       }
@@ -215,13 +140,11 @@ function RoutineInformation(props) {
       return routineDisplayContainer;
    }
 
-   // render() {
    return (
       <div>
          {displayRoutineDays()}
       </div>
    );
-   // }
 }
 
 export default RoutineInformation;
