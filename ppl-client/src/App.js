@@ -69,12 +69,19 @@ function App() {
                <Route path="/" exact component={LandingPage} />
                <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
                <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
-               <CreateRoutineContext.Provider value={createRoutineValues}>
-                  <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
-               </CreateRoutineContext.Provider>
-               <RoutineContext.Provider value={routineValues}>
-                  <Route path="/profile" exact render={(props) => <ProfilePage {...props} />} />
-               </RoutineContext.Provider>
+
+               <Route path="/profile" exact render={(props) =>
+                  <RoutineContext.Provider value={routineValues}>
+                     <ProfilePage {...props} />
+                  </RoutineContext.Provider>
+               } />
+
+               <Route path="/ppl/create_routine" exact render={(props) =>
+                  <CreateRoutineContext.Provider value={createRoutineValues}>
+                     <CreateRoutine {...props} />
+                  </CreateRoutineContext.Provider>
+               } />
+
                <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
             </Switch>
          </UserContext.Provider>
