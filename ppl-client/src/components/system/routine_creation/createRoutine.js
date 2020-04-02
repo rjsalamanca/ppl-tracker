@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import { Redirect } from "react-router-dom";
+import { Button } from "react-bootstrap";
+
 
 import AddRoutineName from './addRoutineName';
 import AddDay from './addDay';
@@ -10,12 +12,16 @@ import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
 import '../css/createRoutineStyle.css';
 
 function CreateRoutine() {
-   const [redirect, setRedirect] = useState(false);
-   const [errorCode, setErrorCode] = useState(0);
-   const [date] = useState(moment(new Date()).format("YYYY-MM-DD"));
+   // const [date] = useState(moment(new Date()).format("YYYY-MM-DD"));
    // const [routineNameCheck, setRoutineNameCheck] = useState(false);
+   const [dateCreation] = useState(moment(new Date()).format("YYYY-MM-DD"));
+   const [errorCodeCreate, setErrorCodeCreate] = useState(0);
+   const [redirectCreate, setRedirectCreate] = useState(false);
 
-   const { routineName } = useContext(CreateRoutineContext);
+   // const { dateCreation, setRedirectCreate, setErrorCodeCreate } = useContext(CreateRoutineContext);
+
+
+   const { routineName, setRoutineName, routineDays, setRoutineDays } = useContext(CreateRoutineContext);
 
    // state = {
    //    redirect: false,
@@ -39,11 +45,11 @@ function CreateRoutine() {
    //    }
    // }
 
-   const saveRoutine = async (days) => {
-      let send_info = {
+   const saveRoutine = async () => {
+      let sendInfo = {
          routine_name: routineName,
-         todays_date: date,
-         days
+         todays_date: dateCreation,
+         days: routineDays
       }
 
       const url = "http://localhost:3000/ppl/routine/add_routine";
@@ -59,7 +65,7 @@ function CreateRoutine() {
       // 5: Backend Connection Failed   //
       ////////////////////////////////////
 
-      if (days.length !== 0) {
+      if (routineDays.length !== 0) {
          try {
             const response = await fetch(url, {
                method: "POST",
@@ -68,34 +74,32 @@ function CreateRoutine() {
                   "Content-Type": "application/json"
                },
                credentials: 'include',
-               body: JSON.stringify(send_info)
+               body: JSON.stringify(sendInfo)
             });
 
             const data = await response.json();
             if (!!data.routine_added) {
-               // this.setState({ redirect: true })
-               setRedirect(true);
+               // Reset then redirect
+               setRoutineName('');
+               setRoutineDays([]);
+               setRedirectCreate(true);
             } else {
-               // this.setState({ error_code: data.error_code })
-               setErrorCode(data.error_code)
+               setErrorCodeCreate(data.error_code)
             }
          } catch (err) {
             // back end connection error
-            // this.setState({ error_code: 5 })
-            setErrorCode(5)
+            setErrorCodeCreate(5)
          }
       } else {
          // no days error
-         // this.setState({ error_code: 4 })
-         setErrorCode(4)
+         setErrorCodeCreate(4)
       }
    }
 
    const displayError = () => {
-      // const { error_code } = this.state;
       let errorMessage = '';
 
-      switch (errorCode) {
+      switch (errorCodeCreate) {
          case 1:
             errorMessage = 'You already have a routine with the same name, try using a different name';
             break;
@@ -121,12 +125,12 @@ function CreateRoutine() {
       );
    }
 
-   const loadProperComponents = () => {
-      // const { routine_name_check } = this.state;
-      if (routineName.length >= 3) {
-         return <AddDay saveRoutine={saveRoutine} />
-      }
-   }
+   // const loadProperComponents = () => {
+   //    // const { routine_name_check } = this.state;
+   //    if (routineName.length >= 3) {
+   //       return <AddDay />
+   //    }
+   // }
 
    // render() {
    // const { error_code, redirect } = this.state;
@@ -142,14 +146,15 @@ function CreateRoutine() {
                   <li>Specify the weight for each set/rep.</li>
                   <li>Once you're done, click finish!</li>
                </ol>
-               {errorCode !== 0 && displayError()}
+               {errorCodeCreate !== 0 && displayError()}
             </div>
             <div className="routineCreationLoadComponents">
                <AddRoutineName />
-               {loadProperComponents()}
+               {routineName.length >= 3 && <AddDay />}
+               {routineName.length >= 3 && <Button className="btn-block" variant="primary" onClick={(e) => saveRoutine()}>Finish</Button>}
             </div>
          </div>
-         {!!redirect && <Redirect to="/profile/" />}
+         {!!redirectCreate && <Redirect to="/profile/" />}
       </div >
    );
    // }

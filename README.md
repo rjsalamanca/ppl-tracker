@@ -73,6 +73,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    - We're using hooks
    [X] Convert Profile Route and all children components.
    [IP] Convert routine creation and all children components.
+      - Unintentionally added a save feature when adding routine information then switching pages with the use of hooks.
    [X] Convert login/register routes.
 [X] Rework creating of workout through components instead of redirects
 [X] Work on failsafes for routine creation

@@ -31,14 +31,17 @@ function App() {
 
    // CreateRoutineContext 
    const [routineName, setRoutineName] = useState('');
+   const [routineDays, setRoutineDays] = useState([]);
 
    const createRoutineValues = useMemo(() => (
       {
-         routineName, setRoutineName
+         routineName, setRoutineName,
+         routineDays, setRoutineDays
       }
    ),
       [
-         routineName, setRoutineName
+         routineName, setRoutineName,
+         routineDays, setRoutineDays
       ]
    );
 
@@ -81,8 +84,6 @@ function App() {
                      <CreateRoutine {...props} />
                   </CreateRoutineContext.Provider>
                } />
-
-               <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
             </Switch>
          </UserContext.Provider>
 

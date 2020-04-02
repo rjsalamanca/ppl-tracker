@@ -1,64 +1,66 @@
-import React, { Component } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Form, Modal } from "react-bootstrap";
 
 import AddExercises from './addExercises';
 
+import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
+
 import '../css/addDayStyle.css';
 
-class addDay extends Component {
-   state = {
-      show: false,
-      day_name: '',
-      day_error: 0,
-      temp_exercises: [],
-      days: []
-   }
+function AddDay() {
+   const [show, setShow] = useState(false);
+   const [dayName, setDayName] = useState('');
+   const [dayError, setDayError] = useState(0);
+   const [tempExercises, setTempExercises] = useState([]);
+   // const [days, setDays] = useState([]);
 
-   handleClose = () => this.setState({ show: false });
-   handleShow = () => this.setState({ show: true });
-   handleDayName = (e) => this.setState({ day_name: e.target.value });
-   clearDayError = () => this.setState({ day_error: 0 });
-   modalTrigger = () => {
-      const { show } = this.state;
-      !!show ? this.setState({ show: false }) : this.setState({ show: true, day_name: '', temp_exercises: [], day_error: 0 })
-   }
+   const { routineDays, setRoutineDays } = useContext(CreateRoutineContext);
 
-   sendExercisesToDay = (exercises) => {
-      this.setState({ temp_exercises: exercises })
-   }
+   const clearDayError = () => setDayError(0);
 
-   saveExercisesToDay = async () => {
-      const { days, day_name, temp_exercises } = this.state;
-      let temp_days = [...days];
-
-      if (day_name !== '') {
-         if (temp_exercises.length !== 0) {
-            temp_days.push({ name: day_name, exercises: temp_exercises })
-            await this.setState({
-               days: temp_days,
-               day_error: 0
-            })
-            this.handleClose();
-         } else {
-            this.setState({ day_error: 2 });
-         }
+   const modalTrigger = () => {
+      if (!!show) {
+         setShow(false)
       } else {
-         this.setState({ day_error: 1 });
+         setShow(true);
+         setDayName('');
+         setTempExercises([]);
+         setDayError(0)
       }
    }
 
-   addRestDay = () => {
-      const { days, } = this.state;
-      let temp_days = [...days];
-      let currentAmountOfRestDays = temp_days.filter(e => e.name.includes('Rest Day')).length;
-
-      temp_days.push({ name: `Rest Day #${currentAmountOfRestDays + 1}`, rest_day: true, exercises: [{ name: 'No exercises available.' }] });
-      this.setState({ days: temp_days });
+   const sendExercisesToDay = (exercises) => {
+      setTempExercises(exercises);
    }
 
-   displayAddDayModal = () => {
-      const { show, day_error } = this.state;
-      let error_message = "";
+   const saveExercisesToDay = async () => {
+      let tempDays = [...routineDays];
+
+      if (dayName !== '') {
+         if (tempExercises.length !== 0) {
+            tempDays.push({ name: dayName, exercises: tempExercises })
+
+            setRoutineDays(tempDays);
+            setDayError(0);
+            setShow(false)
+         } else {
+            setDayError(2)
+         }
+      } else {
+         setDayError(1)
+      }
+   }
+
+   const addRestDay = () => {
+      let tempDays = [...routineDays];
+      let currentAmountOfRestDays = tempDays.filter(e => e.name.includes('Rest Day')).length;
+
+      tempDays.push({ name: `Rest Day #${currentAmountOfRestDays + 1}`, rest_day: true, exercises: [{ name: 'No exercises available.' }] });
+      setRoutineDays(tempDays);
+   }
+
+   const displayAddDayModal = () => {
+      let errorMessage = "";
 
       ////////////////////////////
       //     ERROR MESSAGES:    //
@@ -68,92 +70,64 @@ class addDay extends Component {
       // 2: No exercises added  //
       ////////////////////////////
 
-      if (day_error === 1) {
-         error_message = 'Your day must have a name.';
-      } else if (day_error === 2) {
-         error_message = 'Please nake sure to add exercises to your routine.';
+      if (dayError === 1) {
+         errorMessage = 'Your day must have a name.';
+      } else if (dayError === 2) {
+         errorMessage = 'Please nake sure to add exercises to your routine.';
       }
+
       return (
-         <Modal show={show} onHide={this.handleClose} id="addDayModal">
+         <Modal show={show} onHide={() => setShow(false)} id="addDayModal">
             <Modal.Header closeButton>
                <Modal.Title>Add A Day</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                <Form.Group controlId="formBasicEmail">
                   <Form.Label>Day Name: </Form.Label>
-                  <Form.Control type="input" onChange={(e) => this.handleDayName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                  <Form.Control type="input" onChange={(e) => setDayName(e.target.value.trim())} placeholder="Ex. Push Day, Pull Day, Leg Day" />
                </Form.Group>
-               <AddExercises clearDayError={this.clearDayError} sendExercisesToDay={this.sendExercisesToDay} />
+               <AddExercises clearDayError={clearDayError} sendExercisesToDay={sendExercisesToDay} />
                <div className="error-message">
-                  <p>{error_message}</p>
+                  <p>{errorMessage}</p>
                </div>
             </Modal.Body>
             <Modal.Footer>
-               <Button variant="secondary" onClick={this.handleClose}>Close</Button>
-               <Button variant="primary" onClick={this.saveExercisesToDay}>Save Day</Button>
+               <Button variant="secondary" onClick={(e) => setShow(false)}>Close</Button>
+               <Button variant="primary" onClick={(e) => saveExercisesToDay(e)}>Save Day</Button>
             </Modal.Footer>
          </Modal>
       );
    }
 
-   displaySingleDay = (day) => {
-      console.log(day)
-   }
-   displayDays = () => {
-      const { days } = this.state;
+   const displayDays = () => {
 
-      return days.map((day, dayIdx) =>
+      return routineDays.length > 0 && routineDays.map((day, dayIdx) =>
          <div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
             <h4 className="dayName h4">Day {dayIdx + 1} - {day.name}</h4>
-            {this.displaySingleDay(day)}
             <h6 className="exerciseHeader h6">Exercises:</h6>
             <ol>
                {day.exercises.map((exercise, idx) =>
                   <li key={`exercise-${day.name}-${idx}`}>
                      {exercise.name}
-                     {/* <ul>
-                        {exercise.sets.map((set, idx) =>
-                           <li key={`exercise-${day.name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x {set.reps}</li>
-                        )}
-                     </ul> */}
                   </li>
                )}
             </ol>
-
          </div>
       )
    }
 
-   // <h6 className="exerciseHeader h6">Exercises:</h6>
-   // <ol>
-   //    {day.exercises.map((exercise, idx) =>
-   //       <li key={`exercise-${day.name}-${idx}`}>
-   //          {exercise.name}
-   //          {/* <ul>
-   //             {exercise.sets.map((set, idx) =>
-   //                <li key={`exercise-${day.name}-set-${idx + 1}`}>Set {idx + 1} : {set.weight} x {set.reps}</li>
-   //             )}
-   //          </ul> */}
-   //       </li>
-   //    )}
-   // </ol>
-
-   render() {
-      const { days } = this.state;
-      return (
-         <div>
-            {this.displayAddDayModal()}
-            <div className="displayDaysContainer">
-               {this.displayDays()}
-            </div>
-            <Form>
-               <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => this.modalTrigger(e)}>Add A Day</Button>
-               <Button className="mb-3 ml-3 btn-outline-primary" variant="light" onClick={(e) => this.addRestDay(e)}>Add A Rest Day</Button>
-               <Button className="btn-block" variant="primary" onClick={(e) => this.props.saveRoutine(days)}>Finish</Button>
-            </Form>
+   return (
+      <div>
+         {displayAddDayModal()}
+         <div className="displayDaysContainer">
+            {displayDays()}
          </div>
-      )
-   }
+         <Form>
+            <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => modalTrigger(e)}>Add A Day</Button>
+            <Button className="mb-3 ml-3 btn-outline-primary" variant="light" onClick={(e) => addRestDay(e)}>Add A Rest Day</Button>
+         </Form>
+      </div>
+   )
 }
 
-export default addDay;
+export default AddDay;
