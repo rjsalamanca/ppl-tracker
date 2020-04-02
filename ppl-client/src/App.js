@@ -36,39 +36,6 @@ function App() {
       ]
    );
 
-   // state = {
-   //    is_logged_in: false
-   // }
-
-   // const changeToLogout = async () => {
-   //    setIs_logged_in(false);
-   // }
-
-   // const checkLoginStatus = async () => {
-   //    const url = "http://localhost:3000/users/loginStatus";
-
-   //    try {
-   //       const response = await fetch(url, {
-   //          method: 'GET',
-   //          headers: {
-   //             "Accept": "application/json",
-   //             "Content-Type": "application/json"
-   //          },
-   //          credentials: 'include'
-   //       })
-
-   //       const data = await response.json();
-   //       setIs_logged_in(data.is_logged_in)
-   //       // this.setState({ is_logged_in: data.is_logged_in })
-
-   //       return 'yes';
-   //    } catch (err) {
-   //       // console.log(this.state.is_logged_in)
-   //       return err.message;
-   //    }
-   // }
-
-
    return (
       <Router>
          <UserContext.Provider value={value}>
