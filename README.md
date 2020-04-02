@@ -40,7 +40,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    [X] Rest Days have no exercise sets, error on back end needs fixing.
    - Inserting of days are not in order. Rework of insertions need to be sequential according to the day.
 [X] Start button displaying on rest days
-[IP] Error when fetching scheduled workouts for today
+[X] Error when fetching scheduled workouts for today
+   - Bug was created when we had routines without days (happened during testing)
 
 ************
 * STYLING: *

@@ -13,7 +13,6 @@ router.post('/routine/currentDay', async (req, res) => {
    const user_id = req.session.user_id;
    const { date } = req.body;
    const getWorkout = await pplSystemModel.getWorkoutDays(user_id);
-
    if (getWorkout[0].json_agg !== null) {
       const getWorkoutByDay = getWorkout[0].json_agg.map(workout => {
          const date_between = Math.floor(moment.duration(moment(date).diff(workout.date_started)).asDays());

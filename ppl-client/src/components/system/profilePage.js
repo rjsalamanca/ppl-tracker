@@ -19,14 +19,9 @@ function Profile() {
    const { selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(RoutineContext);
 
    useEffect(() => {
-      console.log('called')
-      loadTodaysWorkouts();
-
-   }, [date])
-
-   useEffect(() => {
-      if (routines.length == 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {
+      if (routines.length === 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {
          checkForRoutines();
+         loadTodaysWorkouts();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [routines, todaysWorkouts]);
@@ -62,7 +57,6 @@ function Profile() {
       setSelectedRoutine(e.target.value);
       setFullRoutine({ routine_found: false });
       setSelectedWorkout({});
-      // setLoadWorkout(false);
       setLoadRoutineInfo(true)
    }
 
@@ -113,7 +107,6 @@ function Profile() {
    }
 
    const loadTodaysWorkouts = async () => {
-      console.log(date)
       const url = 'http://localhost:3000/ppl/routine/currentDay';
       try {
          const response = await fetch(url, {
