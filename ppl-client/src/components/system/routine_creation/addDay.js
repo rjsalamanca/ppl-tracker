@@ -11,8 +11,6 @@ function AddDay() {
    const [show, setShow] = useState(false);
    const [dayName, setDayName] = useState('');
    const [dayError, setDayError] = useState(0);
-   // const [tempExercises, setTempExercises] = useState([]);
-   // const [days, setDays] = useState([]);
 
    const { routineDays, setRoutineDays, tempExercises, setTempExercises } = useContext(CreateRoutineContext);
 
