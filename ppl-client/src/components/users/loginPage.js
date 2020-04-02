@@ -14,7 +14,6 @@ function Login(props) {
    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
 
    useEffect(() => {
-      console.log(props.location.errorCode);
       if (props.location.errorCode === 0 && isLoggedIn === false) setErrorCode(5);
    }, [props.location.errorCode, isLoggedIn]);
 
@@ -41,7 +40,6 @@ function Login(props) {
                setIsLoggedIn(true);
             }
             setErrorCode(data.errorCode);
-            console.log(errorCode)
 
             ///////////////////////////////////
             //          ERROR CODES:         //

@@ -10,7 +10,6 @@ function Register() {
    const [password, setPassword] = useState('');
 
    const createUser = async (e) => {
-      console.log('bruh')
       const formCheck = document.getElementById('registerForm').checkValidity();
       const url = "http://localhost:3000/users/register"
 
@@ -38,7 +37,6 @@ function Register() {
             })
 
             const data = await response.json();
-            console.log(data.errorCode)
             setErrorCode(data.errorCode);
          } catch (err) {
             // Can't connect to Database

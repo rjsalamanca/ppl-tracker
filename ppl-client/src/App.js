@@ -32,16 +32,19 @@ function App() {
    // CreateRoutineContext 
    const [routineName, setRoutineName] = useState('');
    const [routineDays, setRoutineDays] = useState([]);
+   const [tempExercises, setTempExercises] = useState([]);
 
    const createRoutineValues = useMemo(() => (
       {
          routineName, setRoutineName,
-         routineDays, setRoutineDays
+         routineDays, setRoutineDays,
+         tempExercises, setTempExercises
       }
    ),
       [
          routineName, setRoutineName,
-         routineDays, setRoutineDays
+         routineDays, setRoutineDays,
+         tempExercises, setTempExercises
       ]
    );
 

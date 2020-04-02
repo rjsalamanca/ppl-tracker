@@ -1,78 +1,71 @@
-import React, { Component } from "react";
+import React, { useState, useContext } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
-// add custom css here
+import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
+
 import "../css/addExercisesStyle.css";
 
-class AddExercises extends Component {
-   state = {
-      show: false,
-      exercise_name: '',
-      exercises: [],
-      exercise_error: 0,
-      sets: [],
-   }
+function AddExercises(props) {
+   const [show, setShow] = useState(false);
+   const [exerciseName, setExerciseName] = useState('');
+   const [exercises, setExercises] = useState([]);
+   const [exerciseError, setExerciseError] = useState(0);
+   const [exerciseSets, setExerciseSets] = useState([]);
 
-   handleClose = () => {
+   const { setTempExercises } = useContext(CreateRoutineContext)
+
+   const handleClose = () => {
       let hidePreviousModal = document.getElementById('addDayModal').parentNode;
       hidePreviousModal.classList.remove("hideAddModal");
-      this.setState({ show: false });
+      setShow(false);
    }
 
-   handleShow = () => {
+   const handleShow = () => {
       let hidePreviousModal = document.getElementById('addDayModal').parentNode;
       hidePreviousModal.classList.add("hideAddModal");
-      this.setState({ show: true });
+      setShow(true);
    }
 
-   handleExerciseName = (e) => this.setState({ exercise_name: e.target.value });
-   handleSetWeight = (e, idx) => {
-      const { sets } = this.state;
-      let newSets = [...sets];
+   const handleSetWeight = (e, idx) => {
+      let newSets = [...exerciseSets];
 
       if (e.target.value === '' || e.target.value.match(/([^0-9])/g)) {
          newSets[idx].weight = null;
       } else {
          newSets[idx].weight = e.target.value.match(/([0-9])/g).join('');
       }
-
-      this.setState({ sets: newSets });
+      setExerciseSets(newSets);
    };
 
-   handleSetReps = (e, idx) => {
-      const { sets } = this.state;
-      let newSets = [...sets];
+   const handleSetReps = (e, idx) => {
+      let newSets = [...exerciseSets];
       newSets[idx].reps = e.target.value;
-      this.setState({ sets: newSets });
+      setExerciseSets(newSets);
    };
 
-   handleRemoveSets = (idx) => {
-      const { sets } = this.state;
-      let newSets = [...sets];
+   const handleRemoveSets = (idx) => {
+      let newSets = [...exerciseSets];
       newSets.splice(idx, 1);
-      this.setState({ sets: newSets });
+      setExerciseSets(newSets);
    }
 
-   modalTrigger = () => {
-      const { show } = this.state;
-      this.props.clearDayError();
-      this.setState({
-         exercise_name: '',
-         sets: [{ weight: null, reps: 1, initial_set: true }],
-         exercise_error: 0
-      });
+   const modalTrigger = () => {
+      props.clearDayError();
 
-      (!!show) ? this.handleClose() : this.handleShow();
+      setExerciseName('');
+      setExerciseSets([{ weight: null, reps: 1, initial_set: true }]);
+      setExerciseError(0);
+
+      (!!show) ? handleClose() : handleShow();
    }
 
-   addSet = () => {
-      const { sets } = this.state;
-      let newSets = [...sets];
+   const addSet = () => {
+      let newSets = [...exerciseSets];
       newSets.push({ weight: null, reps: 1 })
-      this.setState({ sets: newSets });
+      setExerciseSets(newSets)
    }
 
-   displayReps = (maxReps) => {
+   const displayReps = (maxReps) => {
       let repsOption = [];
       for (let i = 0; i <= maxReps; i++) {
          repsOption.push(i);
@@ -80,34 +73,31 @@ class AddExercises extends Component {
       return repsOption;
    }
 
-   saveExercise = async () => {
-      const { exercises, exercise_name, sets } = this.state;
+   const saveExercise = async () => {
       let newExercises = [...exercises];
-      let tempSets = sets.filter((set) => set.weight !== null);
+      let tempSets = exerciseSets.filter((set) => set.weight !== null);
 
-      if (exercise_name !== '') {
-         for (let i = 0; i < sets.length; i++) {
-            if (sets[i].weight === null) {
-               this.setState({ exercise_error: 1 })
+      if (exerciseName !== '') {
+         for (let i = 0; i < exerciseSets.length; i++) {
+            if (exerciseSets[i].weight === null) {
+               setExerciseError(1)
                break;
             }
          }
-         if (sets.length === tempSets.length) {
-            newExercises.push({ name: exercise_name, sets })
-            await this.setState({
-               exercises: newExercises,
-               exercise_error: 0
-            })
-            this.props.sendExercisesToDay(this.state.exercises);
-            this.handleClose();
+         if (exerciseSets.length === tempSets.length) {
+            newExercises.push({ name: exerciseName, sets: exerciseSets })
+
+            setExercises(newExercises);
+            setExerciseError(0);
+            setTempExercises(newExercises);
+            handleClose();
          }
       } else {
-         this.setState({ exercise_error: 2 });
+         setExerciseError(2)
       }
    }
 
-   displayExerciseModal = () => {
-      const { show, exercise_error, sets } = this.state;
+   const displayExerciseModal = () => {
       let errorMessage = "";
 
       ////////////////////////////
@@ -118,51 +108,50 @@ class AddExercises extends Component {
       // 2: No Exercise Name    //
       ////////////////////////////
 
-      if (exercise_error === 1) {
+      if (exerciseError === 1) {
          errorMessage = "Please don't leave any sets blank.";
-      } else if (exercise_error === 2) {
+      } else if (exerciseError === 2) {
          errorMessage = "Please make sure to add an exercise name.";
       }
 
       return (
-         <Modal show={show} onHide={this.handleClose}>
+         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                <Modal.Title>Add An Exercise</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                <Form.Group controlId="formBasicEmail">
                   <div>
-                     Exercise Name: <Form.Control type="input" onChange={(e) => this.handleExerciseName(e)} placeholder="Ex. Push Day, Pull Day, Leg Day" />
-                     {sets.map((set, idx) =>
+                     Exercise Name: <Form.Control type="input" onChange={(e) => setExerciseName(e.target.value.trim())} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                     {exerciseSets.map((set, idx) =>
                         <div key={`set-${idx + 1}`} className="setContainer">
                            <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
-                           <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => this.handleSetWeight(e, idx)} value={sets[idx].weight === null ? '' : sets[idx].weight} />
+                           <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => handleSetWeight(e, idx)} value={exerciseSets[idx].weight === null ? '' : exerciseSets[idx].weight} />
                            <span className="weightRepsLabel">Reps:</span>
-                           <select className="setReps" onChange={e => this.handleSetReps(e, idx)} value={sets[idx].reps === 0 && sets[idx].weight === null ? 1 : sets[idx].reps}>
+                           <select className="setReps" onChange={e => handleSetReps(e, idx)} value={exerciseSets[idx].reps === 0 && exerciseSets[idx].weight === null ? 1 : exerciseSets[idx].reps}>
                               {
-                                 this.displayReps(25).map((ele, repIdx) =>
+                                 displayReps(25).map((ele, repIdx) =>
                                     <option key={`set${idx}-reps${ele}`}>{ele}</option>
                                  )
                               }
                            </select>
-                           <Button className="setDelete" variant="danger" onClick={() => this.handleRemoveSets(idx)}>
+                           <Button className="setDelete" variant="danger" onClick={() => handleRemoveSets(idx)}>
                               X
                            </Button>
                         </div>
                      )}
-                     <Button className="btn-outline-primary" variant="light" onClick={(e) => this.addSet(e)}>Add Set</Button>
+                     <Button className="btn-outline-primary" variant="light" onClick={(e) => addSet(e)}>Add Set</Button>
                      <div className="exerciseError">
                         <p>{errorMessage}</p>
                      </div>
                   </div>
                </Form.Group>
-
             </Modal.Body>
             <Modal.Footer>
-               <Button variant="secondary" onClick={this.handleClose}>
+               <Button variant="secondary" onClick={handleClose}>
                   Close
                </Button>
-               <Button variant="primary" onClick={this.saveExercise}>
+               <Button variant="primary" onClick={saveExercise}>
                   Save Excercise
                </Button>
             </Modal.Footer>
@@ -170,8 +159,7 @@ class AddExercises extends Component {
       );
    }
 
-   displayExercisesToDay = () => {
-      const { exercises } = this.state;
+   const displayExercisesToDay = () => {
 
       if (exercises.length === 0) {
          return 'No exercises added - add an exercise to your day'
@@ -204,21 +192,19 @@ class AddExercises extends Component {
       );
    }
 
-   render() {
-      return (
-         <div>
-            {this.displayExerciseModal()}
-            <h5 className="h5">Exercises:</h5>
+   return (
+      <div>
+         {displayExerciseModal()}
+         <h5 className="h5">Exercises:</h5>
 
-            <div className="displayExercises">
-               {this.displayExercisesToDay()}
-            </div>
-            <Form>
-               <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => this.modalTrigger(e)}>Add An Exercise</Button>
-            </Form>
-         </div >
-      );
-   }
+         <div className="displayExercises">
+            {displayExercisesToDay()}
+         </div>
+         <Form>
+            <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => modalTrigger(e)}>Add An Exercise</Button>
+         </Form>
+      </div >
+   );
 }
 
 export default AddExercises;

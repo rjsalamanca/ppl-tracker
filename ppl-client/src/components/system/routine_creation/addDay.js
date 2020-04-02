@@ -11,10 +11,10 @@ function AddDay() {
    const [show, setShow] = useState(false);
    const [dayName, setDayName] = useState('');
    const [dayError, setDayError] = useState(0);
-   const [tempExercises, setTempExercises] = useState([]);
+   // const [tempExercises, setTempExercises] = useState([]);
    // const [days, setDays] = useState([]);
 
-   const { routineDays, setRoutineDays } = useContext(CreateRoutineContext);
+   const { routineDays, setRoutineDays, tempExercises, setTempExercises } = useContext(CreateRoutineContext);
 
    const clearDayError = () => setDayError(0);
 
@@ -27,10 +27,6 @@ function AddDay() {
          setTempExercises([]);
          setDayError(0)
       }
-   }
-
-   const sendExercisesToDay = (exercises) => {
-      setTempExercises(exercises);
    }
 
    const saveExercisesToDay = async () => {
@@ -73,7 +69,7 @@ function AddDay() {
       if (dayError === 1) {
          errorMessage = 'Your day must have a name.';
       } else if (dayError === 2) {
-         errorMessage = 'Please nake sure to add exercises to your routine.';
+         errorMessage = 'Please make sure to add exercises to your routine.';
       }
 
       return (
@@ -86,7 +82,7 @@ function AddDay() {
                   <Form.Label>Day Name: </Form.Label>
                   <Form.Control type="input" onChange={(e) => setDayName(e.target.value.trim())} placeholder="Ex. Push Day, Pull Day, Leg Day" />
                </Form.Group>
-               <AddExercises clearDayError={clearDayError} sendExercisesToDay={sendExercisesToDay} />
+               <AddExercises clearDayError={clearDayError} />
                <div className="error-message">
                   <p>{errorMessage}</p>
                </div>
