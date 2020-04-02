@@ -3,7 +3,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 import moment from 'moment';
 
-import { UserContext } from '../../UserContext';
+import { RoutineContext } from '../../contexts/RoutineContext';
 
 import './css/workoutInformationStyle.css'
 
@@ -12,7 +12,7 @@ function WorkoutInformation() {
    const [showSaving, setShowSaving] = useState(false);
    const [completedWorkout, setCompletedWorkout] = useState(false);
 
-   const { selectedWorkout } = useContext(UserContext);
+   const { selectedWorkout } = useContext(RoutineContext);
 
 
    const handleClose = () => {

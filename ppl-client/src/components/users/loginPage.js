@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
-import { UserContext } from '../../UserContext';
+import { UserContext } from '../../contexts/UserContext';
 
 import '../../App.css';
 

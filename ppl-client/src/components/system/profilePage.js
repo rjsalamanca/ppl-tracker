@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import RoutineInformation from './routineInformation';
 import WorkoutInformation from './workoutInformation';
 
-import { UserContext } from '../../UserContext';
+import { RoutineContext } from '../../contexts/RoutineContext';
 
 import './css/profilePageStyle.css'
 
@@ -16,7 +16,7 @@ function Profile() {
    const [todaysWorkouts, setTodaysWorkouts] = useState({});
    const [loadRoutineInfo, setLoadRoutineInfo] = useState(true);
 
-   const { selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(UserContext);
+   const { selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(RoutineContext);
 
    useEffect(() => {
       if (routines.length === 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {

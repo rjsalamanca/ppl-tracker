@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
 
-import { UserContext } from '../../UserContext';
+import { RoutineContext } from '../../contexts/RoutineContext';
 
 import './css/routineInformationStyle.css'
 
@@ -10,7 +10,7 @@ function RoutineInformation() {
    const [dateBetween, setDateBetween] = useState(null);
    const [workoutDays, setWorkoutDays] = useState({});
 
-   const { setSelectedWorkout, date, fullRoutine } = useContext(UserContext);
+   const { setSelectedWorkout, date, fullRoutine } = useContext(RoutineContext);
 
    useEffect(() => {
       let start_date = moment(fullRoutine.routine.date_started);

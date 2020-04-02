@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Nav, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../contexts/UserContext";
 
 function NavBar() {
    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
