@@ -45,7 +45,6 @@ function App() {
       ]
    );
 
-
    return (
       <Router>
          <UserContext.Provider value={userValues}>
@@ -54,6 +53,7 @@ function App() {
                <Route path="/" exact component={LandingPage} />
                <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
                <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
+               <Route path="/ppl/create_routine" exact render={(props) => <CreateRoutine {...props} />} />
                <RoutineContext.Provider value={routineValues}>
                   <Route path="/profile" exact render={(props) => <ProfilePage {...props} />} />
                </RoutineContext.Provider>

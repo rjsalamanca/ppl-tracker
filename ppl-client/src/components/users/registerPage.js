@@ -9,26 +9,10 @@ function Register() {
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
 
-   // state = {
-   //    errorCode: -1,
-   //    first_name: '',
-   //    last_name: '',
-   //    email: '',
-   //    password: ''
-   // }
-
-   // handleFirstName = (e) =>  this.setState({ first_name: e.target.value }) };
-   // handleLastName = (e) => { this.setState({ last_name: e.target.value }) };
-   // handleEmail = (e) => { this.setState({ email: e.target.value }) };
-   // handlePassword = (e) => { this.setState({ password: e.target.value }) };
-
    const createUser = async (e) => {
       console.log('bruh')
       const formCheck = document.getElementById('registerForm').checkValidity();
       const url = "http://localhost:3000/users/register"
-
-      //formCheck returns true or false. If everything on the form is correct
-      //connect to the database;
 
       ////////////////////////////////////
       //          ERROR CODES:          //
@@ -64,7 +48,6 @@ function Register() {
    }
 
    const displayError = () => {
-      // const { errorCode } = this.state;
       let errorMessage = '';
       let errorMessageSecondary = ''
       switch (errorCode) {
@@ -92,8 +75,6 @@ function Register() {
       );
    }
 
-   // render() {
-   //    const { errorCode } = this.state;
    return (
       <div>
          <Card className="loginSignUpContainer mt-5" >
@@ -124,7 +105,6 @@ function Register() {
          {errorCode === 0 && <Redirect to={{ pathname: '/login', errorCode }} />}
       </div>
    );
-   // }
 }
 
 export default Register;

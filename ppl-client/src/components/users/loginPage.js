@@ -17,18 +17,6 @@ function Login(props) {
       console.log(props.location.errorCode);
       if (props.location.errorCode === 0 && isLoggedIn === false) setErrorCode(5);
    }, [props.location.errorCode, isLoggedIn]);
-   // state = {
-   //    errorCode: -1,
-   //    email: '',
-   //    password: ''
-   // }
-
-   // componentDidMount() {
-   //    (this.props.location.errorCode === 0) ? this.setState({ errorCode: 5 }) : this.setState({ errorCode: -1 });
-   // }
-
-   // const handleEmail = (e) => { this.setState({ email: e.target.value }) }
-   // const handlePassword = (e) => { this.setState({ password: e.target.value }) }
 
    const login = async (e) => {
       const formCheck = document.getElementById('loginForm').checkValidity();
@@ -48,7 +36,7 @@ function Login(props) {
             })
 
             const data = await response.json();
-            // await this.props.checkLoginStatus()
+
             if (data.errorCode === 0) {
                setIsLoggedIn(true);
             }
