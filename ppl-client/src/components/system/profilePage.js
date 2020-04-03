@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import RoutineInformation from './routineInformation';
 import WorkoutInformation from './workoutInformation';
 
-// import { UserContext } from '../../contexts/UserContext';
 import { RoutineContext } from '../../contexts/RoutineContext';
 
 import './css/profilePageStyle.css'
@@ -18,7 +17,6 @@ function Profile() {
    const [loadRoutineInfo, setLoadRoutineInfo] = useState(true);
 
    const { selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(RoutineContext);
-   // const { isLoggedIn, setIsLoggedIn, isLoggedInTest } = useContext(UserContext);
 
    useEffect(() => {
       console.log('component mounted')

@@ -15,9 +15,6 @@ const express = require('express'),
 */
 
 router.get('/loginStatus', async (req, res) => {
-   //console.log('IN login status: ', req.session.hasOwnProperty('is_logged_in'));
-   // console.log('test')
-   // if (!!req.session.hasOwnProperty('is_logged_in'))
    if (req.session.hasOwnProperty('users')) {
       (req.session.users.is_logged_in === true) ? res.json({ is_logged_in: req.session.users.is_logged_in }) : res.json({ is_logged_in: false })
    } else {
@@ -55,12 +52,7 @@ router.post('/login', async (req, res, next) => {
             expires: new Date(Date.now() + hour),
             maxAge: hour
          }
-         // req.session.is_logged_in = true;
-         // req.session.first_name = user.first_name;
-         // req.session.last_name = user.last_name;
-         // req.session.user_id = user.id;
-         // req.session.expires = new Date(Date.now() + hour);
-         // req.session.maxAge = hour;
+
          await req.session.save(function (err) {
             res.json({
                errorCode: 0,

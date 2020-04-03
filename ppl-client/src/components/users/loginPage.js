@@ -4,8 +4,6 @@ import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import { UserContext } from '../../contexts/UserContext';
 
-import PrivateRoute from '../../PrivateRoute';
-
 import '../../App.css';
 
 function Login(props) {

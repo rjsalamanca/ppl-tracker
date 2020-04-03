@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-// import { Switch, Route, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from "react-router-dom";
 
 import { UserContext } from './contexts/UserContext';
 
@@ -10,11 +9,12 @@ function PrivateRoute({ ...props }) {
 
    useEffect(() => {
       checkLoginStatus();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
 
    const checkLoginStatus = async () => {
       const url = "http://localhost:3000/users/loginStatus";
-      // console.log({ ...props })
+
       try {
          const response = await fetch(url, {
             method: "GET",
