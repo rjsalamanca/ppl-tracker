@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import NavBar from './components/navBar';
@@ -18,14 +18,17 @@ import './App.css';
 function App() {
    // User Context
    const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const [userLocation, setUserLocation] = useState('');
 
    const userValues = useMemo(() => (
       {
-         isLoggedIn, setIsLoggedIn
+         isLoggedIn, setIsLoggedIn,
+         userLocation, setUserLocation
       }
    ),
       [
-         isLoggedIn, setIsLoggedIn
+         isLoggedIn, setIsLoggedIn,
+         userLocation, setUserLocation
       ]
    );
 
@@ -67,19 +70,51 @@ function App() {
       ]
    );
 
+   const checkLoginStatus = async () => {
+      const url = "http://localhost:3000/users/loginStatus";
+
+      fetch(url, {
+         method: "GET",
+         credentials: "include"
+      }).then(response => {
+
+      }).then(err => {
+         console.log(err);
+         return err;
+      });
+
+      // try {
+      //    const response = await fetch(url, {
+      //       method: "GET",
+      //       credentials: "include"
+      //    })
+      //    const data = await response.json();
+      //    console.log(data)
+      //    setIsLoggedIn(true);
+      //    return data.is_logged_in
+      // } catch (err) {
+      //    setIsLoggedIn(false);
+      //    return false
+      // }
+   }
+
    return (
       <Router>
          <UserContext.Provider value={userValues}>
             <NavBar />
             <Switch>
-               <Route path="/" exact component={LandingPage} />
+               <Route path="/" exact render={(props) => < LandingPage {...props} />} />
                <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
                <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
 
                <Route path="/profile" exact render={(props) =>
-                  <RoutineContext.Provider value={routineValues}>
-                     <ProfilePage {...props} />
-                  </RoutineContext.Provider>
+                  !!checkLoginStatus() ?
+                     <RoutineContext.Provider value={routineValues}>
+                        <ProfilePage {...props} />
+                     </RoutineContext.Provider>
+                     :
+                     console.log('no')
+
                } />
 
                <Route path="/ppl/create_routine" exact render={(props) =>

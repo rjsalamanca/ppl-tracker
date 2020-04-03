@@ -3,14 +3,26 @@ const express = require('express'),
    moment = require('moment'),
    pplSystemModel = require('../models/ppl_system');
 
-router.get('/routine', async (req, res) => {
-   const user_id = req.session.user_id;
+function requireLogin(req, res, next) {
+   if (req.session && req.session.users) {
+      console.log('user is logged in')
+      next();
+   } else {
+      console.log('user is not logged in')
+      res.json({
+         user_status: false
+      });
+   }
+};
+
+router.get('/routine', requireLogin, async (req, res) => {
+   const user_id = req.session.users.user_id;
    const anyRoutine = await pplSystemModel.checkAnyRoutine(user_id);
    anyRoutine.rowCount === 0 ? res.json({ routine_found: false }) : res.json({ routine_found: true, routines: anyRoutine.rows })
 });
 
-router.post('/routine/currentDay', async (req, res) => {
-   const user_id = req.session.user_id;
+router.post('/routine/currentDay', requireLogin, async (req, res) => {
+   const user_id = req.session.users.user_id;
    const { date } = req.body;
    const getWorkout = await pplSystemModel.getWorkoutDays(user_id);
    if (getWorkout[0].json_agg !== null) {
@@ -34,16 +46,16 @@ router.post('/routine/currentDay', async (req, res) => {
    }
 });
 
-router.get('/get_full_routine/:routine?', async (req, res) => {
+router.get('/get_full_routine/:routine?', requireLogin, async (req, res) => {
    const { routine } = req.params;
-   const user_id = req.session.user_id;
+   const user_id = req.session.users.user_id;
    const getFullRoutine = await pplSystemModel.getFullRoutine(routine, user_id);
    getFullRoutine[0].json_agg === null ? res.json({ routine_found: false }) : res.json({ routine_found: true, routine: getFullRoutine[0].json_agg[0] });
 });
 
-router.post('/routine/add_routine', async (req, res) => {
+router.post('/routine/add_routine', requireLogin, async (req, res) => {
    const { days, routine_name, todays_date } = req.body;
-   const user_id = req.session.user_id;
+   const user_id = req.session.users.user_id;
 
    const routineModel = new pplSystemModel(null, routine_name, null, todays_date, user_id)
    const checkIfRoutineAlreadyCreated = await routineModel.getRoutineInfo();
@@ -86,7 +98,7 @@ router.post('/routine/add_routine', async (req, res) => {
    }
 });
 
-router.post('/routine/finish_workout', async (req, res) => {
+router.post('/routine/finish_workout', requireLogin, async (req, res) => {
    const { workout, workout_date } = req.body;
    const addSets = await pplSystemModel.finishWorkout(workout.exercises, workout_date);
    addSets.rowCount > 0 ? res.json({ completed_workout: true }) : res.json({ completed_workout: false });
