@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import NavBar from './components/navBar';
 import LandingPage from './components/landingPage';
@@ -10,6 +10,8 @@ import CreateRoutine from './components/system/routine_creation/createRoutine';
 
 import PrivateRoute from './PrivateRoute';
 
+import { CookiesProvider } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import { UserContext } from './contexts/UserContext';
 import { CreateRoutineContext } from './contexts/CreateRoutineContext';
 import { RoutineContext } from './contexts/RoutineContext';
@@ -17,6 +19,9 @@ import { RoutineContext } from './contexts/RoutineContext';
 import './App.css';
 
 function App() {
+   // Cookies
+   const [cookies, setCookie] = useCookies(['loginStatus']);
+
    // User Context
    const [isLoggedIn, setIsLoggedIn] = useState(false);
    const [userLocation, setUserLocation] = useState('');
@@ -72,26 +77,30 @@ function App() {
    );
 
    return (
-      <Router>
-         <UserContext.Provider value={userValues}>
-            <NavBar />
-            <PrivateRoute path="/" exact render={(props) => < LandingPage {...props} />} />
-            <PrivateRoute path="/login" exact render={(props) => <LoginPage {...props} />} />
-            <PrivateRoute path="/register" exact render={(props) => <RegisterPage {...props} />} />
-            <PrivateRoute path="/profile" exact render={(props) =>
-               <RoutineContext.Provider value={routineValues}>
-                  <ProfilePage {...props} />
-               </RoutineContext.Provider>
-            } />
+      <CookiesProvider>
+         <Router>
+            <UserContext.Provider value={userValues}>
+               <NavBar />
+               <Switch>
+                  <Route path="/" exact render={(props) => < LandingPage {...props} />} />
+                  <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
+                  <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
+               </Switch>
+               {cookies.loginStatus == 'true' &&
+                  <Switch>
+                     <Route path="/profile" exact render={(props) =>
+                        <RoutineContext.Provider value={routineValues}>
+                           <ProfilePage {...props} />
+                        </RoutineContext.Provider>
+                     } />
+                  </Switch>
 
-            <PrivateRoute path="/ppl/create_routine" exact render={(props) =>
-               <CreateRoutineContext.Provider value={createRoutineValues}>
-                  <CreateRoutine {...props} />
-               </CreateRoutineContext.Provider>
-            } />
-         </UserContext.Provider>
 
-      </Router>
+               }
+            </UserContext.Provider>
+         </Router>
+      </CookiesProvider>
+
    );
 }
 

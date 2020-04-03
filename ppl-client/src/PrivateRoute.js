@@ -8,6 +8,7 @@ function PrivateRoute({ ...props }) {
    const [loadRoute, setLoadRoute] = useState();
 
    useEffect(() => {
+      console.log({ ...props })
       checkLoginStatus();
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
@@ -30,7 +31,6 @@ function PrivateRoute({ ...props }) {
                !props.path === '/register') {
                setLoadRoute(<Route render={() => <Redirect to='/' />} />)
             } else {
-
                setLoadRoute(<Route {...props} />)
             }
          }

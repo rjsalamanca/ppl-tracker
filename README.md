@@ -42,6 +42,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Start button displaying on rest days
 [X] Error when fetching scheduled workouts for today
    - Bug was created when we had routines without days (happened during testing)
+[] Flash of unloaded content when we visit the profile page.
+[] Hooks not working when working with PrivateRoute Component
+   - Checking if still logged in still needs work.
 
 ************
 * STYLING: *
@@ -67,11 +70,13 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Indicator on Workouts Schedule for Today: Completed vs Non Completed.
 [X] Rework login back end.
    - Also worked on check if logged in to retrieve data.
-[X] Rework checking if still logged in.
+[IP] Rework checking if still logged in.
 [X] Add Rest Days when creating routine.
 [X] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
 [X] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods
 [] Editing of routine/exericses/sets.
+[IP] Ability to remove days when creating routine.
+[IP] Ability to remove exercises when creating routine.
 [X] Rework with hooks or redux for state management.
    - We're using hooks
    [X] Convert Profile Route and all children components.
@@ -85,7 +90,5 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Add end date for routine so we can finish
 [] Add an end routine button incase we wanted to end routine early
 [] Progress Page for our routines
-[] Ability to remove days when creating routine.
-[] Ability to remove exercises when creating routine.
 
 ```

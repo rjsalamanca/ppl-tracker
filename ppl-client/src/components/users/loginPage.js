@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import { UserContext } from '../../contexts/UserContext';
+import { useCookies } from 'react-cookie';
 
 import '../../App.css';
 
@@ -12,6 +13,7 @@ function Login(props) {
    const [password, setPassword] = useState('');
 
    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+   const [cookies, setCookie] = useCookies(['loginStatus']);
 
    useEffect(() => {
       if (props.location.errorCode === 0 && isLoggedIn === false) setErrorCode(5);
@@ -20,7 +22,6 @@ function Login(props) {
    const login = async (e) => {
       const formCheck = document.getElementById('loginForm').checkValidity();
       const url = "http://localhost:3000/users/login";
-
       if (!!formCheck) {
          e.preventDefault();
          try {
@@ -35,10 +36,13 @@ function Login(props) {
             })
 
             const data = await response.json();
-
+            console.log(data)
             if (data.errorCode === 0) {
+               console.log(cookies)
+               setCookie('loginStatus', { true, cookies);
                setIsLoggedIn(true);
             }
+
             setErrorCode(data.errorCode);
 
             ///////////////////////////////////
@@ -54,6 +58,7 @@ function Login(props) {
             ///////////////////////////////////
 
          } catch (err) {
+            console.log(err)
             setErrorCode(4);
          }
       }
@@ -76,7 +81,7 @@ function Login(props) {
             errorMessageSecondary = 'please send this message to us!';
             break;
          case 4:
-            errorMessage = 'Oops, something happened when we tried to find our account,';
+            errorMessage = 'Oops, something happened when we tried to find your account,';
             errorMessageSecondary = 'please send this message to us!';
             break;
          case 5:

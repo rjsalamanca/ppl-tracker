@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import moment from 'moment';
 import { Redirect } from "react-router-dom";
 import { Button } from "react-bootstrap";
@@ -12,38 +12,18 @@ import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
 import '../css/createRoutineStyle.css';
 
 function CreateRoutine() {
-   // const [date] = useState(moment(new Date()).format("YYYY-MM-DD"));
-   // const [routineNameCheck, setRoutineNameCheck] = useState(false);
    const [dateCreation] = useState(moment(new Date()).format("YYYY-MM-DD"));
    const [errorCodeCreate, setErrorCodeCreate] = useState(0);
    const [redirectCreate, setRedirectCreate] = useState(false);
 
-   // const { dateCreation, setRedirectCreate, setErrorCodeCreate } = useContext(CreateRoutineContext);
-
-
    const { routineName, setRoutineName, routineDays, setRoutineDays } = useContext(CreateRoutineContext);
+   useEffect(() => {
+      console.log('loaded component')
+   }, [])
 
-   // state = {
-   //    redirect: false,
-   //    error_code: 0,
-   //    routine_name: '',
-   //    todays_date: moment(new Date()).format("YYYY-MM-DD"),
-   //    routine_name_check: false,
-   // };
-
-   // const checkRoutineName = (e) => {
-   //    if (e.target.value.length >= 3) {
-   //       // this.setState({
-   //       //    routine_name: e.target.value.trim(),
-   //       //    routine_name_check: true
-   //       // });
-   //       setRoutineName(e.target.value.trim())
-   //       setRoutineNameCheck(true);
-   //    } else {
-   //       // this.setState({ routine_name_check: false });
-   //       setRoutineNameCheck(false);
-   //    }
-   // }
+   useEffect(() => {
+      console.log(routineName)
+   }, [routineName])
 
    const saveRoutine = async () => {
       let sendInfo = {
@@ -125,15 +105,6 @@ function CreateRoutine() {
       );
    }
 
-   // const loadProperComponents = () => {
-   //    // const { routine_name_check } = this.state;
-   //    if (routineName.length >= 3) {
-   //       return <AddDay />
-   //    }
-   // }
-
-   // render() {
-   // const { error_code, redirect } = this.state;
    return (
       <div id="routineCreationMainContainer">
          <div className="routineCreationFlexContainer">
@@ -157,7 +128,6 @@ function CreateRoutine() {
          {!!redirectCreate && <Redirect to="/profile/" />}
       </div >
    );
-   // }
 }
 
 export default CreateRoutine;
