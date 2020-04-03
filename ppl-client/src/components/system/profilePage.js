@@ -19,10 +19,6 @@ function Profile() {
    const { selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(RoutineContext);
 
    useEffect(() => {
-      console.log('component mounted')
-   }, [])
-
-   useEffect(() => {
       if (routines.length === 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {
          checkForRoutines();
          loadTodaysWorkouts();
