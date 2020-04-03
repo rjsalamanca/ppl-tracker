@@ -18,7 +18,11 @@ router.get('/loginStatus', async (req, res) => {
    //console.log('IN login status: ', req.session.hasOwnProperty('is_logged_in'));
    // console.log('test')
    // if (!!req.session.hasOwnProperty('is_logged_in'))
-   (req.session.users.is_logged_in === true) ? res.json({ is_logged_in: req.session.users.is_logged_in }) : res.json({ is_logged_in: false })
+   if (req.session.hasOwnProperty('users')) {
+      (req.session.users.is_logged_in === true) ? res.json({ is_logged_in: req.session.users.is_logged_in }) : res.json({ is_logged_in: false })
+   } else {
+      res.json({ is_logged_in: false })
+   }
 });
 
 router.get('/logout', async (req, res) => {

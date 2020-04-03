@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import NavBar from './components/navBar';
@@ -75,23 +75,20 @@ function App() {
       <Router>
          <UserContext.Provider value={userValues}>
             <NavBar />
-            <Switch>
-               <Route path="/" exact render={(props) => < LandingPage {...props} />} />
-               <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
-               <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
+            <PrivateRoute path="/" exact render={(props) => < LandingPage {...props} />} />
+            <PrivateRoute path="/login" exact render={(props) => <LoginPage {...props} />} />
+            <PrivateRoute path="/register" exact render={(props) => <RegisterPage {...props} />} />
+            <PrivateRoute path="/profile" exact render={(props) =>
+               <RoutineContext.Provider value={routineValues}>
+                  <ProfilePage {...props} />
+               </RoutineContext.Provider>
+            } />
 
-               <PrivateRoute path="/profile" exact render={(props) =>
-                  <RoutineContext.Provider value={routineValues}>
-                     <ProfilePage {...props} />
-                  </RoutineContext.Provider>
-               } />
-
-               <Route path="/ppl/create_routine" exact render={(props) =>
-                  <CreateRoutineContext.Provider value={createRoutineValues}>
-                     <CreateRoutine {...props} />
-                  </CreateRoutineContext.Provider>
-               } />
-            </Switch>
+            <PrivateRoute path="/ppl/create_routine" exact render={(props) =>
+               <CreateRoutineContext.Provider value={createRoutineValues}>
+                  <CreateRoutine {...props} />
+               </CreateRoutineContext.Provider>
+            } />
          </UserContext.Provider>
 
       </Router>

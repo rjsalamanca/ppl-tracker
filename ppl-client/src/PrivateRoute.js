@@ -1,41 +1,46 @@
-import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+// import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { UserContext } from './contexts/UserContext';
 
 function PrivateRoute({ ...props }) {
-   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+   const { setIsLoggedIn } = useContext(UserContext);
+   const [loadRoute, setLoadRoute] = useState();
+
+   useEffect(() => {
+      checkLoginStatus();
+   }, [])
 
    const checkLoginStatus = async () => {
       const url = "http://localhost:3000/users/loginStatus";
-
+      // console.log({ ...props })
       try {
          const response = await fetch(url, {
             method: "GET",
             credentials: "include"
          })
          const data = await response.json();
-         console.log(data)
          if (data.is_logged_in) {
-            console.log('yo')
             setIsLoggedIn(true);
-            //return <Route {...props} />
-            return <Redirect to='/login' />
+            setLoadRoute(<Route {...props} />)
          } else {
-            return <Redirect to='/' />
+            if (!props.path === '/' &&
+               !props.path === '/login' &&
+               !props.path === '/register') {
+               setLoadRoute(<Route render={() => <Redirect to='/' />} />)
+            } else {
+
+               setLoadRoute(<Route {...props} />)
+            }
          }
       } catch (err) {
-         console.log(false)
-
          setIsLoggedIn(false);
-         return <Redirect to='/' />
+         setLoadRoute(<Route render={() => <Redirect to='/' />} />)
       }
    }
 
-   return
-   <div>
-      {checkLoginStatus()}
-   </div>;
+   return <Switch>{loadRoute}</Switch>;
 }
 
 export default PrivateRoute;

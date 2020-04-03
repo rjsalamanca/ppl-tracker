@@ -5,6 +5,7 @@ import { UserContext } from "../contexts/UserContext";
 
 function NavBar() {
    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+
    const loggedInToLogout = () => {
       const url = "http://localhost:3000/users/logout";
       try {
@@ -18,9 +19,6 @@ function NavBar() {
          console.log('cant logout')
       }
    }
-   // componentDidMount = () => {
-   //    // this.setState({ check: this.props.is_logged_in })
-   // }
 
    return (
       < Nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm" style={{ zIndex: 100 }} >

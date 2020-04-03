@@ -121,7 +121,7 @@ function Login(props) {
                   No Account? <Link to="/register"><b>Register</b></Link>
                </p>
             </Card.Body>
-            {/* {errorCode === 0 ? <Redirect to="/profile" /> : <div></div>} */}
+            {errorCode === 0 ? <Redirect to="/profile" /> : <div></div>}
          </Card >
       </div>
    )
