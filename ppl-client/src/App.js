@@ -5,9 +5,10 @@ import NavBar from './components/navBar';
 import LandingPage from './components/landingPage';
 import LoginPage from './components/users/loginPage';
 import RegisterPage from './components/users/registerPage';
-
 import ProfilePage from './components/system/profilePage';
 import CreateRoutine from './components/system/routine_creation/createRoutine';
+
+import PrivateRoute from './PrivateRoute';
 
 import { UserContext } from './contexts/UserContext';
 import { CreateRoutineContext } from './contexts/CreateRoutineContext';
@@ -70,34 +71,6 @@ function App() {
       ]
    );
 
-   const checkLoginStatus = async () => {
-      const url = "http://localhost:3000/users/loginStatus";
-
-      fetch(url, {
-         method: "GET",
-         credentials: "include"
-      }).then(response => {
-
-      }).then(err => {
-         console.log(err);
-         return err;
-      });
-
-      // try {
-      //    const response = await fetch(url, {
-      //       method: "GET",
-      //       credentials: "include"
-      //    })
-      //    const data = await response.json();
-      //    console.log(data)
-      //    setIsLoggedIn(true);
-      //    return data.is_logged_in
-      // } catch (err) {
-      //    setIsLoggedIn(false);
-      //    return false
-      // }
-   }
-
    return (
       <Router>
          <UserContext.Provider value={userValues}>
@@ -107,14 +80,10 @@ function App() {
                <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
                <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
 
-               <Route path="/profile" exact render={(props) =>
-                  !!checkLoginStatus() ?
-                     <RoutineContext.Provider value={routineValues}>
-                        <ProfilePage {...props} />
-                     </RoutineContext.Provider>
-                     :
-                     console.log('no')
-
+               <PrivateRoute path="/profile" exact render={(props) =>
+                  <RoutineContext.Provider value={routineValues}>
+                     <ProfilePage {...props} />
+                  </RoutineContext.Provider>
                } />
 
                <Route path="/ppl/create_routine" exact render={(props) =>

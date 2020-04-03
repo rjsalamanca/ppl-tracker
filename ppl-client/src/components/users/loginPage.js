@@ -4,6 +4,8 @@ import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import { UserContext } from '../../contexts/UserContext';
 
+import PrivateRoute from '../../PrivateRoute';
+
 import '../../App.css';
 
 function Login(props) {
@@ -119,7 +121,7 @@ function Login(props) {
                   No Account? <Link to="/register"><b>Register</b></Link>
                </p>
             </Card.Body>
-            {errorCode === 0 ? <Redirect to="/profile" /> : <div></div>}
+            {/* {errorCode === 0 ? <Redirect to="/profile" /> : <div></div>} */}
          </Card >
       </div>
    )

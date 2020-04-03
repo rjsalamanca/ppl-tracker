@@ -65,7 +65,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 **************************
 
 [] Indicator on Workouts Schedule for Today: Completed vs Non Completed.
-[IP] Rework login back end.
+[X] Rework login back end.
+   - Also worked on check if logged in to retrieve data.
 [IP] Rework checking if still logged in.
 [X] Add Rest Days when creating routine.
 [X] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
