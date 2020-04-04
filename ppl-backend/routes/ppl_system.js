@@ -24,6 +24,7 @@ router.get('/routine', requireLogin, async (req, res) => {
 router.post('/routine/currentDay', requireLogin, async (req, res) => {
    const user_id = req.session.users.user_id;
    const { date } = req.body;
+   console.log(date)
    const getWorkout = await pplSystemModel.getWorkoutDays(user_id);
    if (getWorkout[0].json_agg !== null) {
       const getWorkoutByDay = getWorkout[0].json_agg.map(workout => {

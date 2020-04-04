@@ -19,10 +19,16 @@ function Profile() {
    const { selectedWorkout, setSelectedWorkout, date, setDate, fullRoutine, setFullRoutine } = useContext(RoutineContext);
 
    useEffect(() => {
+      loadTodaysWorkouts();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [date])
+
+   useEffect(() => {
       if (routines.length === 0 && !todaysWorkouts.hasOwnProperty('todays_workout')) {
          checkForRoutines();
          loadTodaysWorkouts();
       }
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [routines, todaysWorkouts]);
 

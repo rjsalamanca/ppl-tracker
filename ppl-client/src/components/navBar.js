@@ -7,8 +7,9 @@ import { UserContext } from '../contexts/UserContext'
 
 function NavBar() {
    const [cookies, setCookie] = useCookies(['user']);
-   const { update, setUpdate } = useContext(UserContext);
-   const loggedInToLogout = async () => {
+   const { setUpdate } = useContext(UserContext);
+   const loggedInToLogout = async (e) => {
+      e.preventDefault();
       const url = "http://localhost:3000/users/logout";
       try {
          const response = await fetch(url, {
@@ -16,21 +17,12 @@ function NavBar() {
             credentials: "include"
          })
          const data = await response.json();
+         // console.log(data)
          if (!data.is_logged_in) {
             setUpdate(true);
             setCookie('user', { isLoggedIn: false })
             setUpdate(false);
          }
-         setCookie('user', { isLoggedIn: false })
-
-         console.log(data);
-         // fetch(url, {
-         //    method: 'GET',
-         //    credentials: "include"
-         // }).then((data) => {
-         //    console.log(data)
-         //    setCookie('user', { isLoggedIn: false })
-         // })
       } catch (err) {
          console.log('cant logout')
       }
@@ -67,7 +59,7 @@ function NavBar() {
                   true:
                      <Nav className="navbar-nav ml-auto">
                         <Nav.Item className="nav-item active">
-                           <Link className="nav-link" to="/" onClick={() => loggedInToLogout()}>Logout</Link>
+                           <Link className="nav-link" to="/" onClick={(e) => loggedInToLogout(e)}>Logout</Link>
                         </Nav.Item>
                      </Nav>,
                   false:

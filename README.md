@@ -21,10 +21,11 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    - Bugs are created when there is no information in the child. EX: Routine with no Routine Days.
 [X] Workouts not updating when changing calendar date.
 [X] Workouts Schedule for Today not properly updating when calendar is changed.
-[IP] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout.
+[X] Initial reload for 'Workouts Scheduled for Today' displays tomorrows workout.
    - Back end issue caused by using Math.ceil instead of Math.floor
    [X] Bug is back after reworking hooks. Look at INSERT ISSUE BUG
-   [IP] Bug is back after reworking with cookies.
+   [X] Bug is back after reworking with cookies.
+      - Accidentally removed a useEffect hook. Added it back and it's working fine.
 [X] Select button does not change when selecting reps when creating a routine, but changes in the back end.
    [X] Select bug is back. Need to work on ternary. FIXED - Just changed default value to 1.
    [X] Select bug is back AGAIN, after changing hooks. Look at INSERT ISSUE BUG

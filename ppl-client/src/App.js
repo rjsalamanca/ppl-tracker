@@ -23,10 +23,13 @@ function App() {
    const [run, setRun] = useState(true);
    const [update, setUpdate] = useState(false);
    const [cookies, setCookie] = useCookies(['user']);
+   const [cookieCheck, setCookieCheck] = useState(cookies);
 
    useEffect(() => {
+      setCookieCheck(cookies);
       runContent();
-   }, [cookies, update]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [cookies, update, cookieCheck]);
 
    const runContent = () => {
       if (!!cookies.hasOwnProperty('user')) {
@@ -36,7 +39,7 @@ function App() {
                <Switch>
                   <Route path="/" exact render={(props) => < LandingPage {...props} />} />
                   <Route path="/login" exact render={(props) => {
-                     console.log(cookies)
+                     // console.log(cookies);
                      return !!cookies.user.isLoggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
                   }
                   } />
