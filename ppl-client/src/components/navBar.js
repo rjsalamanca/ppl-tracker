@@ -6,10 +6,6 @@ import { useCookies } from 'react-cookie';
 function NavBar() {
    const [cookies, setCookie] = useCookies(['user']);
 
-   useEffect(() => {
-      console.log(cookies)
-   }, [cookies])
-
    const loggedInToLogout = () => {
       const url = "http://localhost:3000/users/logout";
       try {

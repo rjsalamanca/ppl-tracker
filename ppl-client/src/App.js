@@ -42,16 +42,16 @@ function App() {
    return (
       <CookiesProvider>
          <Router>
-            <UserContext.Provider value={userValues}>
-               <NavBar />
-               <Switch>
-                  <Route path="/" exact render={(props) => < LandingPage {...props} />} />
-                  <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
-                  <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
-               </Switch>
-               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
-               <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />s
-            </UserContext.Provider>
+            {/* <UserContext.Provider value={userValues}> */}
+            <NavBar />
+            <Switch>
+               <Route path="/" exact render={(props) => < LandingPage {...props} />} />
+               <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
+               <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
+            </Switch>
+            <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
+            <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />
+            {/* </UserContext.Provider> */}
          </Router>
       </CookiesProvider>
 
