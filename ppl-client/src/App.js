@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, createContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import NavBar from './components/navBar';
@@ -14,13 +14,14 @@ import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
 import { UserContext } from './contexts/UserContext';
 import { CreateRoutineContext } from './contexts/CreateRoutineContext';
-import { RoutineContext } from './contexts/RoutineContext';
+// import { RoutineContext } from './contexts/RoutineContext';
+import RoutineContextProvider from './components/providers/CreateRoutineProvider';
 
 import './App.css';
 
 function App() {
    // Cookies
-   const [cookies, setCookie] = useCookies(['loginStatus']);
+   const [cookies, setCookie] = useCookies(['user']);
 
    // User Context
    const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,23 +40,23 @@ function App() {
    );
 
    // CreateRoutineContext 
-   const [routineName, setRoutineName] = useState('');
-   const [routineDays, setRoutineDays] = useState([]);
-   const [tempExercises, setTempExercises] = useState([]);
+   // const [routineName, setRoutineName] = useState('');
+   // const [routineDays, setRoutineDays] = useState([]);
+   // const [tempExercises, setTempExercises] = useState([]);
 
-   const createRoutineValues = useMemo(() => (
-      {
-         routineName, setRoutineName,
-         routineDays, setRoutineDays,
-         tempExercises, setTempExercises
-      }
-   ),
-      [
-         routineName, setRoutineName,
-         routineDays, setRoutineDays,
-         tempExercises, setTempExercises
-      ]
-   );
+   // const createRoutineValues = useMemo(() => (
+   //    {
+   //       routineName, setRoutineName,
+   //       routineDays, setRoutineDays,
+   //       tempExercises, setTempExercises
+   //    }
+   // ),
+   //    [
+   //       routineName, setRoutineName,
+   //       routineDays, setRoutineDays,
+   //       tempExercises, setTempExercises
+   //    ]
+   // );
 
    //Routine Context
    const [selectedWorkout, setSelectedWorkout] = useState({});
@@ -86,17 +87,26 @@ function App() {
                   <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
                   <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
                </Switch>
-               {cookies.loginStatus == 'true' &&
-                  <Switch>
-                     <Route path="/profile" exact render={(props) =>
-                        <RoutineContext.Provider value={routineValues}>
-                           <ProfilePage {...props} />
-                        </RoutineContext.Provider>
-                     } />
-                  </Switch>
+               {/* {!!cookies.user.isLoggedIn && */}
+               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={RoutineContextProvider} Component={CreateRoutine} />
+               {/* <Switch> 
+                  <PrivateRoute path="/ppl/create_routine" exact render={(props) =>
+                     <CreateRoutineContext.Provider value={createRoutineValues}>
+                        <CreateRoutine {...props} />
+                     </CreateRoutineContext.Provider>
+                  } />
+               </Switch> */}
 
+               {/* {!!cookies.user.isLoggedIn && */}
 
-               }
+               {/* <Switch> */}
+               {/* <PrivateRoute path="/profile" exact render={(props) =>
+                  <RoutineContext.Provider value={routineValues}>
+                     <ProfilePage {...props} />
+                  </RoutineContext.Provider>
+               } /> */}
+               {/* </Switch> */}
+
             </UserContext.Provider>
          </Router>
       </CookiesProvider>

@@ -13,14 +13,16 @@ function Login(props) {
    const [password, setPassword] = useState('');
 
    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
-   const [cookies, setCookie] = useCookies(['loginStatus']);
+   const [cookies, setCookie] = useCookies(['user']);
 
    useEffect(() => {
-      if (props.location.errorCode === 0 && isLoggedIn === false) setErrorCode(5);
-   }, [props.location.errorCode, isLoggedIn]);
+      if (props.location.errorCode === 0 && cookies.user.isLoggedIn === false) setErrorCode(5);
+
+   }, [props.location.errorCode]);
 
    const login = async (e) => {
       const formCheck = document.getElementById('loginForm').checkValidity();
+      console.log('wtf')
       const url = "http://localhost:3000/users/login";
       if (!!formCheck) {
          e.preventDefault();
@@ -36,14 +38,6 @@ function Login(props) {
             })
 
             const data = await response.json();
-            console.log(data)
-            if (data.errorCode === 0) {
-               console.log(cookies)
-               setCookie('loginStatus', { true, cookies);
-               setIsLoggedIn(true);
-            }
-
-            setErrorCode(data.errorCode);
 
             ///////////////////////////////////
             //          ERROR CODES:         //
@@ -55,7 +49,12 @@ function Login(props) {
             // 4 = URL to backend is bad     //
             // 5 = Redirecteed from register //
             //     - display message         //
-            ///////////////////////////////////
+            ///////////////////////////////////s
+
+            if (data.errorCode === 0) {
+               await setCookie('user', { isLoggedIn: true });
+            }
+            await setErrorCode(data.errorCode);
 
          } catch (err) {
             console.log(err)

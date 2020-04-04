@@ -11,7 +11,7 @@ import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
 
 import '../css/createRoutineStyle.css';
 
-function CreateRoutine() {
+function CreateRoutine(props) {
    const [dateCreation] = useState(moment(new Date()).format("YYYY-MM-DD"));
    const [errorCodeCreate, setErrorCodeCreate] = useState(0);
    const [redirectCreate, setRedirectCreate] = useState(false);
@@ -23,6 +23,7 @@ function CreateRoutine() {
 
    useEffect(() => {
       console.log(routineName)
+      console.log(props)
    }, [routineName])
 
    const saveRoutine = async () => {

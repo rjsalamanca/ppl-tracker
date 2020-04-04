@@ -1,41 +1,33 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import { UserContext } from './contexts/UserContext';
+import { useCookies } from 'react-cookie';
 
-function PrivateRoute({ ...props }) {
-   const { setIsLoggedIn } = useContext(UserContext);
+function PrivateRoute({ ContextProvider, Component, ...routerProps }) {
    const [loadRoute, setLoadRoute] = useState();
-
+   const [cookies, setCookie] = useCookies(['user']);
+   // const Provider = provider;
+   // const LoadComponent = component;
    useEffect(() => {
-      console.log({ ...props })
       checkLoginStatus();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // console.log({ ...routerProps })
    }, [])
 
    const checkLoginStatus = async () => {
-      const url = "http://localhost:3000/users/loginStatus";
+      if (!!cookies.user.isLoggedIn) {
+         // await contextValues.setRoutineName('in Private')
+         // console.log(contextValues.routineName);
+         // <PrivateRoute path="/ppl/create_routine" exact render={(props) =>
+         //    <CreateRoutineContext.Provider value={createRoutineValues}>
+         //       <CreateRoutine {...props} />
+         //    </CreateRoutineContext.Provider>
+         // } />
+         setLoadRoute(<Route {...routerProps} render={(props) =>
+            <ContextProvider LoadComponent={Component} RouterProps={props} />
 
-      try {
-         const response = await fetch(url, {
-            method: "GET",
-            credentials: "include"
-         })
-         const data = await response.json();
-         if (data.is_logged_in) {
-            setIsLoggedIn(true);
-            setLoadRoute(<Route {...props} />)
-         } else {
-            if (!props.path === '/' &&
-               !props.path === '/login' &&
-               !props.path === '/register') {
-               setLoadRoute(<Route render={() => <Redirect to='/' />} />)
-            } else {
-               setLoadRoute(<Route {...props} />)
-            }
-         }
-      } catch (err) {
-         setIsLoggedIn(false);
+         } />
+         );
+      } else {
          setLoadRoute(<Route render={() => <Redirect to='/' />} />)
       }
    }
