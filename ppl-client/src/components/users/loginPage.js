@@ -15,12 +15,10 @@ function Login(props) {
 
    useEffect(() => {
       if (props.location.errorCode === 0 && cookies.user.isLoggedIn === false) setErrorCode(5);
-
    }, [props.location.errorCode, cookies]);
 
    const login = async (e) => {
       const formCheck = document.getElementById('loginForm').checkValidity();
-      console.log('wtf')
       const url = "http://localhost:3000/users/login";
       if (!!formCheck) {
          e.preventDefault();
@@ -50,9 +48,12 @@ function Login(props) {
             ///////////////////////////////////s
 
             if (data.errorCode === 0) {
-               await setCookie('user', { isLoggedIn: true });
+               setCookie('user', { isLoggedIn: true })
+               await setErrorCode(0);
+
+            } else {
+               await setErrorCode(data.errorCode);
             }
-            await setErrorCode(data.errorCode);
 
          } catch (err) {
             console.log(err)

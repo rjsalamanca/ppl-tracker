@@ -43,8 +43,13 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Error when fetching scheduled workouts for today
    - Bug was created when we had routines without days (happened during testing)
 [] Flash of unloaded content when we visit the profile page.
-[] Hooks not working when working with PrivateRoute Component
+[X] Hooks not working when working with PrivateRoute Component
    - Checking if still logged in still needs work.
+   - Had to rework on providers
+[IP] Errors on pages sometime
+   - Might be cookie loading error?
+   - Issue has to deal with logging in
+[IP] Ability to go to the Login and Register page once logged in.
 
 ************
 * STYLING: *
@@ -70,7 +75,10 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [] Indicator on Workouts Schedule for Today: Completed vs Non Completed.
 [X] Rework login back end.
    - Also worked on check if logged in to retrieve data.
-[IP] Rework checking if still logged in.
+[X] Rework checking if still logged in.
+   - Navigation now works as it should.
+   - Hooks are working throughout the site.
+   - Used cookies to store user login info.
 [X] Add Rest Days when creating routine.
 [X] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
 [X] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods

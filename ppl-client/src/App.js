@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import NavBar from './components/navBar';
@@ -12,7 +12,6 @@ import PrivateRoute from './components/PrivateRoute';
 
 import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
-import { UserContext } from './contexts/UserContext';
 
 import CreateRoutineContextProvider from './components/providers/CreateRoutineProvider';
 import RoutineProvider from './components/providers/RoutineProvider';
@@ -20,41 +19,38 @@ import RoutineProvider from './components/providers/RoutineProvider';
 import './App.css';
 
 function App() {
-   // Cookies
-   // const [cookies, setCookie] = useCookies(['user']);
+   const [run, setRun] = useState(true);
+   const [cookies, setCookie] = useCookies(['user']);
 
-   // User Context
-   const [isLoggedIn, setIsLoggedIn] = useState(false);
-   const [userLocation, setUserLocation] = useState('');
+   useEffect(() => {
+      runOnce();
+   }, [cookies]);
 
-   const userValues = useMemo(() => (
-      {
-         isLoggedIn, setIsLoggedIn,
-         userLocation, setUserLocation
+   const runOnce = () => {
+      if (!!cookies.hasOwnProperty('user')) {
+         return setRun(
+            <Router>
+               <NavBar />
+               <Switch>
+                  <Route path="/" exact render={(props) => < LandingPage {...props} />} />
+                  <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
+                  <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
+               </Switch>
+               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
+               <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />
+            </Router>
+         )
+      } else {
+         setCookie('user', { isLoggedIn: false })
+         console.log(cookies)
+         return setRun(<div>hi</div>)
       }
-   ),
-      [
-         isLoggedIn, setIsLoggedIn,
-         userLocation, setUserLocation
-      ]
-   );
+   }
 
    return (
       <CookiesProvider>
-         <Router>
-            {/* <UserContext.Provider value={userValues}> */}
-            <NavBar />
-            <Switch>
-               <Route path="/" exact render={(props) => < LandingPage {...props} />} />
-               <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
-               <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
-            </Switch>
-            <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
-            <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />
-            {/* </UserContext.Provider> */}
-         </Router>
+         {run}
       </CookiesProvider>
-
    );
 }
 

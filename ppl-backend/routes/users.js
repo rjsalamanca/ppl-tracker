@@ -62,7 +62,7 @@ router.post('/login', async (req, res, next) => {
                email: user.email
             });
          });
-
+         console.log(req.session)
       } else {
          res.json({
             errorCode: 2
