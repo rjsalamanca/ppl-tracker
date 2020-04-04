@@ -14,7 +14,8 @@ import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
 import { UserContext } from './contexts/UserContext';
 
-import RoutineContextProvider from './components/providers/CreateRoutineProvider';
+import CreateRoutineContextProvider from './components/providers/CreateRoutineProvider';
+import RoutineProvider from './components/providers/RoutineProvider';
 
 import './App.css';
 
@@ -38,44 +39,6 @@ function App() {
       ]
    );
 
-   // CreateRoutineContext 
-   // const [routineName, setRoutineName] = useState('');
-   // const [routineDays, setRoutineDays] = useState([]);
-   // const [tempExercises, setTempExercises] = useState([]);
-
-   // const createRoutineValues = useMemo(() => (
-   //    {
-   //       routineName, setRoutineName,
-   //       routineDays, setRoutineDays,
-   //       tempExercises, setTempExercises
-   //    }
-   // ),
-   //    [
-   //       routineName, setRoutineName,
-   //       routineDays, setRoutineDays,
-   //       tempExercises, setTempExercises
-   //    ]
-   // );
-
-   //Routine Context
-   const [selectedWorkout, setSelectedWorkout] = useState({});
-   const [date, setDate] = useState(new Date());
-   const [fullRoutine, setFullRoutine] = useState({ routine_found: false });
-
-   const routineValues = useMemo(() => (
-      {
-         selectedWorkout, setSelectedWorkout,
-         date, setDate,
-         fullRoutine, setFullRoutine
-      }
-   ),
-      [
-         selectedWorkout, setSelectedWorkout,
-         date, setDate,
-         fullRoutine, setFullRoutine
-      ]
-   );
-
    return (
       <CookiesProvider>
          <Router>
@@ -86,27 +49,8 @@ function App() {
                   <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
                   <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
                </Switch>
-               {/* {!!cookies.user.isLoggedIn && */}
-               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={RoutineContextProvider} LoadComponent={CreateRoutine} />
-
-               {/* <Switch> 
-                  <PrivateRoute path="/ppl/create_routine" exact render={(props) =>
-                     <CreateRoutineContext.Provider value={createRoutineValues}>
-                        <CreateRoutine {...props} />
-                     </CreateRoutineContext.Provider>
-                  } />
-               </Switch> */}
-
-               {/* {!!cookies.user.isLoggedIn && */}
-
-               {/* <Switch> */}
-               {/* <PrivateRoute path="/profile" exact render={(props) =>
-                  <RoutineContext.Provider value={routineValues}>
-                     <ProfilePage {...props} />
-                  </RoutineContext.Provider>
-               } /> */}
-               {/* </Switch> */}
-
+               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
+               <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />s
             </UserContext.Provider>
          </Router>
       </CookiesProvider>
