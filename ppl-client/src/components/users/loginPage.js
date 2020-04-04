@@ -49,14 +49,12 @@ function Login(props) {
 
             if (data.errorCode === 0) {
                setCookie('user', { isLoggedIn: true })
-               await setErrorCode(0);
-
+               setErrorCode(0);
             } else {
-               await setErrorCode(data.errorCode);
+               setErrorCode(data.errorCode);
             }
 
          } catch (err) {
-            console.log(err)
             setErrorCode(4);
          }
       }

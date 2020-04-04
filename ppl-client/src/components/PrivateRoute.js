@@ -10,7 +10,7 @@ function PrivateRoute({ ContextProvider, LoadComponent, ...routerProps }) {
    useEffect(() => {
       checkLoginStatus();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [])
+   }, [cookies])
 
    const checkLoginStatus = async () => {
       if (!!cookies.user.isLoggedIn) {

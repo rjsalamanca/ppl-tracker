@@ -1,20 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Nav, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 
+import { UserContext } from '../contexts/UserContext'
+
 function NavBar() {
    const [cookies, setCookie] = useCookies(['user']);
-
-   const loggedInToLogout = () => {
+   const { update, setUpdate } = useContext(UserContext);
+   const loggedInToLogout = async () => {
       const url = "http://localhost:3000/users/logout";
       try {
-         fetch(url, {
+         const response = await fetch(url, {
             method: 'GET',
             credentials: "include"
-         }).then((data) => {
-            setCookie('user', { isLoggedIn: false })
          })
+         const data = await response.json();
+         if (!data.is_logged_in) {
+            setUpdate(true);
+            setCookie('user', { isLoggedIn: false })
+            setUpdate(false);
+         }
+         setCookie('user', { isLoggedIn: false })
+
+         console.log(data);
+         // fetch(url, {
+         //    method: 'GET',
+         //    credentials: "include"
+         // }).then((data) => {
+         //    console.log(data)
+         //    setCookie('user', { isLoggedIn: false })
+         // })
       } catch (err) {
          console.log('cant logout')
       }

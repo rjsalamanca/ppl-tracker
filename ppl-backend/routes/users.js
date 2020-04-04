@@ -26,8 +26,8 @@ router.get('/logout', async (req, res) => {
    req.session.expires = new Date(Date.now() - 1000000000000);
    req.session.maxAge = 1;
 
-   req.session.destroy();
-   res.clearCookie();
+   await req.session.destroy();
+   await res.clearCookie();
 
    res.json({
       is_logged_in: false

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 import NavBar from './components/navBar';
 import LandingPage from './components/landingPage';
@@ -10,6 +10,7 @@ import CreateRoutine from './components/system/routine_creation/createRoutine';
 
 import PrivateRoute from './components/PrivateRoute';
 
+import { UserContext } from './contexts/UserContext';
 import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
 
@@ -20,21 +21,26 @@ import './App.css';
 
 function App() {
    const [run, setRun] = useState(true);
+   const [update, setUpdate] = useState(false);
    const [cookies, setCookie] = useCookies(['user']);
 
    useEffect(() => {
-      runOnce();
-   }, [cookies]);
+      runContent();
+   }, [cookies, update]);
 
-   const runOnce = () => {
+   const runContent = () => {
       if (!!cookies.hasOwnProperty('user')) {
          return setRun(
             <Router>
                <NavBar />
                <Switch>
                   <Route path="/" exact render={(props) => < LandingPage {...props} />} />
-                  <Route path="/login" exact render={(props) => <LoginPage {...props} />} />
-                  <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
+                  <Route path="/login" exact render={(props) => {
+                     console.log(cookies)
+                     return !!cookies.user.isLoggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
+                  }
+                  } />
+                  <Route path="/register" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
                </Switch>
                <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
                <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />
@@ -42,14 +48,15 @@ function App() {
          )
       } else {
          setCookie('user', { isLoggedIn: false })
-         console.log(cookies)
          return setRun(<div>hi</div>)
       }
    }
 
    return (
       <CookiesProvider>
-         {run}
+         <UserContext.Provider value={{ update, setUpdate }}>
+            {run}
+         </UserContext.Provider>
       </CookiesProvider>
    );
 }
