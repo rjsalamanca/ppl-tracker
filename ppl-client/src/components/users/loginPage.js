@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
-import { UserContext } from '../../contexts/UserContext';
 import { useCookies } from 'react-cookie';
 
 import '../../App.css';
@@ -17,7 +16,7 @@ function Login(props) {
    useEffect(() => {
       if (props.location.errorCode === 0 && cookies.user.isLoggedIn === false) setErrorCode(5);
 
-   }, [props.location.errorCode]);
+   }, [props.location.errorCode, cookies]);
 
    const login = async (e) => {
       const formCheck = document.getElementById('loginForm').checkValidity();

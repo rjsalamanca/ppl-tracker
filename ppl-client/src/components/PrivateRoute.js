@@ -9,6 +9,8 @@ function PrivateRoute({ ContextProvider, LoadComponent, ...routerProps }) {
 
    useEffect(() => {
       checkLoginStatus();
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
 
    const checkLoginStatus = async () => {

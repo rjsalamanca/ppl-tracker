@@ -20,7 +20,7 @@ import './App.css';
 
 function App() {
    // Cookies
-   const [cookies, setCookie] = useCookies(['user']);
+   // const [cookies, setCookie] = useCookies(['user']);
 
    // User Context
    const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -88,6 +88,7 @@ function App() {
                </Switch>
                {/* {!!cookies.user.isLoggedIn && */}
                <PrivateRoute path="/ppl/create_routine" exact ContextProvider={RoutineContextProvider} LoadComponent={CreateRoutine} />
+
                {/* <Switch> 
                   <PrivateRoute path="/ppl/create_routine" exact render={(props) =>
                      <CreateRoutineContext.Provider value={createRoutineValues}>

@@ -11,7 +11,7 @@ import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
 
 import '../css/createRoutineStyle.css';
 
-function CreateRoutine(props) {
+function CreateRoutine() {
    const [dateCreation] = useState(moment(new Date()).format("YYYY-MM-DD"));
    const [errorCodeCreate, setErrorCodeCreate] = useState(0);
    const [redirectCreate, setRedirectCreate] = useState(false);
