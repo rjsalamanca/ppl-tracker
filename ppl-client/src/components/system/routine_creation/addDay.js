@@ -53,6 +53,12 @@ function AddDay() {
       setRoutineDays(tempDays);
    }
 
+   const removeDay = (idx) => {
+      let tempDays = [...routineDays];
+      tempDays.splice(idx, 1);
+      setRoutineDays(tempDays);
+   }
+
    const displayAddDayModal = () => {
       let errorMessage = "";
 
@@ -97,6 +103,7 @@ function AddDay() {
 
       return routineDays.length > 0 && routineDays.map((day, dayIdx) =>
          <div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
+            <Button className="setDeleteDay" variant="secondary" onClick={() => removeDay(dayIdx)}>X</Button>
             <h4 className="dayName h4">Day {dayIdx + 1} - {day.name}</h4>
             <h6 className="exerciseHeader h6">Exercises:</h6>
             <ol>

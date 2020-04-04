@@ -14,6 +14,7 @@
    flex-grow: 1;
    background-color:#E8E8E8;
    margin: 5px;
+   position: relative;
 }
 
 .singleDayContainer ol{
@@ -47,4 +48,12 @@
 
 .exerciseHeader{
    color:#585858;
+}
+
+.setDeleteDay{
+   border-radius:50%;
+   position: absolute;
+   right:-10px;
+   top:-10px;
+   
 }

@@ -88,8 +88,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 [X] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
 [X] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods
 [] Editing of routine/exericses/sets.
-[IP] Ability to remove days when creating routine.
-[IP] Ability to remove exercises when creating routine.
+[X] Ability to remove days when creating routine.
+[X] Ability to remove exercises when creating routine.
 [X] Rework with hooks or redux for state management.
    - We're using hooks
    [X] Convert Profile Route and all children components.

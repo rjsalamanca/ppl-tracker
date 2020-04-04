@@ -43,10 +43,16 @@ function AddExercises(props) {
       setExerciseSets(newSets);
    };
 
-   const handleRemoveSets = (idx) => {
+   const removeSets = (idx) => {
       let newSets = [...exerciseSets];
       newSets.splice(idx, 1);
       setExerciseSets(newSets);
+   }
+
+   const removeExercise = (idx) => {
+      let tempDays = [...exercises];
+      tempDays.splice(idx, 1);
+      setExercises(tempDays);
    }
 
    const modalTrigger = () => {
@@ -135,7 +141,7 @@ function AddExercises(props) {
                                  )
                               }
                            </select>
-                           <Button className="setDelete" variant="danger" onClick={() => handleRemoveSets(idx)}>
+                           <Button className="setDelete" variant="danger" onClick={() => removeSets(idx)}>
                               X
                            </Button>
                         </div>
@@ -168,6 +174,7 @@ function AddExercises(props) {
       return (
          exercises.map((exercise, idx) =>
             <div className="exerciseAndSets" key={`exercise-${idx}`}>
+               <Button className="setDeleteExercise" variant="secondary" onClick={() => removeExercise(idx)}>X</Button>
                <h4 className="table-primary h4 text-center pt-2 pb-2">{exercise.name}</h4>
                <table className="table table-striped table-hover exercise-table">
                   <thead>

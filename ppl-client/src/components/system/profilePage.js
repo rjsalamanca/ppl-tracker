@@ -20,6 +20,7 @@ function Profile() {
 
    useEffect(() => {
       loadTodaysWorkouts();
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [date])
 

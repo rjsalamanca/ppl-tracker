@@ -32,6 +32,15 @@
    border:1px solid #007bff;
    flex-basis:200px;
    margin: 10px 5px;
+   position:relative;
+}
+
+.setDeleteExercise{
+   border-radius:50%;
+   position: absolute;
+   right:-10px;
+   top:-10px;
+   
 }
 
 .exerciseAndSets .h4{
