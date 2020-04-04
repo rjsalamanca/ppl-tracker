@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { CreateRoutineContext } from '../../contexts/CreateRoutineContext';
-import CreateRoutine from '../system/routine_creation/createRoutine'
+
 function CreateRoutineProvider({ LoadComponent, ...rest }) {
    const [routineName, setRoutineName] = useState('');
    const [routineDays, setRoutineDays] = useState([]);
@@ -22,7 +22,6 @@ function CreateRoutineProvider({ LoadComponent, ...rest }) {
 
    return (
       <CreateRoutineContext.Provider value={createRoutineValues}>
-         {/* <CreateRoutine /> */}
          <LoadComponent {...rest} />
       </CreateRoutineContext.Provider>
    )

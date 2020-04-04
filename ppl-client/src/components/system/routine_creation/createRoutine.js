@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import { Redirect } from "react-router-dom";
 import { Button } from "react-bootstrap";
@@ -17,14 +17,6 @@ function CreateRoutine(props) {
    const [redirectCreate, setRedirectCreate] = useState(false);
 
    const { routineName, setRoutineName, routineDays, setRoutineDays } = useContext(CreateRoutineContext);
-   useEffect(() => {
-      console.log('loaded component')
-   }, [])
-
-   useEffect(() => {
-      console.log(routineName)
-      console.log(props)
-   }, [routineName])
 
    const saveRoutine = async () => {
       let sendInfo = {

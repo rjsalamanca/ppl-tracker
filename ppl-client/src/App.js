@@ -1,4 +1,4 @@
-import React, { useState, useMemo, createContext } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import NavBar from './components/navBar';
@@ -8,13 +8,12 @@ import RegisterPage from './components/users/registerPage';
 import ProfilePage from './components/system/profilePage';
 import CreateRoutine from './components/system/routine_creation/createRoutine';
 
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './components/PrivateRoute';
 
 import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
 import { UserContext } from './contexts/UserContext';
-import { CreateRoutineContext } from './contexts/CreateRoutineContext';
-// import { RoutineContext } from './contexts/RoutineContext';
+
 import RoutineContextProvider from './components/providers/CreateRoutineProvider';
 
 import './App.css';
@@ -88,7 +87,7 @@ function App() {
                   <Route path="/register" exact render={(props) => <RegisterPage {...props} />} />
                </Switch>
                {/* {!!cookies.user.isLoggedIn && */}
-               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={RoutineContextProvider} Component={CreateRoutine} />
+               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={RoutineContextProvider} LoadComponent={CreateRoutine} />
                {/* <Switch> 
                   <PrivateRoute path="/ppl/create_routine" exact render={(props) =>
                      <CreateRoutineContext.Provider value={createRoutineValues}>

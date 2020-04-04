@@ -12,7 +12,6 @@ function Login(props) {
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
 
-   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
    const [cookies, setCookie] = useCookies(['user']);
 
    useEffect(() => {
