@@ -60,7 +60,6 @@ function NavBar() {
                         </Nav>
                   }[cookies.user.isLoggedIn]
                }
-
             </Nav>
             {
                {
