@@ -2,13 +2,17 @@
 
 PPL is short for Push Pull Legs. This project was created to be a personal tracker for my Push Pull Legs workout cycle. As I've been working on this tracker, I've added features that turned in into a full on workout tracker. You're able to create multiple workout routines and you're able to track multiple workouts per day.
 
-### LEGEND
+## LEGEND
+
+***
 
 - [x] - Completed
 - [IP] - In Progress
 - [ ] - Incomplete
 
-### Bug Fixes:
+### Bug Fixes
+
+***
 
 - [x] Routine name needs to be trimmed before inputting in DB.
 - [x] Creating of routine needs to happen in 1 SQL statement.
@@ -50,7 +54,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    - [x] Once we logout we can't access the login page. 
       - Used hooks for a force reload
 
-### STYLING:
+### STYLING
+
+***
 
 - [ ] Landing page.
 - [x] Creation of Routines
@@ -65,7 +71,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [] Rework Profile Page look
 - [] Add a default background
 
-### TO DO (New Features):
+### TO DO (New Features)
+
+***
 
 - [ ] Indicator on Workouts Schedule for Today: Completed vs Non Completed.
 - [x] Rework login back end.
