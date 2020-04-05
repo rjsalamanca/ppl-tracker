@@ -11,8 +11,9 @@ function AddDay() {
    const [show, setShow] = useState(false);
    const [dayName, setDayName] = useState('');
    const [dayError, setDayError] = useState(0);
+   const [editing, setEditing] = useState({ idx: null, status: false });
 
-   const { routineDays, setRoutineDays, tempExercises, setTempExercises } = useContext(CreateRoutineContext);
+   const { routineDays, setRoutineDays, tempExercises, setTempExercises, setExercises } = useContext(CreateRoutineContext);
 
    const clearDayError = () => setDayError(0);
 
@@ -27,7 +28,6 @@ function AddDay() {
       }
    }
 
-
    const saveExercisesToDay = async () => {
       let tempDays = [...routineDays];
 
@@ -36,6 +36,7 @@ function AddDay() {
             tempDays.push({ name: dayName, exercises: tempExercises })
 
             setRoutineDays(tempDays);
+            setDayName('')
             setDayError(0);
             setShow(false)
          } else {
@@ -61,14 +62,37 @@ function AddDay() {
    }
 
    const editDay = (idx) => {
+      setEditing({ idx, status: true });
       console.log(routineDays[idx])
       if (!!show) {
          setShow(false)
       } else {
          setShow(true);
-         // setDayName('');
-         // setTempExercises([]);
-         setDayError(0)
+         setDayName(routineDays[idx].name)
+         setExercises(routineDays[idx].exercises)
+         setDayError(0);
+      }
+   }
+
+   const saveEditDay = () => {
+      let tempDays = [...routineDays];
+
+      if (dayName !== '') {
+         if (tempExercises.length !== 0) {
+
+            tempDays[editing.idx] = ({ name: dayName, exercises: tempExercises });
+
+            setRoutineDays(tempDays);
+            setDayName('');
+            setExercises([])
+            setDayError(0);
+            setEditing(false);
+            setShow(false);
+         } else {
+            setDayError(2)
+         }
+      } else {
+         setDayError(1)
       }
    }
 
@@ -97,7 +121,7 @@ function AddDay() {
             <Modal.Body>
                <Form.Group controlId="formBasicEmail">
                   <Form.Label>Day Name: </Form.Label>
-                  <Form.Control type="input" onChange={(e) => setDayName(e.target.value.trim())} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                  <Form.Control type="input" onChange={(e) => setDayName(e.target.value)} value={dayName} placeholder="Ex. Push Day, Pull Day, Leg Day" />
                </Form.Group>
                <AddExercises clearDayError={clearDayError} />
                <div className="error-message">
@@ -106,7 +130,11 @@ function AddDay() {
             </Modal.Body>
             <Modal.Footer>
                <Button variant="secondary" onClick={(e) => setShow(false)}>Close</Button>
-               <Button variant="primary" onClick={(e) => saveExercisesToDay(e)}>Save Day</Button>
+               {!!editing.status ?
+                  <Button variant="primary" onClick={(e) => saveEditDay(e)}>Edit Day</Button>
+                  :
+                  <Button variant="primary" onClick={(e) => saveExercisesToDay(e)}>Save Day</Button>
+               }
             </Modal.Footer>
          </Modal>
       );

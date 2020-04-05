@@ -8,11 +8,11 @@ import "../css/addExercisesStyle.css";
 function AddExercises(props) {
    const [show, setShow] = useState(false);
    const [exerciseName, setExerciseName] = useState('');
-   const [exercises, setExercises] = useState([]);
+   // const [exercises, setExercises] = useState([]);
    const [exerciseError, setExerciseError] = useState(0);
    const [exerciseSets, setExerciseSets] = useState([]);
 
-   const { setTempExercises } = useContext(CreateRoutineContext)
+   const { exercises, setExercises, setTempExercises } = useContext(CreateRoutineContext)
 
    const handleClose = () => {
       let hidePreviousModal = document.getElementById('addDayModal').parentNode;

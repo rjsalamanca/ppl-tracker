@@ -4,18 +4,21 @@ import { CreateRoutineContext } from '../../contexts/CreateRoutineContext';
 function CreateRoutineProvider({ LoadComponent, ...rest }) {
    const [routineName, setRoutineName] = useState('');
    const [routineDays, setRoutineDays] = useState([]);
+   const [exercises, setExercises] = useState([]);
    const [tempExercises, setTempExercises] = useState([]);
 
    const createRoutineValues = useMemo(() => (
       {
          routineName, setRoutineName,
          routineDays, setRoutineDays,
-         tempExercises, setTempExercises
+         exercises, setExercises,
+         tempExercises, setTempExercises,
       }
    ),
       [
          routineName, setRoutineName,
          routineDays, setRoutineDays,
+         exercises, setExercises,
          tempExercises, setTempExercises
       ]
    );
