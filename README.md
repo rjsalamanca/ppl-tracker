@@ -90,7 +90,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Editing of routine/exericses/sets when creating routine.
 - [x] Ability to remove days when creating routine.
 - [x] Ability to remove exercises when creating routine.
-- [ ] Ability to edit routines/days/exercises after we have **SAVED**.
+
+:small_orange_diamond:  Ability to edit routines/days/exercises after we have **SAVED**.
+
 - [x] Rework with hooks or redux for state management.
   - We're using hooks
   - [x] Convert Profile Route and all children components.

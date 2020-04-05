@@ -7,6 +7,7 @@ import LoginPage from './components/users/loginPage';
 import RegisterPage from './components/users/registerPage';
 import ProfilePage from './components/system/profilePage';
 import CreateRoutine from './components/system/routine_creation/createRoutine';
+import EditRoutines from './components/system/editRoutines';
 
 import PrivateRoute from './components/PrivateRoute';
 
@@ -38,12 +39,9 @@ function App() {
                <NavBar />
                <Switch>
                   <Route path="/" exact render={(props) => < LandingPage {...props} />} />
-                  <Route path="/login" exact render={(props) => {
-                     // console.log(cookies);
-                     return !!cookies.user.isLoggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
-                  }
-                  } />
+                  <Route path="/login" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : <LoginPage {...props} />} />
                   <Route path="/register" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
+                  <Route path="/ppl/edit_routines" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : <EditRoutines {...props} />} />
                </Switch>
                <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
                <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />

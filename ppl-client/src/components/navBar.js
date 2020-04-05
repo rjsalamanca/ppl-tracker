@@ -45,6 +45,7 @@ function NavBar() {
                         <Nav className="navbar-nav">
                            <Nav.Item className="nav-item active">
                               <Link className="nav-link" to="/ppl/create_routine">Create Routine</Link>
+                              <Link className="nav-link" to="/ppl/edit_routines">Edit Routine</Link>
                            </Nav.Item>
                            <Nav.Item className="nav-item active">
                               <Link className="nav-link" to="/profile">Profile</Link>
