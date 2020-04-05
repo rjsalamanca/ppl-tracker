@@ -2,17 +2,13 @@
 
 PPL is short for Push Pull Legs. This project was created to be a personal tracker for my Push Pull Legs workout cycle. As I've been working on this tracker, I've added features that turned in into a full on workout tracker. You're able to create multiple workout routines and you're able to track multiple workouts per day.
 
-**************
-*   LEGEND   *
-**************
+### LEGEND
 
 - [x] - Completed
 - [IP] - In Progress
-- [] - Incomplete
+- [ ] - Incomplete
 
-**************
-* Bug Fixes: *
-**************
+### Bug Fixes:
 
 - [x] Routine name needs to be trimmed before inputting in DB.
 - [x] Creating of routine needs to happen in 1 SQL statement.
@@ -42,7 +38,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Start button displaying on rest days
 - [x] Error when fetching scheduled workouts for today
    - Bug was created when we had routines without days (happened during testing)
-- [] Flash of unloaded content when we visit the profile page.
+- [ ] Flash of unloaded content when we visit the profile page.
 - [x] Hooks not working when working with PrivateRoute Component
    - Checking if still logged in still needs work.
    - Had to rework on providers
@@ -54,11 +50,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
    - [x] Once we logout we can't access the login page. 
       - Used hooks for a force reload
 
-************
-* STYLING: *
-************
+### STYLING:
 
-- [] Landing page.
+- [ ] Landing page.
 - [x] Creation of Routines
    - [x] Solved modal on top of modal with simple javascript (Possible rework with React?)
    - [x] Format the look of exercises in the 'Add A Day' modal.
@@ -71,11 +65,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [] Rework Profile Page look
 - [] Add a default background
 
-**************************
-*  TO DO (New Features): *
-**************************
+### TO DO (New Features):
 
-- [] Indicator on Workouts Schedule for Today: Completed vs Non Completed.
+- [ ] Indicator on Workouts Schedule for Today: Completed vs Non Completed.
 - [x] Rework login back end.
    - Also worked on check if logged in to retrieve data.
 - [x] Rework checking if still logged in.
@@ -85,7 +77,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Add Rest Days when creating routine.
 - [x] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
 - [x] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods
-- [] Editing of routine/exericses/sets.
+- [ ] Editing of routine/exericses/sets.
 - [x] Ability to remove days when creating routine.
 - [x] Ability to remove exercises when creating routine.
 - [x] Rework with hooks or redux for state management.
@@ -98,7 +90,6 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Work on failsafes for routine creation
    - [x] Fail Safe for routine name without any days
    - [x] Rework Error Codes/Refactor/Remove commented code
-- [] Add end date for routine so we can finish
-- [] Add an end routine button incase we wanted to end routine early
-- [] Progress Page for our routines
-
+- [ ] Add end date for routine so we can finish
+- [ ] Add an end routine button incase we wanted to end routine early
+- [ ] Progress Page for our routines
