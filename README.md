@@ -7,7 +7,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 ***
 
 - [x] - Completed
+
 :small_orange_diamond: - In Progress
+
 - [ ] - Incomplete
 
 ### Bug Fixes
