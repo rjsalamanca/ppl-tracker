@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Nav, Button } from 'react-bootstrap';
+import { Nav, NavDropdown, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 
@@ -43,10 +43,17 @@ function NavBar() {
                   {
                      true:
                         <Nav className="navbar-nav">
-                           <Nav.Item className="nav-item active">
-                              <Link className="nav-link" to="/ppl/create_routine">Create Routine</Link>
-                              <Link className="nav-link" to="/ppl/edit_routines">Edit Routine</Link>
-                           </Nav.Item>
+                           <div className="nav-item dropdown">
+                              <div className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                 Routine
+                              </div>
+                              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                 <NavDropdown.Item className="dropdown-item" href="/ppl/create_routine">Create Routine</NavDropdown.Item>
+                                 <NavDropdown.Divider />
+                                 <NavDropdown.Item className="dropdown-item" href="/ppl/edit_routines">Edit Routines</NavDropdown.Item>
+                              </div>
+                           </div>
+
                            <Nav.Item className="nav-item active">
                               <Link className="nav-link" to="/profile">Profile</Link>
                            </Nav.Item>
