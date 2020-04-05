@@ -84,7 +84,6 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - Navigation now works as it should.
   - Hooks are working throughout the site.
   - Used cookies to store user login info.
-
 - [x] Add Rest Days when creating routine.
 - [x] Remove Workouts Scheduled for Today if the date is before the created Routine Date.
 - [x] Rework of componentWillReceiveProps in routineInformation.js - CHANGED life cycle methods

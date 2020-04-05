@@ -27,6 +27,7 @@ function AddDay() {
       }
    }
 
+
    const saveExercisesToDay = async () => {
       let tempDays = [...routineDays];
 
@@ -57,6 +58,18 @@ function AddDay() {
       let tempDays = [...routineDays];
       tempDays.splice(idx, 1);
       setRoutineDays(tempDays);
+   }
+
+   const editDay = (idx) => {
+      console.log(routineDays[idx])
+      if (!!show) {
+         setShow(false)
+      } else {
+         setShow(true);
+         // setDayName('');
+         // setTempExercises([]);
+         setDayError(0)
+      }
    }
 
    const displayAddDayModal = () => {
@@ -103,7 +116,8 @@ function AddDay() {
 
       return routineDays.length > 0 && routineDays.map((day, dayIdx) =>
          <div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
-            <Button className="setDeleteDay" variant="secondary" onClick={() => removeDay(dayIdx)}>X</Button>
+            <Button className="editDay" variant="secondary" onClick={() => editDay(dayIdx)}>Edit</Button>
+            <Button className="deleteDay" variant="secondary" onClick={() => removeDay(dayIdx)}>X</Button>
             <h4 className="dayName h4">Day {dayIdx + 1} - {day.name}</h4>
             <h6 className="exerciseHeader h6">Exercises:</h6>
             <ol>
@@ -124,7 +138,7 @@ function AddDay() {
             {displayDays()}
          </div>
          <Form>
-            <Button className="mb-3 btn-outline-primary" variant="light" onClick={(e) => modalTrigger(e)}>Add A Day</Button>
+            <Button className="mb-3 btn-outline-primary" variant="light" onClick={() => modalTrigger()}>Add A Day</Button>
             <Button className="mb-3 ml-3 btn-outline-primary" variant="light" onClick={(e) => addRestDay(e)}>Add A Rest Day</Button>
          </Form>
       </div>
