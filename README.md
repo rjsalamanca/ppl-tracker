@@ -99,6 +99,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - [x] Be able to edit the whole routine.
   - [ ] Add Finish button.
   - [ ] Work on backend UPDATE.
+  - [x] Updating of select doesn't work properly.
 
 - [x] Rework with hooks or redux for state management.
   - We're using hooks

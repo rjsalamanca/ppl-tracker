@@ -69,6 +69,10 @@ function EditRoutines() {
    }
 
    const handleSelect = (e) => {
+      //reset values before we reload
+      setRoutineName('');
+      setRoutineDays([]);
+      setFullRoutine({})
       setSelectedRoutine(e.target.value);
    }
 
