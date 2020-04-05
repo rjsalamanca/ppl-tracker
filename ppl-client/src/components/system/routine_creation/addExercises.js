@@ -8,11 +8,11 @@ import "../css/addExercisesStyle.css";
 function AddExercises(props) {
    const [show, setShow] = useState(false);
    const [exerciseName, setExerciseName] = useState('');
-   // const [exercises, setExercises] = useState([]);
    const [exerciseError, setExerciseError] = useState(0);
    const [exerciseSets, setExerciseSets] = useState([]);
+   const [editing, setEditing] = useState({ idx: null, status: false });
 
-   const { exercises, setExercises, setTempExercises } = useContext(CreateRoutineContext)
+   const { exercises, setExercises, tempExercises, setTempExercises } = useContext(CreateRoutineContext);
 
    const handleClose = () => {
       let hidePreviousModal = document.getElementById('addDayModal').parentNode;
@@ -53,6 +53,17 @@ function AddExercises(props) {
       let tempDays = [...exercises];
       tempDays.splice(idx, 1);
       setExercises(tempDays);
+   }
+
+   const editExercise = (idx) => {
+      props.clearDayError();
+
+      setEditing({ idx, status: true });
+      setExerciseName(tempExercises[idx].name);
+      setExerciseSets(tempExercises[idx].sets)
+      setExerciseError(0);
+
+      (!!show) ? handleClose() : handleShow();
    }
 
    const modalTrigger = () => {
@@ -103,6 +114,29 @@ function AddExercises(props) {
       }
    }
 
+   const saveEditExercise = () => {
+      let newExercises = [...exercises];
+      let tempSets = exerciseSets.filter((set) => set.weight !== null);
+
+      if (exerciseName !== '') {
+         for (let i = 0; i < exerciseSets.length; i++) {
+            if (exerciseSets[i].weight === null) {
+               setExerciseError(1)
+               break;
+            }
+         }
+         if (exerciseSets.length === tempSets.length) {
+            newExercises[editing.idx] = ({ name: exerciseName, sets: exerciseSets })
+            setExercises(newExercises);
+            setExerciseError(0);
+            setTempExercises(newExercises);
+            handleClose();
+         }
+      } else {
+         setExerciseError(2)
+      }
+   }
+
    const displayExerciseModal = () => {
       let errorMessage = "";
 
@@ -128,7 +162,7 @@ function AddExercises(props) {
             <Modal.Body>
                <Form.Group controlId="formBasicEmail">
                   <div>
-                     Exercise Name: <Form.Control type="input" onChange={(e) => setExerciseName(e.target.value.trim())} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                     Exercise Name: <Form.Control type="input" onChange={(e) => setExerciseName(e.target.value)} value={exerciseName} placeholder="Ex. Push Day, Pull Day, Leg Day" />
                      {exerciseSets.map((set, idx) =>
                         <div key={`set-${idx + 1}`} className="setContainer">
                            <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
@@ -154,12 +188,14 @@ function AddExercises(props) {
                </Form.Group>
             </Modal.Body>
             <Modal.Footer>
-               <Button variant="secondary" onClick={handleClose}>
-                  Close
-               </Button>
-               <Button variant="primary" onClick={saveExercise}>
-                  Save Excercise
-               </Button>
+               <Button variant="secondary" onClick={handleClose}>Close</Button>
+
+               {!!editing.status ?
+                  <Button variant="primary" onClick={(e) => saveEditExercise(e)}>Edit Day</Button>
+                  :
+                  <Button variant="primary" onClick={(e) => saveExercise(e)}>Save Day</Button>
+               }
+
             </Modal.Footer>
          </Modal>
       );
@@ -174,7 +210,8 @@ function AddExercises(props) {
       return (
          exercises.map((exercise, idx) =>
             <div className="exerciseAndSets" key={`exercise-${idx}`}>
-               <Button className="setDeleteExercise" variant="secondary" onClick={() => removeExercise(idx)}>X</Button>
+               <Button className="deleteExercise" variant="secondary" onClick={() => removeExercise(idx)}>X</Button>
+               <Button className="editExercise" variant="secondary" onClick={() => editExercise(idx)}>Edit</Button>
                <h4 className="table-primary h4 text-center pt-2 pb-2">{exercise.name}</h4>
                <table className="table table-striped table-hover exercise-table">
                   <thead>

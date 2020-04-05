@@ -35,12 +35,19 @@
    position:relative;
 }
 
-.setDeleteExercise{
+.deleteExercise{
    border-radius:50%;
    position: absolute;
    right:-10px;
    top:-10px;
    
+}
+
+.editExercise{
+   position: absolute;
+   left:-10px;
+   top:-10px;
+   border:1px solid white;
 }
 
 .exerciseAndSets .h4{

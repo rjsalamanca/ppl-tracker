@@ -21,6 +21,7 @@ function AddDay() {
       if (!!show) {
          setShow(false)
       } else {
+         setExercises([])
          setShow(true);
          setDayName('');
          setTempExercises([]);
@@ -63,7 +64,6 @@ function AddDay() {
 
    const editDay = (idx) => {
       setEditing({ idx, status: true });
-      console.log(routineDays[idx])
       if (!!show) {
          setShow(false)
       } else {
@@ -79,12 +79,10 @@ function AddDay() {
 
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
-
             tempDays[editing.idx] = ({ name: dayName, exercises: tempExercises });
-
             setRoutineDays(tempDays);
             setDayName('');
-            setExercises([])
+            setExercises([]);
             setDayError(0);
             setEditing(false);
             setShow(false);
