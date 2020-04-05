@@ -55,13 +55,13 @@ class PPL_System {
                   routine.date_started,
                   (SELECT json_agg(RD)
                      FROM(
-                        SELECT routine_day.day_name, 
+                        SELECT routine_day.day_name as name, 
                            routine_day.id AS routine_day_id,
                            routine_day.routine_id,
                            (SELECT json_agg(EXER)
                               FROM(
                                  SELECT id,
-                                 exercise_name,
+                                 exercise_name as name,
                                  routine_day_id,
                                  (SELECT json_agg(single_set)
                                     FROM(

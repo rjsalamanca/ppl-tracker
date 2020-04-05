@@ -80,9 +80,9 @@ function RoutineInformation() {
                   {
                      workoutDays[day] !== null ?
                         <div>
-                           Workout: {workoutDays[day].day_name}
+                           Workout: {workoutDays[day].name}
                            {
-                              workoutDays[day].day_name.includes("Rest Day #") ?
+                              workoutDays[day].name.includes("Rest Day #") ?
                                  <p className="m-3">
                                     <b>Sit back and relax, on your rest day.</b>
                                  </p>
@@ -90,8 +90,8 @@ function RoutineInformation() {
                                  <div>
                                     <ul>
                                        {workoutDays[day].exercises.map((exercise, idx) =>
-                                          <li key={`exercise-${workoutDays[day].day_name}-${idx}`}>
-                                             {exercise.exercise_name}
+                                          <li key={`exercise-${workoutDays[day].name}-${idx}`}>
+                                             {exercise.name}
                                           </li>
                                        )}
                                     </ul>

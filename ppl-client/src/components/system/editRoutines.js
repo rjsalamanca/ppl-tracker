@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+
+import AddRoutineName from './routine_creation/addRoutineName';
+import AddDay from './routine_creation/addDay';
+
+import { CreateRoutineContext } from '../../contexts/CreateRoutineContext';
 
 function EditRoutines() {
    const [routines, setRoutines] = useState([]);
@@ -8,10 +13,43 @@ function EditRoutines() {
    const [initialLoad, setInitialLoad] = useState(true);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
 
+   const { routineName, setRoutineName, setRoutineDays, setExercises } = useContext(CreateRoutineContext);
+
    useEffect(() => {
       if (routines.length === 0) checkForRoutines();
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [routines]);
+
+   useEffect(() => {
+      const getFullRoutine = async () => {
+         const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
+         try {
+            const response = await fetch(url, {
+               method: "GET",
+               credentials: "include"
+            });
+
+            const data = await response.json();
+            console.log(data)
+            if (!!data.routine_found) {
+               setRoutineName(data.routine.routine_name);
+               setRoutineDays(data.routine.routine_days);
+               await setFullRoutine(data)
+            } else {
+               await setFullRoutine({ routine_found: false });
+            }
+
+         } catch (err) {
+            console.log(err);
+         }
+      }
+
+      if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') {
+         getFullRoutine();
+      }
+   }, [fullRoutine, setFullRoutine, selectedRoutine]);
+
+
 
    const checkForRoutines = async () => {
       const url = "http://localhost:3000/ppl/routine";
@@ -32,27 +70,6 @@ function EditRoutines() {
 
    const handleSelect = (e) => {
       setSelectedRoutine(e.target.value);
-      getFullRoutine();
-   }
-
-   const getFullRoutine = async () => {
-      const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
-      try {
-         const response = await fetch(url, {
-            method: "GET",
-            credentials: "include"
-         });
-
-         const data = await response.json();
-         console.log(data)
-         if (!!data.routine_found) {
-            await setFullRoutine(data)
-         } else {
-            await setFullRoutine({ routine_found: false });
-         }
-      } catch (err) {
-         console.log(err);
-      }
    }
 
    const displayRoutineInformation = () => {
@@ -87,8 +104,14 @@ function EditRoutines() {
    }
 
    const displayFullRoutine = () => {
+
       if (fullRoutine !== false) {
-         console.log(fullRoutine)
+         return (
+            <div>
+               <AddRoutineName />
+               <AddDay />
+            </div>
+         );
       }
    }
 

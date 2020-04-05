@@ -112,7 +112,7 @@ function WorkoutInformation() {
                </Button>
             </div>
 
-            <h3 className="workoutTitle">{selectedWorkout.day_name}</h3>
+            <h3 className="workoutTitle">{selectedWorkout.name}</h3>
             <Form id="workoutForm">
                <Form.Group controlId="formBasicEmail">
                   {
@@ -120,8 +120,8 @@ function WorkoutInformation() {
                         <div className="workoutInfo">
                            {
                               selectedWorkout.exercises.map((exercise, exerciseIdx) =>
-                                 <div key={`Workout-${selectedWorkout.day_name}-${exercise.exercise_name}`} className="exerciseContainer">
-                                    <b className="exerciseName">Exercise {`${exerciseIdx + 1} : ${exercise.exercise_name}`}</b>
+                                 <div key={`Workout-${selectedWorkout.name}-${exercise.name}`} className="exerciseContainer">
+                                    <b className="exerciseName">Exercise {`${exerciseIdx + 1} : ${exercise.name}`}</b>
                                     <table className="table table-hover exerciseTable ">
                                        <thead>
                                           <tr className="bg-primary text-white">
@@ -134,7 +134,7 @@ function WorkoutInformation() {
                                        <tbody>
                                           {
                                              exercise.sets.map((set, idx) =>
-                                                <tr key={`Workout-${selectedWorkout.day_name}-${exercise.exercise_name}-Set${idx}`}>
+                                                <tr key={`Workout-${selectedWorkout.name}-${exercise.name}-Set${idx}`}>
                                                    <th scope="row">{idx + 1}</th>
                                                    <td>{set.weight}lbs</td>
                                                    <td>{set.reps}</td>

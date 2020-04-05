@@ -125,6 +125,7 @@ function AddExercises(props) {
                break;
             }
          }
+
          if (exerciseSets.length === tempSets.length) {
             newExercises[editing.idx] = ({ name: exerciseName, sets: exerciseSets })
             setExercises(newExercises);
@@ -190,10 +191,11 @@ function AddExercises(props) {
             <Modal.Footer>
                <Button variant="secondary" onClick={handleClose}>Close</Button>
 
-               {!!editing.status ?
-                  <Button variant="primary" onClick={(e) => saveEditExercise(e)}>Edit Day</Button>
-                  :
-                  <Button variant="primary" onClick={(e) => saveExercise(e)}>Save Day</Button>
+               {
+                  !!editing.status ?
+                     <Button variant="primary" onClick={(e) => saveEditExercise(e)}>Edit Day</Button>
+                     :
+                     <Button variant="primary" onClick={(e) => saveExercise(e)}>Save Day</Button>
                }
 
             </Modal.Footer>

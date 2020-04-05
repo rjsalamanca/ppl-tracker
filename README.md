@@ -53,8 +53,11 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - Issue has to deal with logging in
 - [x] Ability to go to the Login and Register page once logged in need to be removed.
   - [x] Restricted Ability to these pages
-  - [x] Once we logout we can't access the login page. 
+  - [x] Once we logout we can't access the login page.
     - Used hooks for a force reload
+- [ ] After adding the editing feature, once we remove all days or all exercsies, we're able to pass.
+  - [ ] Fix addDay
+  - [ ] Fix addExercises  
 
 ### STYLING
 
@@ -66,6 +69,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - [x] Format the look of exercises in the 'Add A Day' modal.
   - [x] Format the look of all days in side routine creation load components.
   - [x] Place errors under the instructions.
+- [ ] Edit Routines
 - [x] Login Page.
 - [x] Register Page.
 - [ ] Transitions when loading new components.
@@ -92,6 +96,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Ability to remove exercises when creating routine.
 
 :small_orange_diamond:  Ability to edit routines/days/exercises after we have **SAVED**.
+  - [x] Be able to edit the whole routine.
+  - [ ] Add Finish button.
+  - [ ] Work on backend UPDATE.
 
 - [x] Rework with hooks or redux for state management.
   - We're using hooks

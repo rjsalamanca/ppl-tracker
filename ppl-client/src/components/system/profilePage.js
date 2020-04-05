@@ -108,7 +108,7 @@ function Profile() {
    }
 
    const loadWorkoutComponent = () => {
-      if (selectedWorkout.hasOwnProperty('day_name')) {
+      if (selectedWorkout.hasOwnProperty('name')) {
          return (<WorkoutInformation />)
       }
    }
@@ -149,7 +149,7 @@ function Profile() {
                            <li key={`todays_workout_${workout.routine_name}_${ind}`} className="list-group-item">
                               {workout.routine_name}
                               <ul className="list-group">
-                                 <li className="list-group-item">{workout.current_workout.day_name}</li>
+                                 <li className="list-group-item">{workout.current_workout.name}</li>
                               </ul>
                            </li>
                         )

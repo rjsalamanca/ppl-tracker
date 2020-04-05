@@ -41,8 +41,9 @@ function App() {
                   <Route path="/" exact render={(props) => < LandingPage {...props} />} />
                   <Route path="/login" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : <LoginPage {...props} />} />
                   <Route path="/register" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
-                  <Route path="/ppl/edit_routines" exact render={(props) => !!cookies.user.isLoggedIn ? <EditRoutines {...props} /> : <Redirect to="/" />} />
                </Switch>
+
+               <PrivateRoute path="/ppl/edit_routines" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={EditRoutines} />
                <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
                <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />
             </Router>

@@ -69,6 +69,7 @@ function AddDay() {
       } else {
          setShow(true);
          setDayName(routineDays[idx].name)
+         setTempExercises(routineDays[idx].exercises)
          setExercises(routineDays[idx].exercises)
          setDayError(0);
       }
