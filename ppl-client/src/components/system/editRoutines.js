@@ -49,7 +49,13 @@ function EditRoutines() {
       }
    }, [fullRoutine, setFullRoutine, selectedRoutine]);
 
-
+   const handleSelect = (e) => {
+      //reset values before we reload
+      setRoutineName('');
+      setRoutineDays([]);
+      setFullRoutine({})
+      setSelectedRoutine(e.target.value);
+   }
 
    const checkForRoutines = async () => {
       const url = "http://localhost:3000/ppl/routine";
@@ -68,13 +74,10 @@ function EditRoutines() {
       }
    }
 
-   const handleSelect = (e) => {
-      //reset values before we reload
-      setRoutineName('');
-      setRoutineDays([]);
-      setFullRoutine({})
-      setSelectedRoutine(e.target.value);
+   const updateRoutine = () => {
+      console.log('updating!')
    }
+
 
    const displayRoutineInformation = () => {
       if (!initialLoad) {
@@ -114,6 +117,7 @@ function EditRoutines() {
             <div>
                <AddRoutineName />
                <AddDay />
+               <Button className="mb-3" type="submit" variant={'danger'} onClick={() => updateRoutine()}>Update</Button>
             </div>
          );
       }
