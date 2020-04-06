@@ -64,31 +64,33 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
 
    let updateRoutine, updateDays, updateExercises;
 
-   //Update Info
+   // Update Routine Name
    if (originalRoutineInfo.routine_name !== routine_name) {
       updateRoutine = await routineModel.updateRoutineName();
-      console.log(updateRoutine)
       console.log('name updated')
    }
 
+   // Update Days, Exercises, Exercise Sets
    if (JSON.stringify(originalRoutineInfo.routine_days) !== JSON.stringify(days)) {
+      // Update Days
       updateDays = await routineModel.updateRoutineDays(days);
-      console.log(updateDays)
-      console.log('days update')
-   } else {
+
+      // Update Exercises 
+      days.map((day, dayIdx) => {
+         console.log('New converted:', JSON.stringify(day.exercises))
+         console.log('Old converted:', JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises));
+         console.log(' ')
+         if (JSON.stringify(day.exercises) !== JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises)) {
+            console.log(' not the same exercises')
+         }
+         return day;
+      })
    }
 
    //Update Exercises
+
+
    res.json({ originalRoutineInfo })
-
-   // // Updare Routine Name.
-   // const updateRoutine = await routineModel.updateRoutineName();
-
-   // if(updateRoutine.rowCount === 1){
-
-   // } else {
-   //    console.log('err update')
-   // }
 });
 
 router.post('/routine/add_routine', requireLogin, async (req, res) => {
