@@ -54,9 +54,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Ability to go to the Login and Register page once logged in need to be removed.
   - [x] Restricted Ability to these pages
   - [x] Once we logout we can't access the login page.
-    - Used hooks for a force reload
-
-:small_orange_diamond: After adding the editing feature, once we remove all days or all exercises, we're able to pass causing us to be able to save null exercises or days
+    - Used hooks for a force reload.
+- [x] After adding the editing feature, once we remove all days or all exercises, we're able to pass causing us to be able to save null exercises or days
   - [x] Fix addDay editing.
   - [x] Fix addExercises editing.
 - [ ] Login bug created with cookies.
