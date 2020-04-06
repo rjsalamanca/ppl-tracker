@@ -171,6 +171,21 @@ class PPL_System {
       }
    }
 
+   async updateRoutineName() {
+      try {
+         const response = await db.result(`
+            UPDATE routine
+            SET routine_name = $1
+            WHERE 
+               id = $2 
+            AND user_id = $3
+         `, [this.routine_name, this.routine_id, this.user_id]);
+         return response;
+      } catch (err) {
+         return err.msgs
+      }
+   }
+
    async addRoutineDays(days) {
       let buildDays = days.map(day => `('${day.name}', ${this.routine_id})`).join(',')
 
@@ -191,15 +206,8 @@ class PPL_System {
          const response = await db.result(`
             INSERT INTO exercises(exercise_name, routine_day_id)
             VALUES ${buildExercises}`);
-         // const response = await db.result(`
-         //    INSERT INTO exercises(exercise_name, routine_day_id)
-         //    VALUES($1, (SELECT id from routine_day WHERE day_name = $2 AND routine_id = $3))
-         //    `, [exercise.name, day.name, this.routine_id]);
          return response;
       } catch (err) {
-         // console.log('being sent: $1 $2 $3', [exercise.name, day.name, this.routine_id])
-         // console.log('in add exercise err:', err);
-
          return err.msg;
       }
    }

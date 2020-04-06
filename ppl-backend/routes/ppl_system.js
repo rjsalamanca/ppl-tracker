@@ -54,6 +54,30 @@ router.get('/get_full_routine/:routine?', requireLogin, async (req, res) => {
    getFullRoutine[0].json_agg === null ? res.json({ routine_found: false }) : res.json({ routine_found: true, routine: getFullRoutine[0].json_agg[0] });
 });
 
+router.post('/routine/update_routine', requireLogin, async (req, res) => {
+   const { routine_id, routine_name, days } = req.body;
+   const user_id = req.session.users.user_id;
+
+   const routineModel = new pplSystemModel(routine_id, routine_name, null, null, user_id);
+   const getFullRoutine = await pplSystemModel.getFullRoutine(routine_name, user_id);
+   const routineInfo = getFullRoutine[0].json_agg[0];
+
+   if (routineInfo.routine_name !== routine_name) {
+      console.log('we need to change')
+   } else {
+      console.log('no change needed')
+   }
+
+   // // Updare Routine Name.
+   // const updateRoutine = await routineModel.updateRoutineName();
+
+   // if(updateRoutine.rowCount === 1){
+
+   // } else {
+   //    console.log('err update')
+   // }
+});
+
 router.post('/routine/add_routine', requireLogin, async (req, res) => {
    const { days, routine_name, todays_date } = req.body;
    const user_id = req.session.users.user_id;

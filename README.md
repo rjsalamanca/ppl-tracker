@@ -98,11 +98,13 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 
 :small_orange_diamond:  Ability to edit routines/days/exercises after we have **SAVED**.
   - [x] Be able to edit the whole routine.
+  :small_orange_diamond: Add Failsafe to update.
 
   :small_orange_diamond: Add Finish button.
 
   :small_orange_diamond: Work on backend UPDATE.
-  - [x] Updating of select doesn't work properly.
+
+  - [x] Updating of select option doesn't work properly.
 - [x] Rework with hooks or redux for state management.
   - We're using hooks
   - [x] Convert Profile Route and all children components.

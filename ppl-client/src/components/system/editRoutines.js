@@ -12,8 +12,9 @@ function EditRoutines() {
    const [fullRoutine, setFullRoutine] = useState(false)
    const [initialLoad, setInitialLoad] = useState(true);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
+   const [errorCode, setErrorCode] = useState(-1);
 
-   const { routineName, setRoutineName, setRoutineDays, setExercises } = useContext(CreateRoutineContext);
+   const { routineName, setRoutineName, routineDays, setRoutineDays } = useContext(CreateRoutineContext);
 
    useEffect(() => {
       if (routines.length === 0) checkForRoutines();
@@ -51,6 +52,7 @@ function EditRoutines() {
 
    const handleSelect = (e) => {
       //reset values before we reload
+      setErrorCode(-1);
       setRoutineName('');
       setRoutineDays([]);
       setFullRoutine({})
@@ -74,8 +76,83 @@ function EditRoutines() {
       }
    }
 
-   const updateRoutine = () => {
-      console.log('updating!')
+   const updateRoutine = async () => {
+      let sendInfo = {
+         routine_id: fullRoutine.routine.routine_id,
+         routine_name: routineName,
+         days: routineDays
+      }
+
+      setErrorCode(-1)
+
+      console.log(sendInfo)
+      if (routineName.length < 3) {
+         setErrorCode(3)
+      } else if (routineDays.length !== 0) {
+
+         const url = "http://localhost:3000/ppl/routine/update_routine";
+
+         ////////////////////////////////////////////////
+         //                 ERROR CODES:               //
+         ////////////////////////////////////////////////
+         // 0: Valid                                   //
+         // 1: Already Created                         //
+         // 2: Routine Insert Failed                   //
+         // 3: Routine Name Must be 3 characters long  //
+         // 4: No Days In Routine                      //
+         // 5: Backend Connection Failed               //
+         ////////////////////////////////////////////////
+
+         try {
+            const response = await fetch(url, {
+               method: "POST",
+               headers: {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json"
+               },
+               credentials: 'include',
+               body: JSON.stringify(sendInfo)
+            });
+
+            const data = await response.json();
+            console.log(data)
+         } catch (err) {
+            // back end connection error
+            setErrorCode(5)
+         }
+      } else {
+         setErrorCode(4)
+      }
+   }
+
+   const displayErrors = () => {
+      let errorMessage = '';
+
+      switch (errorCode) {
+         case 0:
+            break;
+         case 1:
+            break;
+         case 2:
+            break;
+         case 3:
+            errorMessage = 'Your routine name must be atleast 3 characters long.';
+            break;
+         case 4:
+            errorMessage = 'No days in your routine.';
+            break;
+         case 5:
+            errorMessage = 'Hmm, it looks like either our server or your connection is down.';
+            break;
+         default:
+            errorMessage = '';
+      }
+
+      return (
+         <div className="errorContainer">
+            <span className="errorLabel"></span> {errorMessage}
+         </div>
+      );
    }
 
 
@@ -93,6 +170,7 @@ function EditRoutines() {
                      </Form.Control>
                   </Form>
                   {displayFullRoutine()}
+                  {displayErrors()};
                </div>
             );
          } else {
