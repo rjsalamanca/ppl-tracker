@@ -52,6 +52,8 @@ function AddExercises(props) {
    const removeExercise = (idx) => {
       let tempDays = [...exercises];
       tempDays.splice(idx, 1);
+
+      setTempExercises(tempDays)
       setExercises(tempDays);
    }
 
@@ -93,24 +95,27 @@ function AddExercises(props) {
    const saveExercise = async () => {
       let newExercises = [...exercises];
       let tempSets = exerciseSets.filter((set) => set.weight !== null);
-
-      if (exerciseName !== '') {
-         for (let i = 0; i < exerciseSets.length; i++) {
-            if (exerciseSets[i].weight === null) {
-               setExerciseError(1)
-               break;
-            }
-         }
-         if (exerciseSets.length === tempSets.length) {
-            newExercises.push({ name: exerciseName, sets: exerciseSets })
-
-            setExercises(newExercises);
-            setExerciseError(0);
-            setTempExercises(newExercises);
-            handleClose();
-         }
+      if (exerciseSets.length === 0) {
+         setExerciseError(3)
       } else {
-         setExerciseError(2)
+         if (exerciseName !== '') {
+            for (let i = 0; i < exerciseSets.length; i++) {
+               if (exerciseSets[i].weight === null) {
+                  setExerciseError(1)
+                  break;
+               }
+            }
+            if (exerciseSets.length === tempSets.length) {
+               newExercises.push({ name: exerciseName, sets: exerciseSets })
+
+               setExercises(newExercises);
+               setExerciseError(0);
+               setTempExercises(newExercises);
+               handleClose();
+            }
+         } else {
+            setExerciseError(2)
+         }
       }
    }
 
@@ -118,23 +123,27 @@ function AddExercises(props) {
       let newExercises = [...exercises];
       let tempSets = exerciseSets.filter((set) => set.weight !== null);
 
-      if (exerciseName !== '') {
-         for (let i = 0; i < exerciseSets.length; i++) {
-            if (exerciseSets[i].weight === null) {
-               setExerciseError(1)
-               break;
-            }
-         }
-
-         if (exerciseSets.length === tempSets.length) {
-            newExercises[editing.idx] = ({ name: exerciseName, sets: exerciseSets })
-            setExercises(newExercises);
-            setExerciseError(0);
-            setTempExercises(newExercises);
-            handleClose();
-         }
+      if (exerciseSets.length === 0) {
+         setExerciseError(3)
       } else {
-         setExerciseError(2)
+         if (exerciseName !== '') {
+            for (let i = 0; i < exerciseSets.length; i++) {
+               if (exerciseSets[i].weight === null) {
+                  setExerciseError(1)
+                  break;
+               }
+            }
+
+            if (exerciseSets.length === tempSets.length) {
+               newExercises[editing.idx] = ({ name: exerciseName, sets: exerciseSets })
+               setExercises(newExercises);
+               setExerciseError(0);
+               setTempExercises(newExercises);
+               handleClose();
+            }
+         } else {
+            setExerciseError(2)
+         }
       }
    }
 
@@ -147,12 +156,15 @@ function AddExercises(props) {
       // 0: Pass                //
       // 1: Blank sets detected //
       // 2: No Exercise Name    //
+      // 3: No sets detected    //
       ////////////////////////////
 
       if (exerciseError === 1) {
          errorMessage = "Please don't leave any sets blank.";
       } else if (exerciseError === 2) {
          errorMessage = "Please make sure to add an exercise name.";
+      } else if (exerciseError === 3) {
+         errorMessage = "Please make sure to add atleast 1 set.";
       }
 
       return (

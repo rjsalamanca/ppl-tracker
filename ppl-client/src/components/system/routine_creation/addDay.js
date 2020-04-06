@@ -13,7 +13,7 @@ function AddDay() {
    const [dayError, setDayError] = useState(0);
    const [editing, setEditing] = useState({ idx: null, status: false });
 
-   const { routineDays, setRoutineDays, tempExercises, setTempExercises, setExercises } = useContext(CreateRoutineContext);
+   const { routineDays, setRoutineDays, tempExercises, setTempExercises, setExercises, exerciseSets } = useContext(CreateRoutineContext);
 
    const clearDayError = () => setDayError(0);
 
@@ -26,25 +26,6 @@ function AddDay() {
          setDayName('');
          setTempExercises([]);
          setDayError(0)
-      }
-   }
-
-   const saveExercisesToDay = async () => {
-      let tempDays = [...routineDays];
-
-      if (dayName !== '') {
-         if (tempExercises.length !== 0) {
-            tempDays.push({ name: dayName, exercises: tempExercises })
-
-            setRoutineDays(tempDays);
-            setDayName('')
-            setDayError(0);
-            setShow(false)
-         } else {
-            setDayError(2)
-         }
-      } else {
-         setDayError(1)
       }
    }
 
@@ -75,12 +56,31 @@ function AddDay() {
       }
    }
 
+   const saveExercisesToDay = async () => {
+      let tempDays = [...routineDays];
+      if (dayName !== '') {
+         if (tempExercises.length !== 0) {
+            tempDays.push({ name: dayName, exercises: tempExercises })
+
+            setRoutineDays(tempDays);
+            setDayName('')
+            setDayError(0);
+            setShow(false)
+         } else {
+            setDayError(2)
+         }
+      } else {
+         setDayError(1)
+      }
+   }
+
    const saveEditDay = () => {
       let tempDays = [...routineDays];
 
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
             tempDays[editing.idx] = ({ name: dayName, exercises: tempExercises });
+
             setRoutineDays(tempDays);
             setDayName('');
             setExercises([]);
