@@ -199,6 +199,25 @@ class PPL_System {
       }
    }
 
+   async updateRoutineDays(days) {
+      let buildDays = days.map(day => `('${day.name}', ${this.routine_id})`).join(',')
+
+      try {
+         const response = await db.result(`
+            UPDATE routine_day as RD
+            SET day_name = b.day_name, routine_name = b.routine_name
+            from(
+               values
+               (1,2,3)
+            ) as RD()
+
+            `);
+         return response;
+      } catch (err) {
+         return err.msg;
+      }
+   }
+
    async addExercises(day) {
       let buildExercises = day.exercises.map(exercise => `('${exercise.name}', (SELECT id FROM routine_day WHERE day_name = '${day.name}' AND routine_id = ${this.routine_id})) `).join(',')
       console.log(buildExercises)

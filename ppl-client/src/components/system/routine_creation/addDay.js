@@ -58,6 +58,7 @@ function AddDay() {
 
    const saveExercisesToDay = async () => {
       let tempDays = [...routineDays];
+
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
             tempDays.push({ name: dayName, exercises: tempExercises })
@@ -76,10 +77,9 @@ function AddDay() {
 
    const saveEditDay = () => {
       let tempDays = [...routineDays];
-
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
-            tempDays[editing.idx] = ({ name: dayName, exercises: tempExercises });
+            tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises });
 
             setRoutineDays(tempDays);
             setDayName('');

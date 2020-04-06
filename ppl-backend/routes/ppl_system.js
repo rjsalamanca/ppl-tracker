@@ -56,17 +56,28 @@ router.get('/get_full_routine/:routine?', requireLogin, async (req, res) => {
 
 router.post('/routine/update_routine', requireLogin, async (req, res) => {
    const { routine_id, routine_name, days } = req.body;
-   const user_id = req.session.users.user_id;
+   const user_id = req.session.users.user_id
 
    const routineModel = new pplSystemModel(routine_id, routine_name, null, null, user_id);
    const getFullRoutine = await pplSystemModel.getFullRoutine(routine_name, user_id);
    const routineInfo = getFullRoutine[0].json_agg[0];
+   let updateRoutine, updateDays, updateExercises;
 
+   //Update Info
    if (routineInfo.routine_name !== routine_name) {
-      console.log('we need to change')
-   } else {
-      console.log('no change needed')
+      updateRoutine = await routineModel.updateRoutineName();
    }
+
+   //Update Days
+   if (JSON.stringify(routineInfo.routine_days) !== JSON.stringify(days)) {
+      updateDays = await routineModel.updateRoutineDays();
+      console.log('same')
+   } else {
+      console.log('not same')
+   }
+
+   //Update Exercises
+   res.json({ routineInfo })
 
    // // Updare Routine Name.
    // const updateRoutine = await routineModel.updateRoutineName();
