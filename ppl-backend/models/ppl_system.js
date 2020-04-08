@@ -66,6 +66,7 @@ class PPL_System {
                                  (SELECT json_agg(single_set)
                                     FROM(
                                        SELECT weight,
+                                          id,
                                           set_num AS set,
                                           reps,
                                           set_date,
@@ -116,7 +117,9 @@ class PPL_System {
                                  routine_day_id,
                                  (SELECT json_agg(single_set)
                                     FROM(
-                                       SELECT weight,
+                                       SELECT 
+                                          id,
+                                          weight,
                                           set_num AS set,
                                           reps,
                                           set_date,
@@ -314,8 +317,28 @@ class PPL_System {
 
          return response;
       } catch (err) {
-         // console.log(err.msg)
+         return err.msg;
+      }
+   }
 
+   async updateExerciseSets(exercise, day) {
+
+      let buildSets = exercise.sets.map(exerciseSet => `(${exerciseSet.id}, ${exerciseSet.weight}, ${exerciseSet.set}, ${exerciseSet.reps}, ${exerciseSet.exercise_id})`);
+      try {
+         const response = await db.result(`
+         UPDATE exercise_sets AS ES
+         SET weight = new_exercise_sets.weight,
+            set_num = new_exercise_sets.set_num,
+            reps = new_exercise_sets.reps,
+            exercise_id = new_exercise_sets.exercise_id
+         FROM(
+            VALUES
+               ${buildSets}
+         ) AS new_exercise_sets(id,weight,set_num,reps,exercise_id)
+         WHERE ES.id = new_exercise_sets.id`);
+
+         return response;
+      } catch (err) {
          return err.msg;
       }
    }
