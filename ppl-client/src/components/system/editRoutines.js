@@ -85,9 +85,8 @@ function EditRoutines() {
 
       setErrorCode(-1)
 
-      // console.log(sendInfo)
       if (routineName.length < 3) {
-         setErrorCode(3)
+         setErrorCode(2)
       } else if (routineDays.length !== 0) {
 
          const url = "http://localhost:3000/ppl/routine/update_routine";
@@ -96,11 +95,10 @@ function EditRoutines() {
          //                 ERROR CODES:               //
          ////////////////////////////////////////////////
          // 0: Valid                                   //
-         // 1: Already Created                         //
-         // 2: Routine Insert Failed                   //
-         // 3: Routine Name Must be 3 characters long  //
-         // 4: No Days In Routine                      //
-         // 5: Backend Connection Failed               //
+         // 1: Update Error                            //
+         // 2: Routine Name Must be 3 characters long  //
+         // 3: No Days In Routine                      //
+         // 4: Backend Connection Failed               //
          ////////////////////////////////////////////////
 
          try {
@@ -115,13 +113,14 @@ function EditRoutines() {
             });
 
             const data = await response.json();
-            console.log(data)
+
+            !!data.update_status ? setErrorCode(0) : setErrorCode(1);
          } catch (err) {
             // back end connection error
-            setErrorCode(5)
+            setErrorCode(4)
          }
       } else {
-         setErrorCode(4)
+         setErrorCode(3)
       }
    }
 
@@ -129,19 +128,16 @@ function EditRoutines() {
       let errorMessage = '';
 
       switch (errorCode) {
-         case 0:
-            break;
          case 1:
+            errorMessage = 'There was an error on our end.';
             break;
          case 2:
-            break;
-         case 3:
             errorMessage = 'Your routine name must be atleast 3 characters long.';
             break;
-         case 4:
+         case 3:
             errorMessage = 'No days in your routine.';
             break;
-         case 5:
+         case 4:
             errorMessage = 'Hmm, it looks like either our server or your connection is down.';
             break;
          default:
@@ -195,6 +191,7 @@ function EditRoutines() {
                <AddRoutineName />
                <AddDay />
                <Button className="mb-3" type="submit" variant={'danger'} onClick={() => updateRoutine()}>Update</Button>
+
             </div>
          );
       }
