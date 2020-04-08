@@ -62,58 +62,36 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
    const getOriginalFullRoutine = await pplSystemModel.getFullRoutineByID(routine_id, user_id);
    const originalRoutineInfo = getOriginalFullRoutine[0].json_agg[0];
 
-   let updateRoutine, updateDays, updateExerciseNames, updateExerciseSets;
-
    // Update Routine Name
-   if (originalRoutineInfo.routine_name !== routine_name) {
-      updateRoutine = await routineModel.updateRoutineName();
-      console.log('name updated')
-   }
+   try {
+      if (originalRoutineInfo.routine_name !== routine_name) {
+         await routineModel.updateRoutineName();
+      }
 
-   // Update Days, Exercises, Exercise Sets
-   if (JSON.stringify(originalRoutineInfo.routine_days) !== JSON.stringify(days)) {
-      // Update Days
-      updateDays = await routineModel.updateRoutineDays(days);
+      // Update Days, Exercises, Exercise Sets
+      if (JSON.stringify(originalRoutineInfo.routine_days) !== JSON.stringify(days)) {
+         // Update Days
+         await routineModel.updateRoutineDays(days);
 
-      // Update Exercises 
-      days.forEach(async (day, dayIdx) => {
-         if (JSON.stringify(day.exercises) !== JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises)) {
-            // Update Exercise Name First
-            updateExerciseNames = await routineModel.updateExerciseName(day.exercises);
-         }
+         // Update Exercises 
+         days.forEach(async (day, dayIdx) => {
+            if (JSON.stringify(day.exercises) !== JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises)) {
+               // Update Exercise Name First
+               await routineModel.updateExerciseName(day.exercises);
+            }
 
-         day.exercises.forEach(async (exercise) => {
-            // Update Each Set 
-            updateExerciseSets = await routineModel.updateExerciseSets(exercise, day)
+            day.exercises.forEach(async (exercise) => {
+               // Update Each Set 
+               await routineModel.updateExerciseSets(exercise, day)
+            })
          })
-      })
+      }
+      // If we get all the way to the bottom send success
+      res.json({ update_status: true })
+   } catch (err) {
+      // error down the line
+      res.json({ update_status: false })
    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   //Update Exercises
-   res.json({ originalRoutineInfo })
 });
 
 router.post('/routine/add_routine', requireLogin, async (req, res) => {

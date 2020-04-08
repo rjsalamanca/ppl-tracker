@@ -31,7 +31,7 @@ function EditRoutines() {
             });
 
             const data = await response.json();
-            console.log(data)
+
             if (!!data.routine_found) {
                setRoutineName(data.routine.routine_name);
                setRoutineDays(data.routine.routine_days);
@@ -82,8 +82,6 @@ function EditRoutines() {
          routine_name: routineName,
          days: routineDays
       }
-
-      console.log('this should be same as above:', sendInfo.days)
 
       setErrorCode(-1)
 
