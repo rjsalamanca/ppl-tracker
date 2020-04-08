@@ -83,9 +83,11 @@ function EditRoutines() {
          days: routineDays
       }
 
+      console.log('this should be same as above:', sendInfo.days)
+
       setErrorCode(-1)
 
-      console.log(sendInfo)
+      // console.log(sendInfo)
       if (routineName.length < 3) {
          setErrorCode(3)
       } else if (routineDays.length !== 0) {
@@ -154,7 +156,6 @@ function EditRoutines() {
          </div>
       );
    }
-
 
    const displayRoutineInformation = () => {
       if (!initialLoad) {

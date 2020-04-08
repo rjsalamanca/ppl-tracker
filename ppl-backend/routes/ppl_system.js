@@ -62,7 +62,7 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
    const getOriginalFullRoutine = await pplSystemModel.getFullRoutineByID(routine_id, user_id);
    const originalRoutineInfo = getOriginalFullRoutine[0].json_agg[0];
 
-   let updateRoutine, updateDays, updateExercises;
+   let updateRoutine, updateDays, updateExerciseNames;
 
    // Update Routine Name
    if (originalRoutineInfo.routine_name !== routine_name) {
@@ -76,20 +76,40 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
       updateDays = await routineModel.updateRoutineDays(days);
 
       // Update Exercises 
-      days.map((day, dayIdx) => {
-         console.log('New converted:', JSON.stringify(day.exercises))
-         console.log('Old converted:', JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises));
-         console.log(' ')
+      days.map(async (day, dayIdx) => {
          if (JSON.stringify(day.exercises) !== JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises)) {
-            console.log(' not the same exercises')
+            // Update Exercise Name First
+            updateExerciseNames = await routineModel.updateExerciseName(day.exercises);
+
          }
          return day;
       })
    }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    //Update Exercises
-
-
    res.json({ originalRoutineInfo })
 });
 

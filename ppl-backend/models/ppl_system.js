@@ -282,6 +282,26 @@ class PPL_System {
       }
    }
 
+   async updateExerciseName(exercises) {
+      let buildExercises = exercises.map(exercise => `(${exercise.id}, '${exercise.name}', ${exercise.routine_day_id})`);
+
+      try {
+         const response = await db.result(`
+            UPDATE exercises as E
+            SET exercise_name = new_exercise.exercise_name,
+               routine_day_id = new_exercise.routine_day_id
+            FROM(
+               VALUES
+               ${buildExercises}
+            ) AS new_exercise(id,exercise_name,routine_day_id)
+            WHERE E.id = new_exercise.id
+         `);
+         return response;
+      } catch (err) {
+         return err.msg;
+      }
+   }
+
    async addExerciseSets(exercise, day) {
       let buildSets = exercise.sets.map((set, setIdx) => `
          (${parseInt(set.weight)}, ${setIdx + 1}, ${set.reps},

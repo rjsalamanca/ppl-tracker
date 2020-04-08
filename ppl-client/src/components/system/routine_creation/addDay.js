@@ -80,8 +80,10 @@ function AddDay() {
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
             tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises });
-
+            console.log('tempDays should be:', tempDays)
             setRoutineDays(tempDays);
+            console.log('new routineDays should be:', tempDays)
+
             setDayName('');
             setExercises([]);
             setDayError(0);

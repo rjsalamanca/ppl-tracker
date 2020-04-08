@@ -135,7 +135,7 @@ function AddExercises(props) {
             }
 
             if (exerciseSets.length === tempSets.length) {
-               newExercises[editing.idx] = ({ name: exerciseName, sets: exerciseSets })
+               newExercises[editing.idx] = ({ id: exercises[editing.idx].id, name: exerciseName, routine_day_id: exercises[editing.idx].routine_day_id, sets: exerciseSets })
                setExercises(newExercises);
                setExerciseError(0);
                setTempExercises(newExercises);
