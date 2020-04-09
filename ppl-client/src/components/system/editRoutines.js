@@ -50,8 +50,6 @@ function EditRoutines() {
       }
    }
 
-
-
    const handleSelect = (e) => {
       //reset values before we reload
       setErrorCode(-1);

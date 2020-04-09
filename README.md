@@ -95,16 +95,11 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Editing of routine/exericses/sets when creating routine.
 - [x] Ability to remove days when creating routine.
 - [x] Ability to remove exercises when creating routine.
-
-:small_orange_diamond:  Ability to edit routines/days/exercises after we have **SAVED**.
+- [x] Ability to edit routines/days/exercises after we have **SAVED**.
   - [x] Be able to edit the whole routine.
-
-  :small_orange_diamond: Add Failsafe to update.
-
-  :small_orange_diamond: Add Finish button.
-
+  - [x] Add Failsafe to update.
+  - [x] Add Finish button.
   - [x] Work on backend UPDATE.
-
   - [x] Updating of select option doesn't work properly.
 - [x] Rework with hooks or redux for state management.
   - We're using hooks
