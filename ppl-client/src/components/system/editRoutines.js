@@ -165,7 +165,7 @@ function EditRoutines() {
                      </Form.Control>
                   </Form>
                   {displayFullRoutine()}
-                  {displayErrors()};
+                  {displayErrors()}
                </div>
             );
          } else {
@@ -191,7 +191,7 @@ function EditRoutines() {
                <Modal.Title>Completed Updating</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-               You have successfully updated, you can close this modal to edit more routines or
+               You have successfully updated, you can close this screen to edit more routines or
                click below to either create a new routine or visit youur profile page.
             </Modal.Body>
             <Modal.Footer>
@@ -216,8 +216,9 @@ function EditRoutines() {
                <AddDay />
                <Button className="mb-3" type="submit" variant={'danger'} onClick={() => updateRoutine()}>Update</Button>
                {displayAddDayModal()}
+
             </div>
-         );
+         )
       }
    }
 

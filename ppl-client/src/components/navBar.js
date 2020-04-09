@@ -1,13 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Nav, NavDropdown, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 
-import { UserContext } from '../contexts/UserContext'
+import { UserContext } from '../contexts/UserContext';
 
 function NavBar() {
-   const [cookies, setCookie] = useCookies(['user']);
-   const { setUpdate } = useContext(UserContext);
+   const [cookies, removeCookie] = useCookies(['user']);
+   const { loggedIn, setLoggedIn, setUpdate } = useContext(UserContext);
+
+   useEffect(() => {
+      if (!!cookies.hasOwnProperty('user')) {
+         !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
+      } else {
+         setLoggedIn(false);
+      }
+   }, [cookies, setLoggedIn])
+
    const loggedInToLogout = async (e) => {
       e.preventDefault();
       const url = "http://localhost:3000/users/logout";
@@ -20,7 +29,8 @@ function NavBar() {
          // console.log(data)
          if (!data.is_logged_in) {
             setUpdate(true);
-            setCookie('user', { isLoggedIn: false })
+            removeCookie('user');
+            setLoggedIn(false);
             setUpdate(false);
          }
       } catch (err) {
@@ -58,7 +68,7 @@ function NavBar() {
                               <Link className="nav-link" to="/profile">Profile</Link>
                            </Nav.Item>
                         </Nav>
-                  }[cookies.user.isLoggedIn]
+                  }[loggedIn]
                }
             </Nav>
             {
@@ -78,7 +88,7 @@ function NavBar() {
                            <Link className="nav-link" to="/register">Register</Link>
                         </Nav.Item>
                      </Nav>
-               }[cookies.user.isLoggedIn]
+               }[loggedIn]
             }
          </div>
       </Nav >

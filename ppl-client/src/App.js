@@ -22,6 +22,7 @@ import './App.css';
 
 function App() {
    const [run, setRun] = useState(true);
+   const [loggedIn, setLoggedIn] = useState(false);
    const [update, setUpdate] = useState(false);
    const [cookies, setCookie] = useCookies(['user']);
    const [cookieCheck, setCookieCheck] = useState(cookies);
@@ -50,13 +51,13 @@ function App() {
          )
       } else {
          setCookie('user', { isLoggedIn: false })
-         return setRun(<div>hi</div>)
+         return setRun(<div></div>)
       }
    }
 
    return (
       <CookiesProvider>
-         <UserContext.Provider value={{ update, setUpdate }}>
+         <UserContext.Provider value={{ update, setUpdate, loggedIn, setLoggedIn }}>
             {run}
          </UserContext.Provider>
       </CookiesProvider>
