@@ -13,7 +13,7 @@ function AddDay() {
    const [dayError, setDayError] = useState(0);
    const [editing, setEditing] = useState({ idx: null, status: false });
 
-   const { routineDays, setRoutineDays, tempExercises, setTempExercises, setExercises, exerciseSets } = useContext(CreateRoutineContext);
+   const { routineDays, setRoutineDays, tempExercises, setTempExercises, setExercises } = useContext(CreateRoutineContext);
 
    const clearDayError = () => setDayError(0);
 

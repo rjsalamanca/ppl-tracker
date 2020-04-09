@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import AddRoutineName from './routine_creation/addRoutineName';
 import AddDay from './routine_creation/addDay';
@@ -23,10 +23,7 @@ function EditRoutines() {
    }, [routines]);
 
    useEffect(() => {
-      if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') {
-         getFullRoutine();
-      }
-
+      if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') getFullRoutine();
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [fullRoutine, setFullRoutine, selectedRoutine]);
 
