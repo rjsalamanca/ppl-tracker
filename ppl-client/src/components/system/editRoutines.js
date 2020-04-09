@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Modal, Form, Button } from 'react-bootstrap';
+import { Link, Redirect } from "react-router-dom";
 
 import AddRoutineName from './routine_creation/addRoutineName';
 import AddDay from './routine_creation/addDay';
@@ -13,6 +13,7 @@ function EditRoutines() {
    const [initialLoad, setInitialLoad] = useState(true);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
    const [errorCode, setErrorCode] = useState(-1);
+   const [show, setShow] = useState(false);
 
    const { routineName, setRoutineName, routineDays, setRoutineDays } = useContext(CreateRoutineContext);
 
@@ -22,33 +23,37 @@ function EditRoutines() {
    }, [routines]);
 
    useEffect(() => {
-      const getFullRoutine = async () => {
-         const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
-         try {
-            const response = await fetch(url, {
-               method: "GET",
-               credentials: "include"
-            });
-
-            const data = await response.json();
-
-            if (!!data.routine_found) {
-               setRoutineName(data.routine.routine_name);
-               setRoutineDays(data.routine.routine_days);
-               await setFullRoutine(data)
-            } else {
-               await setFullRoutine({ routine_found: false });
-            }
-
-         } catch (err) {
-            console.log(err);
-         }
-      }
-
       if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') {
          getFullRoutine();
       }
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [fullRoutine, setFullRoutine, selectedRoutine]);
+
+   const getFullRoutine = async () => {
+      const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
+      try {
+         const response = await fetch(url, {
+            method: "GET",
+            credentials: "include"
+         });
+
+         const data = await response.json();
+
+         if (!!data.routine_found) {
+            setRoutineName(data.routine.routine_name);
+            setRoutineDays(data.routine.routine_days);
+            await setFullRoutine(data)
+         } else {
+            await setFullRoutine({ routine_found: false });
+         }
+
+      } catch (err) {
+         console.log(err);
+      }
+   }
+
+
 
    const handleSelect = (e) => {
       //reset values before we reload
@@ -114,7 +119,7 @@ function EditRoutines() {
 
             const data = await response.json();
 
-            !!data.update_status ? setErrorCode(0) : setErrorCode(1);
+            !!data.update_status ? setShow(true) : setErrorCode(1);
          } catch (err) {
             // back end connection error
             setErrorCode(4)
@@ -183,6 +188,30 @@ function EditRoutines() {
       }
    }
 
+   const displayAddDayModal = () => {
+
+      return (
+         <Modal show={show} onHide={() => setShow(false)} id="addDayModal">
+            <Modal.Header closeButton>
+               <Modal.Title>Completed Updating</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+               You have successfully updated, you can close this modal to edit more routines or
+               click below to either create a new routine or visit youur profile page.
+            </Modal.Body>
+            <Modal.Footer>
+               <Button variant="secondary" onClick={(e) => setShow(false)}>Close</Button>
+               <Link className="" variant={'danger'} to="/ppl/create_routine">
+                  <Button variant="secondary">Create a Routine</Button>
+               </Link>
+               <Link className="" variant={'danger'} to="/ppl/create_routine">
+                  <Button variant="secondary">Profile</Button>
+               </Link>
+            </Modal.Footer>
+         </Modal>
+      );
+   }
+
    const displayFullRoutine = () => {
 
       if (fullRoutine !== false) {
@@ -191,7 +220,7 @@ function EditRoutines() {
                <AddRoutineName />
                <AddDay />
                <Button className="mb-3" type="submit" variant={'danger'} onClick={() => updateRoutine()}>Update</Button>
-
+               {displayAddDayModal()}
             </div>
          );
       }
