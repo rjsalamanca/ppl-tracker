@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import { useCookies } from 'react-cookie';
-
+import { UserContext } from '../../contexts/UserContext';
 import '../../App.css';
 
 function Login(props) {
@@ -12,6 +12,7 @@ function Login(props) {
    const [password, setPassword] = useState('');
 
    const [cookies, setCookie] = useCookies(['user']);
+   const { loggedIn, setLoggedIn } = useContext(UserContext)
 
    useEffect(() => {
       if (props.location.errorCode === 0 && cookies.user.isLoggedIn === false) setErrorCode(5);
@@ -48,7 +49,9 @@ function Login(props) {
             ///////////////////////////////////s
 
             if (data.errorCode === 0) {
+               console.log('setting login')
                setCookie('user', { isLoggedIn: true })
+               setLoggedIn(true);
                setErrorCode(0);
             } else {
                setErrorCode(data.errorCode);

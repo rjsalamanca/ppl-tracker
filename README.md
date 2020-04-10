@@ -58,7 +58,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] After adding the editing feature, once we remove all days or all exercises, we're able to pass causing us to be able to save null exercises or days
   - [x] Fix addDay editing.
   - [x] Fix addExercises editing.
-- [ ] Login bug created with cookies.
+  
+:small_orange_diamond: Login bug created with cookies.
 
 ### STYLING
 

@@ -1,21 +1,26 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Nav, NavDropdown, Button } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 
 import { UserContext } from '../contexts/UserContext';
 
 function NavBar() {
-   const [cookies, removeCookie] = useCookies(['user']);
-   const { loggedIn, setLoggedIn, setUpdate } = useContext(UserContext);
+   const [cookies, setCookie] = useCookies(['user']);
+   const [redirect, setRedirect] = useState(false);
+   const { loggedIn, setLoggedIn, update, setUpdate } = useContext(UserContext);
 
    useEffect(() => {
-      if (!!cookies.hasOwnProperty('user')) {
-         !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
-      } else {
-         setLoggedIn(false);
-      }
-   }, [cookies, setLoggedIn])
+      // console.log('update nav')
+      // console.log(cookies)
+      // console.log(loggedIn)
+      // if (!!cookies.hasOwnProperty('user')) {
+      //    !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
+      // } else {
+      //    setLoggedIn(false);
+      // }
+
+   }, [cookies.user, loggedIn])
 
    const loggedInToLogout = async (e) => {
       e.preventDefault();
@@ -26,20 +31,19 @@ function NavBar() {
             credentials: "include"
          })
          const data = await response.json();
-         // console.log(data)
          if (!data.is_logged_in) {
-            setUpdate(true);
-            removeCookie('user');
+            // setUpdate(update + 1);
+            setCookie('use r', { isLoggedIn: false })
+            console.log('\n\n\n\nsetting login to false:', cookies)
             setLoggedIn(false);
-            setUpdate(false);
          }
       } catch (err) {
-         console.log('cant logout')
       }
    }
 
    return (
       < Nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm" style={{ zIndex: 100 }} >
+         {!!redirect && <Redirect to="/" />}
          <Link className="navbar-brand" to="/">PPL Tracker</Link>
          <Button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>

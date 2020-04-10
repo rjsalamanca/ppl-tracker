@@ -1,24 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import { useCookies } from 'react-cookie';
+// import { useCookies } from 'react-cookie';
 import { UserContext } from '../contexts/UserContext';
 
 function PrivateRoute({ ContextProvider, LoadComponent, ...routerProps }) {
-   const { loggedIn, setLoggedIn } = useContext(UserContext);
+   const { loggedIn } = useContext(UserContext);
    const [loadRoute, setLoadRoute] = useState();
-   const [cookies] = useCookies(['user']);
+   // const [cookies] = useCookies(['user']);
 
    useEffect(() => {
-      if (!!cookies.hasOwnProperty('user')) {
-         !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
-      } else {
-         setLoggedIn(false);
-      }
+      console.log('in private route:', loggedIn)
       checkLoginStatus();
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [cookies, loggedIn])
+   }, [loggedIn])
 
    const checkLoginStatus = async () => {
       if (!!loggedIn) {

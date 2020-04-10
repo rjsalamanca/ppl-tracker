@@ -23,15 +23,43 @@ import './App.css';
 function App() {
    const [run, setRun] = useState(true);
    const [loggedIn, setLoggedIn] = useState(false);
-   const [update, setUpdate] = useState(false);
+   const [update, setUpdate] = useState(0);
    const [cookies, setCookie] = useCookies(['user']);
    const [cookieCheck, setCookieCheck] = useState(cookies);
 
+   // useEffect(() => {
+   //    console.log('changed loggedIn')
+   //    if (!!cookies.hasOwnProperty('user')) {
+   //       if (cookies.user.hasOwnProperty('isLoggedIn')) {
+
+   //          !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
+   //       } else {
+   //          setLoggedIn(false)
+   //       }
+   //    } else {
+   //       setLoggedIn(false);
+   //    }
+   //    setUpdate(update + 1);
+   //    console.log('going to update')
+   // }, [loggedIn])
+
    useEffect(() => {
-      setCookieCheck(cookies);
+      // console.log('updated')
+      // if (!!cookies.hasOwnProperty('user')) {
+      //    if (cookies.user.hasOwnProperty('isLoggedIn')) {
+      //       console.log(cookies.user)
+
+      //       !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
+      //    } else {
+      //       setLoggedIn(false)
+      //    }
+      // } else {
+      //    setLoggedIn(false);
+      // }
+      // setCookieCheck(cookies);
       runContent();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [cookies, update, cookieCheck]);
+   }, [update, loggedIn, cookies]);
 
    const runContent = () => {
       if (!!cookies.hasOwnProperty('user')) {
@@ -40,13 +68,17 @@ function App() {
                <NavBar />
                <Switch>
                   <Route path="/" exact render={(props) => < LandingPage {...props} />} />
-                  <Route path="/login" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : <LoginPage {...props} />} />
-                  <Route path="/register" exact render={(props) => !!cookies.user.isLoggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
+                  <Route path="/login" exact render={(props) => {
+                     console.log('route login status:', loggedIn)
+                     return !!loggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
+                  }
+                  } />
+                  <Route path="/register" exact render={(props) => !!loggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
                </Switch>
 
                <PrivateRoute path="/ppl/edit_routines" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={EditRoutines} />
-               <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
-               <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />
+               {/* <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
+               <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} /> */}
             </Router>
          )
       } else {
