@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 import NavBar from './components/navBar';
@@ -27,6 +27,18 @@ function App() {
    const [cookies, setCookie] = useCookies(['user']);
    const [cookieCheck, setCookieCheck] = useState(cookies);
 
+   const createUserValues = useMemo(() => (
+      {
+         loggedIn, setLoggedIn,
+         update, setUpdate
+      }
+   ),
+      [
+         loggedIn, setLoggedIn,
+         update, setUpdate
+      ]
+   );
+
    // useEffect(() => {
    //    console.log('changed loggedIn')
    //    if (!!cookies.hasOwnProperty('user')) {
@@ -44,26 +56,63 @@ function App() {
    // }, [loggedIn])
 
    useEffect(() => {
-      // console.log('updated')
-      // if (!!cookies.hasOwnProperty('user')) {
-      //    if (cookies.user.hasOwnProperty('isLoggedIn')) {
-      //       console.log(cookies.user)
-
-      //       !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
-      //    } else {
-      //       setLoggedIn(false)
-      //    }
-      // } else {
-      //    setLoggedIn(false);
-      // }
-      // setCookieCheck(cookies);
-      runContent();
+      console.log('updated')
+      if (!!cookies.hasOwnProperty('user')) {
+         if (cookies.user.hasOwnProperty('isLoggedIn')) {
+            if (!!loggedIn && !cookies.user.isLoggedIn) {
+               setCookie('user', { isLoggedIn: true })
+            } else {
+               setCookie('user', { isLoggedIn: false })
+            }
+            // !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
+         } else {
+            setCookie('user', { isLoggedIn: false })
+         }
+      } else {
+         setCookie('user', { isLoggedIn: false })
+      }
+      // console.log('running:', loggedIn);
+      // setUpdate(update + 1);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [update, loggedIn, cookies]);
+   }, [loggedIn]);
+
+   // useEffect(() => {
+   //    runContent();
+   // }, [update])
 
    const runContent = () => {
-      if (!!cookies.hasOwnProperty('user')) {
-         return setRun(
+      console.log('load')
+      // if (!!cookies.hasOwnProperty('user')) {
+      //    console.log('in if:', cookies.user)
+      // setRun(<div></div>)
+      return (
+         <Router>
+            <NavBar />
+            <Switch>
+               <Route path="/" exact render={(props) => < LandingPage {...props} />} />
+               <Route path="/login" exact render={(props) => {
+                  console.log('route login status:', loggedIn)
+                  return !!loggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
+               }
+               } />
+               <Route path="/register" exact render={(props) => !!loggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
+            </Switch>
+
+            <PrivateRoute path="/ppl/edit_routines" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={EditRoutines} />
+            {/* <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
+               <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} /> */}
+         </Router>
+      )
+      // } else {
+      //    console.log('empty')
+      //    setCookie('user', { isLoggedIn: false })
+      //    return (<div></div>)
+      // }
+   }
+
+   return (
+      <CookiesProvider>
+         <UserContext.Provider value={createUserValues}>
             <Router>
                <NavBar />
                <Switch>
@@ -80,17 +129,6 @@ function App() {
                {/* <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
                <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} /> */}
             </Router>
-         )
-      } else {
-         setCookie('user', { isLoggedIn: false })
-         return setRun(<div></div>)
-      }
-   }
-
-   return (
-      <CookiesProvider>
-         <UserContext.Provider value={{ update, setUpdate, loggedIn, setLoggedIn }}>
-            {run}
          </UserContext.Provider>
       </CookiesProvider>
    );

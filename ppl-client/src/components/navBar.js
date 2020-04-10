@@ -8,17 +8,18 @@ import { UserContext } from '../contexts/UserContext';
 function NavBar() {
    const [cookies, setCookie] = useCookies(['user']);
    const [redirect, setRedirect] = useState(false);
+   //const [loggedIn, setLoggedIn] = useState(false);
    const { loggedIn, setLoggedIn, update, setUpdate } = useContext(UserContext);
 
    useEffect(() => {
       // console.log('update nav')
       // console.log(cookies)
       // console.log(loggedIn)
-      // if (!!cookies.hasOwnProperty('user')) {
-      //    !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
-      // } else {
-      //    setLoggedIn(false);
-      // }
+      if (!!cookies.hasOwnProperty('user')) {
+         !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
+      } else {
+         setLoggedIn(false);
+      }
 
    }, [cookies.user, loggedIn])
 
@@ -33,7 +34,7 @@ function NavBar() {
          const data = await response.json();
          if (!data.is_logged_in) {
             // setUpdate(update + 1);
-            setCookie('use r', { isLoggedIn: false })
+            setCookie('user', { isLoggedIn: false })
             console.log('\n\n\n\nsetting login to false:', cookies)
             setLoggedIn(false);
          }
