@@ -4,6 +4,7 @@ import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import { useCookies } from 'react-cookie';
 import { UserContext } from '../../contexts/UserContext';
+import axios from 'axios';
 import '../../App.css';
 
 function Login(props) {
@@ -25,7 +26,7 @@ function Login(props) {
          e.preventDefault();
          try {
             const response = await fetch(url, {
-               method: "POST",
+               method: "post",
                headers: {
                   "Accept": "application/json",
                   "Content-Type": "application/json"
@@ -58,6 +59,7 @@ function Login(props) {
             }
 
          } catch (err) {
+            console.log(err)
             setErrorCode(4);
          }
       }
