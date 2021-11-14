@@ -76,6 +76,7 @@ function AddDay() {
    }
 
    const saveEditDay = () => {
+      console.log('save edit day')
       let tempDays = [...routineDays];
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
@@ -86,6 +87,7 @@ function AddDay() {
             setDayError(0);
             setEditing(false);
             setShow(false);
+            console.log(tempExercises)
          } else {
             setDayError(2)
          }

@@ -32,7 +32,8 @@ function AddExercises(props) {
       if (e.target.value === '' || e.target.value.match(/([^0-9])/g)) {
          newSets[idx].weight = null;
       } else {
-         newSets[idx].weight = e.target.value.match(/([0-9])/g).join('');
+         console.log('test')
+         newSets[idx].weight = parseInt(e.target.value.match(/([0-9])/g).join(''));
       }
       setExerciseSets(newSets);
    };
@@ -80,12 +81,14 @@ function AddExercises(props) {
 
    const addSet = () => {
       let newSets = [...exerciseSets];
-      newSets.push({ weight: null, reps: 1 })
+
+      newSets.push({ weight: null, newset: true, reps: 1, set: newSets.length + 1, set_date: null })
       setExerciseSets(newSets)
    }
 
    const displayReps = (maxReps) => {
       let repsOption = [];
+
       for (let i = 0; i <= maxReps; i++) {
          repsOption.push(i);
       }
@@ -122,7 +125,6 @@ function AddExercises(props) {
    const saveEditExercise = () => {
       let newExercises = [...exercises];
       let tempSets = exerciseSets.filter((set) => set.weight !== null);
-
       if (exerciseSets.length === 0) {
          setExerciseError(3)
       } else {
@@ -140,6 +142,9 @@ function AddExercises(props) {
                setExerciseError(0);
                setTempExercises(newExercises);
                handleClose();
+
+               console.log('saved Edit Exercise', newExercises[editing.idx]);
+
             }
          } else {
             setExerciseError(2)

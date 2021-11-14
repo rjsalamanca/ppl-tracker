@@ -57,7 +57,6 @@ router.get('/get_full_routine/:routine?', requireLogin, async (req, res) => {
 router.post('/routine/update_routine', requireLogin, async (req, res) => {
    const { routine_id, routine_name, days } = req.body;
    const user_id = req.session.users.user_id;
-
    const routineModel = new pplSystemModel(routine_id, routine_name, null, null, user_id);
    const getOriginalFullRoutine = await pplSystemModel.getFullRoutineByID(routine_id, user_id);
    const originalRoutineInfo = getOriginalFullRoutine[0].json_agg[0];
@@ -82,10 +81,24 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
 
             day.exercises.forEach(async (exercise) => {
                // Update Each Set 
-               await routineModel.updateExerciseSets(exercise, day)
+
+               //Add new sets
+               exercise.sets.forEach(async (set) => {
+                  if (set.hasOwnProperty('newset')) {
+                     await routineModel.addSingleExerciseSet(set.weight, set.reps, exercise.id);
+                  };
+               });
+
+               if (exercise.sets.hasOwnProperty('newset')) {
+                  console.log('exercise', exercise)
+                  console.log('day', day)
+               } else {
+                  await routineModel.updateExerciseSets(exercise, day)
+               }
             })
          })
       }
+
       // If we get all the way to the bottom send success
       res.json({ update_status: true })
    } catch (err) {

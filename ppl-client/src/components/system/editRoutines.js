@@ -75,6 +75,10 @@ function EditRoutines() {
          console.log(err);
       }
    }
+   const refreshPage = () => {
+      window.location.reload(false);
+   }
+
 
    const updateRoutine = async () => {
       let sendInfo = {
@@ -186,7 +190,7 @@ function EditRoutines() {
    const displayAddDayModal = () => {
 
       return (
-         <Modal show={show} onHide={() => setShow(false)} id="addDayModal">
+         <Modal show={show} onHide={() => { setShow(false); refreshPage(); }} id="addDayModal">
             <Modal.Header closeButton>
                <Modal.Title>Completed Updating</Modal.Title>
             </Modal.Header>
@@ -195,11 +199,11 @@ function EditRoutines() {
                click below to either create a new routine or visit youur profile page.
             </Modal.Body>
             <Modal.Footer>
-               <Button variant="secondary" onClick={(e) => setShow(false)}>Close</Button>
+               <Button variant="secondary" onClick={(e) => { setShow(false); refreshPage(); }}>Close</Button>
                <Link className="" variant={'danger'} to="/ppl/create_routine">
                   <Button variant="secondary">Create a Routine</Button>
                </Link>
-               <Link className="" variant={'danger'} to="/ppl/create_routine">
+               <Link className="" variant={'danger'} to="/profile">
                   <Button variant="secondary">Profile</Button>
                </Link>
             </Modal.Footer>

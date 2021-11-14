@@ -234,6 +234,7 @@ class PPL_System {
                id = $2 
             AND user_id = $3
          `, [this.routine_name, this.routine_id, this.user_id]);
+         console.log(response)
          return response;
       } catch (err) {
          return err.msgs
@@ -305,6 +306,7 @@ class PPL_System {
       }
    }
 
+   // Add multiple sets
    async addExerciseSets(exercise, day) {
       let buildSets = exercise.sets.map((set, setIdx) => `
          (${parseInt(set.weight)}, ${setIdx + 1}, ${set.reps},
@@ -314,6 +316,30 @@ class PPL_System {
          const response = await db.result(`
          INSERT INTO exercise_sets(weight,set_num, reps, exercise_id)
          VALUES ${buildSets}`);
+
+         return response;
+      } catch (err) {
+         return err.msg;
+      }
+   }
+
+   // Add single set
+   async addSingleExerciseSet(weight, reps, exerciseID) {
+      // const findLastSet = async () => {
+      //    try {
+      //       const response = await db.result('SELECT set_num from exercise_sets where exercise_id = $1', [exerciseID]);
+      //       return response;
+      //    } catch (err) {
+      //       return err.msg;
+      //    }
+      //}
+
+
+      try {
+         const findLastSet = await db.result('SELECT set_num from exercise_sets where exercise_id = $1', [exerciseID]);
+         const response = await db.result(
+            `INSERT INTO exercise_sets(weight,set_num, reps, exercise_id)
+         VALUES ($1, $2, $3, $4)`, [weight, findLastSet.rowCount + 1, reps, exerciseID]);
 
          return response;
       } catch (err) {
