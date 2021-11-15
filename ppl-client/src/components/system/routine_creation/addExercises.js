@@ -32,7 +32,6 @@ function AddExercises(props) {
       if (e.target.value === '' || e.target.value.match(/([^0-9])/g)) {
          newSets[idx].weight = null;
       } else {
-         console.log('test')
          newSets[idx].weight = parseInt(e.target.value.match(/([0-9])/g).join(''));
       }
       setExerciseSets(newSets);
@@ -97,6 +96,7 @@ function AddExercises(props) {
 
    const saveExercise = async () => {
       let newExercises = [...exercises];
+
       let tempSets = exerciseSets.filter((set) => set.weight !== null);
       if (exerciseSets.length === 0) {
          setExerciseError(3)
@@ -109,7 +109,8 @@ function AddExercises(props) {
                }
             }
             if (exerciseSets.length === tempSets.length) {
-               newExercises.push({ name: exerciseName, sets: exerciseSets })
+               console.log(newExercises);
+               newExercises.push({ name: exerciseName, sets: exerciseSets, newExercise: true })
 
                setExercises(newExercises);
                setExerciseError(0);
@@ -137,14 +138,12 @@ function AddExercises(props) {
             }
 
             if (exerciseSets.length === tempSets.length) {
-               newExercises[editing.idx] = ({ id: exercises[editing.idx].id, name: exerciseName, routine_day_id: exercises[editing.idx].routine_day_id, sets: exerciseSets })
+
+               newExercises[editing.idx] = ({ id: exercises[editing.idx].id, name: exerciseName, routine_day_id: exercises[editing.idx].routine_day_id, sets: exerciseSets, test: 'new' })
                setExercises(newExercises);
                setExerciseError(0);
                setTempExercises(newExercises);
                handleClose();
-
-               console.log('saved Edit Exercise', newExercises[editing.idx]);
-
             }
          } else {
             setExerciseError(2)

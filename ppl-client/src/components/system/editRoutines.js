@@ -87,6 +87,7 @@ function EditRoutines() {
          days: routineDays
       }
 
+      console.log('Send Info:', sendInfo);
       setErrorCode(-1)
 
       if (routineName.length < 3) {

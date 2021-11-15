@@ -72,30 +72,33 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
          // Update Days
          await routineModel.updateRoutineDays(days);
 
-         // Update Exercises 
          days.forEach(async (day, dayIdx) => {
+
+
+            // Update Exercises 
             if (JSON.stringify(day.exercises) !== JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises)) {
-               // Update Exercise Name First
+               // Update Exercise Name
                await routineModel.updateExerciseName(day.exercises);
             }
 
             day.exercises.forEach(async (exercise) => {
-               // Update Each Set 
-
-               //Add new sets
-               exercise.sets.forEach(async (set) => {
-                  if (set.hasOwnProperty('newset')) {
-                     await routineModel.addSingleExerciseSet(set.weight, set.reps, exercise.id);
-                  };
-               });
-
-               if (exercise.sets.hasOwnProperty('newset')) {
-                  console.log('exercise', exercise)
-                  console.log('day', day)
-               } else {
-                  await routineModel.updateExerciseSets(exercise, day)
+               // Add new Exercises to Existing days.
+               if (exercise.hasOwnProperty('newExercise')) {
+                  await routineModel.addSingleExercise(exercise.name, day.routine_day_id);
+                  await routineModel.addExerciseSets(exercise, day);
                }
-            })
+               else {
+                  // Add new sets to existing exercise.
+                  exercise.sets.forEach(async (set) => {
+                     if (set.hasOwnProperty('newset')) {
+                        await routineModel.addSingleExerciseSet(set.weight, set.reps, exercise.id);
+                     };
+                  });
+               }
+
+               //Update Existing sets.
+               await routineModel.updateExerciseSets(exercise, day);
+            });
          })
       }
 

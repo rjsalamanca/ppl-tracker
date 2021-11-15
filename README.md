@@ -102,6 +102,14 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - [x] Add Finish button.
   - [x] Work on backend UPDATE.
   - [x] Updating of select option doesn't work properly.
+  - [x] Edit: Add Sets
+  - [x] Edit: Add Exercises
+  - [ ] Edit: Add Days
+  - [ ] Edit: Add Rest Days
+  - [ ] Edit: Delete Sets
+  - [ ] Edit: Delete Exercises
+  - [ ] Edit: Delete Days
+  - [ ] Edit: Delete Rest Days
 - [x] Rework with hooks or redux for state management.
   - We're using hooks
   - [x] Convert Profile Route and all children components.

@@ -151,8 +151,8 @@ class PPL_System {
 
    static async finishWorkout(workoutInfo, date) {
       try {
-         let buildValues = workoutInfo.map(workout => {
-            let buildSets = workout.sets.map(set => `(${set.weight}, ${set.set}, ${set.reps}, '${date}', ${set.exercise_id})`)
+         const buildValues = workoutInfo.map(workout => {
+            const buildSets = workout.sets.map(set => `(${set.weight}, ${set.set}, ${set.reps}, '${date}', ${set.exercise_id})`)
             return buildSets.join(',');
          }).join(',');
 
@@ -242,7 +242,7 @@ class PPL_System {
    }
 
    async addRoutineDays(days) {
-      let buildDays = days.map(day => `('${day.name}', ${this.routine_id})`).join(',')
+      const buildDays = days.map(day => `('${day.name}', ${this.routine_id})`).join(',')
 
       try {
          const response = await db.result(`
@@ -255,7 +255,7 @@ class PPL_System {
    }
 
    async updateRoutineDays(days) {
-      let buildDays = days.map(day => `(${day.routine_day_id}, '${day.name}', ${day.routine_id})`).join(',')
+      const buildDays = days.map(day => `(${day.routine_day_id}, '${day.name}', ${day.routine_id})`).join(',')
 
       try {
          const response = await db.result(`
@@ -273,10 +273,10 @@ class PPL_System {
       }
    }
 
+   // Creation of Exercises
    async addExercises(day) {
-      let buildExercises = day.exercises.map(exercise => `('${exercise.name}', (SELECT id FROM routine_day WHERE day_name = '${day.name}' AND routine_id = ${this.routine_id})) `).join(',')
-
       try {
+         const buildExercises = day.exercises.map(exercise => `('${exercise.name}', (SELECT id FROM routine_day WHERE day_name = '${day.name}' AND routine_id = ${this.routine_id})) `).join(',');
          const response = await db.result(`
             INSERT INTO exercises(exercise_name, routine_day_id)
             VALUES ${buildExercises}`);
@@ -286,8 +286,20 @@ class PPL_System {
       }
    }
 
+   // Adding Single Exercise
+   async addSingleExercise(exerciseName, routine_day_id) {
+      try {
+         const response = await db.result(`
+            INSERT INTO exercises(exercise_name, routine_day_id)
+            VALUES ($1, $2) `, [exerciseName, routine_day_id]);
+         return response;
+      } catch (err) {
+         return err.msg;
+      }
+   }
+
    async updateExerciseName(exercises) {
-      let buildExercises = exercises.map(exercise => `(${exercise.id}, '${exercise.name}', ${exercise.routine_day_id})`);
+      const buildExercises = exercises.map(exercise => `(${exercise.id}, '${exercise.name}', ${exercise.routine_day_id})`);
 
       try {
          const response = await db.result(`
@@ -308,7 +320,7 @@ class PPL_System {
 
    // Add multiple sets
    async addExerciseSets(exercise, day) {
-      let buildSets = exercise.sets.map((set, setIdx) => `
+      const buildSets = exercise.sets.map((set, setIdx) => `
          (${parseInt(set.weight)}, ${setIdx + 1}, ${set.reps},
             (SELECT id from exercises WHERE exercise_name = '${exercise.name}' AND routine_day_id =
                (SELECT id from routine_day WHERE day_name = '${day.name}' AND routine_id = ${this.routine_id})))`).join(',');
@@ -323,18 +335,7 @@ class PPL_System {
       }
    }
 
-   // Add single set
    async addSingleExerciseSet(weight, reps, exerciseID) {
-      // const findLastSet = async () => {
-      //    try {
-      //       const response = await db.result('SELECT set_num from exercise_sets where exercise_id = $1', [exerciseID]);
-      //       return response;
-      //    } catch (err) {
-      //       return err.msg;
-      //    }
-      //}
-
-
       try {
          const findLastSet = await db.result('SELECT set_num from exercise_sets where exercise_id = $1', [exerciseID]);
          const response = await db.result(
@@ -348,8 +349,7 @@ class PPL_System {
    }
 
    async updateExerciseSets(exercise, day) {
-
-      let buildSets = exercise.sets.map(exerciseSet => `(${exerciseSet.id}, ${exerciseSet.weight}, ${exerciseSet.set}, ${exerciseSet.reps}, ${exerciseSet.exercise_id})`);
+      const buildSets = exercise.sets.map(exerciseSet => `(${exerciseSet.id}, ${exerciseSet.weight}, ${exerciseSet.set}, ${exerciseSet.reps}, ${exerciseSet.exercise_id})`);
       try {
          const response = await db.result(`
          UPDATE exercise_sets AS ES

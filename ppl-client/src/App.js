@@ -56,7 +56,6 @@ function App() {
    // }, [loggedIn])
 
    useEffect(() => {
-      console.log('updated')
       if (!!cookies.hasOwnProperty('user')) {
          if (cookies.user.hasOwnProperty('isLoggedIn')) {
             if (!!loggedIn && !cookies.user.isLoggedIn) {
@@ -81,7 +80,6 @@ function App() {
    // }, [update])
 
    const runContent = () => {
-      console.log('load')
       // if (!!cookies.hasOwnProperty('user')) {
       //    console.log('in if:', cookies.user)
       // setRun(<div></div>)
