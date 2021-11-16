@@ -73,15 +73,25 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
          await routineModel.updateRoutineDays(days);
 
          days.forEach(async (day, dayIdx) => {
-
-
-            // Update Exercises 
-            if (JSON.stringify(day.exercises) !== JSON.stringify(originalRoutineInfo.routine_days[dayIdx].exercises)) {
-               // Update Exercise Name
-               await routineModel.updateExerciseName(day.exercises);
+            console.log('first day:', day)
+            if (day.hasOwnProperty('newDay')) {
+               if (!!day.newDay) {
+                  const test = await routineModel.addRoutineDays(day);
+                  console.log('test:', test);
+                  day['routine_id'] = test.rows[0].routine_id;
+                  day['routine_day_id'] = test.rows[0].id;
+                  // day = test.rows[0];
+                  // day = await routineModel.getRoutineDay(day);
+                  // console.log('day what:', day)
+               }
             }
 
+            // Update Exercise Name
+            console.log('update:', day);
+            await routineModel.updateExerciseName(day.exercises);
+
             day.exercises.forEach(async (exercise) => {
+               console.log('in day:', day)
                // Add new Exercises to Existing days.
                if (exercise.hasOwnProperty('newExercise')) {
                   await routineModel.addSingleExercise(exercise.name, day.routine_day_id);
@@ -89,6 +99,7 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
                }
                else {
                   // Add new sets to existing exercise.
+                  console.log('ex:', exercise);
                   exercise.sets.forEach(async (set) => {
                      if (set.hasOwnProperty('newset')) {
                         await routineModel.addSingleExerciseSet(set.weight, set.reps, exercise.id);

@@ -79,7 +79,6 @@ function EditRoutines() {
       window.location.reload(false);
    }
 
-
    const updateRoutine = async () => {
       let sendInfo = {
          routine_id: fullRoutine.routine.routine_id,

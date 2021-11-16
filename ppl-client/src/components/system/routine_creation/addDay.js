@@ -16,10 +16,14 @@ function AddDay() {
    const { routineDays, setRoutineDays, tempExercises, setTempExercises, setExercises } = useContext(CreateRoutineContext);
 
    const clearDayError = () => setDayError(0);
+   const closeModal = () => {
+      setShow(false);
+      setEditing(false);
+   }
 
    const modalTrigger = () => {
       if (!!show) {
-         setShow(false)
+         setShow(false);
       } else {
          setExercises([])
          setShow(true);
@@ -44,29 +48,33 @@ function AddDay() {
    }
 
    const editDay = (idx) => {
+      console.log('editing yes')
       setEditing({ idx, status: true });
       if (!!show) {
-         setShow(false)
+         setShow(false);
       } else {
          setShow(true);
-         setDayName(routineDays[idx].name)
-         setTempExercises(routineDays[idx].exercises)
-         setExercises(routineDays[idx].exercises)
+         setDayName(routineDays[idx].name);
+         setTempExercises(routineDays[idx].exercises);
+         setExercises(routineDays[idx].exercises);
          setDayError(0);
       }
    }
 
    const saveExercisesToDay = async () => {
       let tempDays = [...routineDays];
-
+      console.log('Save Day click');
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
-            tempDays.push({ name: dayName, exercises: tempExercises })
+
+            tempDays.push({ name: dayName, exercises: tempExercises, newDay: true })
 
             setRoutineDays(tempDays);
             setDayName('')
             setDayError(0);
             setShow(false)
+
+            console.log('temp Days:', tempDays);
          } else {
             setDayError(2)
          }
@@ -79,13 +87,14 @@ function AddDay() {
       let tempDays = [...routineDays];
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
-            tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises });
+            tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises, newDay: !!routineDays[editing.idx].hasOwnProperty('newDay') ? true : false });
             setRoutineDays(tempDays);
             setDayName('');
             setExercises([]);
             setDayError(0);
             setEditing(false);
             setShow(false);
+            console.log(tempDays);
          } else {
             setDayError(2)
          }
@@ -112,7 +121,7 @@ function AddDay() {
       }
 
       return (
-         <Modal show={show} onHide={() => setShow(false)} id="addDayModal">
+         <Modal show={show} onHide={() => closeModal()} id="addDayModal">
             <Modal.Header closeButton>
                <Modal.Title>Add A Day</Modal.Title>
             </Modal.Header>
@@ -127,7 +136,7 @@ function AddDay() {
                </div>
             </Modal.Body>
             <Modal.Footer>
-               <Button variant="secondary" onClick={(e) => setShow(false)}>Close</Button>
+               <Button variant="secondary" onClick={(e) => closeModal(e)}>Close</Button>
                {!!editing.status ?
                   <Button variant="primary" onClick={(e) => saveEditDay(e)}>Edit Day</Button>
                   :

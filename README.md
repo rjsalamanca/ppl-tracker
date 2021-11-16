@@ -104,7 +104,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - [x] Updating of select option doesn't work properly.
   - [x] Edit: Add Sets
   - [x] Edit: Add Exercises
-  - [ ] Edit: Add Days
+  - [x] Edit: Add Days
   - [ ] Edit: Add Rest Days
   - [ ] Edit: Delete Sets
   - [ ] Edit: Delete Exercises

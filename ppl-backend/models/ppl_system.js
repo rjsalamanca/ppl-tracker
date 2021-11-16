@@ -242,17 +242,28 @@ class PPL_System {
    }
 
    async addRoutineDays(days) {
-      const buildDays = days.map(day => `('${day.name}', ${this.routine_id})`).join(',')
-
+      const buildDays = typeof days === 'object' ? `('${days.name}', ${this.routine_id})` : days.map(day => `('${day.name}', ${this.routine_id})`).join(',');
       try {
          const response = await db.result(`
             INSERT INTO routine_day(day_name, routine_id)
-            VALUES ${buildDays}`);
+            VALUES ${buildDays} RETURNING *`);
          return response;
       } catch (err) {
+         console.log(err)
          return err.msg;
       }
    }
+
+   // async getRoutineDay(day) {
+   //    try {
+   //       const response = await db.result(`
+   //          SELECT * FROM routine_day WHERE routine_id = $1 and day_name = $2`, [this.routine_id, day.name]);
+   //       console.log('routine day:', response);
+   //       return response;
+   //    } catch (err) {
+   //       return err.msg;
+   //    }
+   // }
 
    async updateRoutineDays(days) {
       const buildDays = days.map(day => `(${day.routine_day_id}, '${day.name}', ${day.routine_id})`).join(',')
