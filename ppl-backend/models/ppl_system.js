@@ -57,6 +57,7 @@ class PPL_System {
                      FROM(
                         SELECT routine_day.day_name as name, 
                            routine_day.id AS routine_day_id,
+                           routine_day.rest_day,
                            routine_day.routine_id,
                            (SELECT json_agg(EXER)
                               FROM(
@@ -242,28 +243,35 @@ class PPL_System {
    }
 
    async addRoutineDays(days) {
-      const buildDays = typeof days === 'object' ? `('${days.name}', ${this.routine_id})` : days.map(day => `('${day.name}', ${this.routine_id})`).join(',');
+      const buildDays = () => {
+         let buildInsert;
+
+         if (typeof days === 'object' && !!Array.isArray(days)) {
+            if (days.length === 1) {
+               buildInsert = `('${days[0].name}', ${days[0].rest_day}, ${this.routine_id})`
+            } else {
+               buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
+            }
+         } else if (typeof days === 'object' && !Array.isArray(days)) {
+            buildInsert = `('${days.name}', ${days.rest_day}, ${this.routine_id})`;
+         } else {
+            buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
+         }
+
+         // typeof days === 'object' ?  `('${days.name}', ${days.rest_day}, ${this.routine_id})` : days.map(day => `('${day.name}', ${days.rest_day}, ${this.routine_id}, 'test')`).join(',');
+         return buildInsert;
+      }
+
       try {
          const response = await db.result(`
-            INSERT INTO routine_day(day_name, routine_id)
-            VALUES ${buildDays} RETURNING *`);
+            INSERT INTO routine_day(day_name, rest_day, routine_id)
+            VALUES ${buildDays()} RETURNING *`);
          return response;
       } catch (err) {
          console.log(err)
          return err.msg;
       }
    }
-
-   // async getRoutineDay(day) {
-   //    try {
-   //       const response = await db.result(`
-   //          SELECT * FROM routine_day WHERE routine_id = $1 and day_name = $2`, [this.routine_id, day.name]);
-   //       console.log('routine day:', response);
-   //       return response;
-   //    } catch (err) {
-   //       return err.msg;
-   //    }
-   // }
 
    async updateRoutineDays(days) {
       const buildDays = days.map(day => `(${day.routine_day_id}, '${day.name}', ${day.routine_id})`).join(',')

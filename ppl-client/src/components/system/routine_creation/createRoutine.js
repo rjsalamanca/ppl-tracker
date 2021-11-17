@@ -38,6 +38,7 @@ function CreateRoutine() {
       ////////////////////////////////////
 
       if (routineDays.length !== 0) {
+         console.log('send info:', sendInfo);
          try {
             const response = await fetch(url, {
                method: "POST",

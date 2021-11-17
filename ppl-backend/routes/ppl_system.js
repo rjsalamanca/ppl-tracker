@@ -72,44 +72,42 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
          // Update Days
          await routineModel.updateRoutineDays(days);
 
-         days.forEach(async (day, dayIdx) => {
-            console.log('first day:', day)
+         days.forEach(async (day) => {
+
             if (day.hasOwnProperty('newDay')) {
+               const addedDay = await routineModel.addRoutineDays(day);
+
                if (!!day.newDay) {
-                  const test = await routineModel.addRoutineDays(day);
-                  console.log('test:', test);
-                  day['routine_id'] = test.rows[0].routine_id;
-                  day['routine_day_id'] = test.rows[0].id;
-                  // day = test.rows[0];
-                  // day = await routineModel.getRoutineDay(day);
-                  // console.log('day what:', day)
+                  // Add a new day and add routine id and routine day id after inserting.
+                  day['routine_id'] = addedDay.rows[0].routine_id;
+                  day['routine_day_id'] = addedDay.rows[0].id;
                }
             }
 
-            // Update Exercise Name
-            console.log('update:', day);
-            await routineModel.updateExerciseName(day.exercises);
+            // Only update exercise name on non rest days.
+            if (day.exercises !== null && !day.rest_day) {
+               // Update Exercise Name
+               await routineModel.updateExerciseName(day.exercises);
 
-            day.exercises.forEach(async (exercise) => {
-               console.log('in day:', day)
-               // Add new Exercises to Existing days.
-               if (exercise.hasOwnProperty('newExercise')) {
-                  await routineModel.addSingleExercise(exercise.name, day.routine_day_id);
-                  await routineModel.addExerciseSets(exercise, day);
-               }
-               else {
-                  // Add new sets to existing exercise.
-                  console.log('ex:', exercise);
-                  exercise.sets.forEach(async (set) => {
-                     if (set.hasOwnProperty('newset')) {
-                        await routineModel.addSingleExerciseSet(set.weight, set.reps, exercise.id);
-                     };
-                  });
-               }
+               day.exercises.forEach(async (exercise) => {
+                  // Add new Exercises to Existing days.
+                  if (exercise.hasOwnProperty('newExercise')) {
+                     await routineModel.addSingleExercise(exercise.name, day.routine_day_id);
+                     await routineModel.addExerciseSets(exercise, day);
+                  }
+                  else {
+                     // Add new sets to existing exercise.
+                     exercise.sets.forEach(async (set) => {
+                        if (set.hasOwnProperty('newset')) {
+                           await routineModel.addSingleExerciseSet(set.weight, set.reps, exercise.id);
+                        };
+                     });
+                  }
 
-               //Update Existing sets.
-               await routineModel.updateExerciseSets(exercise, day);
-            });
+                  //Update Existing sets.
+                  await routineModel.updateExerciseSets(exercise, day);
+               });
+            }
          })
       }
 
@@ -141,24 +139,26 @@ router.post('/routine/add_routine', requireLogin, async (req, res) => {
             if (addDays.rowCount >= 1) {
                // add exercises
                days.forEach(async day => {
-                  let addExercises = await addingRoutineModel.addExercises(day);
-                  if (!day.hasOwnProperty('rest_day') && addExercises.rowCount >= 1) {
-                     // add sets
-                     day.exercises.map(exercise => {
-                        addingRoutineModel.addExerciseSets(exercise, day);
-                     });
+                  if (!day.rest_day) {
+                     const addExercises = await addingRoutineModel.addExercises(day);
+                     if (addExercises.rowCount >= 1) {
+                        // add sets
+                        day.exercises.map(exercise => {
+                           addingRoutineModel.addExerciseSets(exercise, day);
+                        });
+                     }
                   }
-               })
+               });
             }
             // No failures, we successfully added a routine.
-            res.json({ routine_added: true })
+            res.json({ routine_added: true });
          } catch (err) {
             // Error Code: 2 Routine insert failures.
-            res.json({ routine_added: false, error_code: 2 })
+            res.json({ routine_added: false, error_code: 2 });
          }
       } else {
          // Error Code: 3 Insert Routine Name issue
-         res.json({ routine_added: false, error_code: 3 })
+         res.json({ routine_added: false, error_code: 3 });
       }
    } else {
       // Error Code: 1 Routine with the same name has already been created

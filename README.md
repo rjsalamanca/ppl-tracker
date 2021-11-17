@@ -96,6 +96,9 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Editing of routine/exericses/sets when creating routine.
 - [x] Ability to remove days when creating routine.
 - [x] Ability to remove exercises when creating routine.
+- [x] Ability to save a Rest Day
+  - [x] Work + rest days not saving.
+  - [x] Work + rest days not appearing on profile page.
 - [x] Ability to edit routines/days/exercises after we have **SAVED**.
   - [x] Be able to edit the whole routine.
   - [x] Add Failsafe to update.
@@ -105,7 +108,8 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - [x] Edit: Add Sets
   - [x] Edit: Add Exercises
   - [x] Edit: Add Days
-  - [ ] Edit: Add Rest Days
+  - [x] Edit: Work + rest days not appearing on edit page.
+  - [x] Edit: Add Rest Days
   - [ ] Edit: Delete Sets
   - [ ] Edit: Delete Exercises
   - [ ] Edit: Delete Days

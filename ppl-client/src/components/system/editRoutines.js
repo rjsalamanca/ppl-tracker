@@ -86,7 +86,6 @@ function EditRoutines() {
          days: routineDays
       }
 
-      console.log('Send Info:', sendInfo);
       setErrorCode(-1)
 
       if (routineName.length < 3) {
@@ -104,7 +103,7 @@ function EditRoutines() {
          // 3: No Days In Routine                      //
          // 4: Backend Connection Failed               //
          ////////////////////////////////////////////////
-
+         console.log('send info:', sendInfo);
          try {
             const response = await fetch(url, {
                method: "POST",
@@ -220,7 +219,6 @@ function EditRoutines() {
                <AddDay />
                <Button className="mb-3" type="submit" variant={'danger'} onClick={() => updateRoutine()}>Update</Button>
                {displayAddDayModal()}
-
             </div>
          )
       }

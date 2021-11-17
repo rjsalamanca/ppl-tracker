@@ -37,7 +37,7 @@ function AddDay() {
       let tempDays = [...routineDays];
       let currentAmountOfRestDays = tempDays.filter(e => e.name.includes('Rest Day')).length;
 
-      tempDays.push({ name: `Rest Day #${currentAmountOfRestDays + 1}`, rest_day: true, exercises: [{ name: 'No exercises available.' }] });
+      tempDays.push({ name: `Rest Day #${currentAmountOfRestDays + 1}`, newDay: true, rest_day: true, exercises: [{ name: 'No exercises available.' }] });
       setRoutineDays(tempDays);
    }
 
@@ -48,7 +48,6 @@ function AddDay() {
    }
 
    const editDay = (idx) => {
-      console.log('editing yes')
       setEditing({ idx, status: true });
       if (!!show) {
          setShow(false);
@@ -67,7 +66,7 @@ function AddDay() {
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
 
-            tempDays.push({ name: dayName, exercises: tempExercises, newDay: true })
+            tempDays.push({ name: dayName, exercises: tempExercises, rest_day: false, newDay: true })
 
             setRoutineDays(tempDays);
             setDayName('')
@@ -151,16 +150,17 @@ function AddDay() {
 
       return routineDays.length > 0 && routineDays.map((day, dayIdx) =>
          <div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
-            <Button className="editDay" variant="secondary" onClick={() => editDay(dayIdx)}>Edit</Button>
+            {/* Edit buttton removed when it's a rest day. You can only delete. */}
+            {!day.rest_day && <Button className="editDay" variant="secondary" onClick={() => editDay(dayIdx)}>Edit</Button>}
             <Button className="deleteDay" variant="secondary" onClick={() => removeDay(dayIdx)}>X</Button>
             <h4 className="dayName h4">Day {dayIdx + 1} - {day.name}</h4>
             <h6 className="exerciseHeader h6">Exercises:</h6>
             <ol>
-               {day.exercises.map((exercise, idx) =>
+               {day.exercises !== null ? day.exercises.map((exercise, idx) =>
                   <li key={`exercise-${day.name}-${idx}`}>
                      {exercise.name}
                   </li>
-               )}
+               ) : 'No Exercises available.'}
             </ol>
          </div>
       )
