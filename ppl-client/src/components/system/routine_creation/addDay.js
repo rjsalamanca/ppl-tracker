@@ -17,6 +17,10 @@ function AddDay() {
 
    const clearDayError = () => setDayError(0);
    const closeModal = () => {
+      console.log('close')
+      console.log(tempExercises);
+
+      setTempExercises(tempExercises.map(e => e.deleted = false));
       setShow(false);
       setEditing(false);
    }
@@ -62,18 +66,13 @@ function AddDay() {
 
    const saveExercisesToDay = async () => {
       let tempDays = [...routineDays];
-      console.log('Save Day click');
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
-
             tempDays.push({ name: dayName, exercises: tempExercises, rest_day: false, newDay: true })
-
             setRoutineDays(tempDays);
             setDayName('')
             setDayError(0);
             setShow(false)
-
-            console.log('temp Days:', tempDays);
          } else {
             setDayError(2)
          }
@@ -84,16 +83,20 @@ function AddDay() {
 
    const saveEditDay = () => {
       let tempDays = [...routineDays];
+      console.log('Edit Day Button:', tempExercises);
       if (dayName !== '') {
-         if (tempExercises.length !== 0) {
-            tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises, newDay: !!routineDays[editing.idx].hasOwnProperty('newDay') ? true : false });
+         console.log(tempExercises.length);
+         console.log(tempExercises.filter(e => e.hasOwnProperty('deleted')).length);
+         if (tempExercises.length === tempExercises.filter(e => e.hasOwnProperty('deleted')).length) {
+            setDayError(2)
+         } else if (tempExercises.length !== 0) {
+            tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises, rest_day: routineDays[editing.idx].rest_day, newDay: !!routineDays[editing.idx].hasOwnProperty('newDay') ? true : false });
             setRoutineDays(tempDays);
             setDayName('');
             setExercises([]);
             setDayError(0);
             setEditing(false);
             setShow(false);
-            console.log(tempDays);
          } else {
             setDayError(2)
          }
@@ -157,9 +160,15 @@ function AddDay() {
             <h6 className="exerciseHeader h6">Exercises:</h6>
             <ol>
                {day.exercises !== null ? day.exercises.map((exercise, idx) =>
-                  <li key={`exercise-${day.name}-${idx}`}>
-                     {exercise.name}
-                  </li>
+                  !exercise.hasOwnProperty('deleted') ?
+                     <li key={`exercise-${day.name}-${idx}`}>
+                        {exercise.name}
+                     </li>
+                     :
+                     !exercise.deleted ?
+                        <li key={`exercise-${day.name}-${idx}`}>
+                           {exercise.name}
+                        </li> : ''
                ) : 'No Exercises available.'}
             </ol>
          </div>

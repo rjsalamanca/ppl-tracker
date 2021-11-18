@@ -83,22 +83,30 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
                   day['routine_day_id'] = addedDay.rows[0].id;
                }
             }
-
             // Only update exercise name on non rest days.
             if (day.exercises !== null && !day.rest_day) {
                // Update Exercise Name
                await routineModel.updateExerciseName(day.exercises);
 
                day.exercises.forEach(async (exercise) => {
-                  // Add new Exercises to Existing days.
-                  if (exercise.hasOwnProperty('newExercise')) {
+                  if (exercise.hasOwnProperty('deleted')) {
+                     if (!!exercise.deleted) {
+                        console.log('deleted exercise:', deleted);
+                     }
+
+                     // Add new Exercises to Existing days.
+                  } else if (exercise.hasOwnProperty('newExercise')) {
                      await routineModel.addSingleExercise(exercise.name, day.routine_day_id);
                      await routineModel.addExerciseSets(exercise, day);
                   }
                   else {
                      // Add new sets to existing exercise.
                      exercise.sets.forEach(async (set) => {
-                        if (set.hasOwnProperty('newset')) {
+                        if (set.hasOwnProperty('deleted')) {
+                           if (!!set.deleted) {
+                              await routineModel.deleteSingleExerciseSet(set.id);
+                           }
+                        } else if (set.hasOwnProperty('newset')) {
                            await routineModel.addSingleExerciseSet(set.weight, set.reps, exercise.id);
                         };
                      });
@@ -106,7 +114,7 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
 
                   //Update Existing sets.
                   await routineModel.updateExerciseSets(exercise, day);
-               });
+               }); x
             }
          })
       }
@@ -134,7 +142,7 @@ router.post('/routine/add_routine', requireLogin, async (req, res) => {
          const addingRoutineModel = new pplSystemModel(getRoutineInfo.id, getRoutineInfo.routine_name, days, getRoutineInfo.date_started, user_id);
          try {
             // add all days
-            let addDays = await addingRoutineModel.addRoutineDays(days);
+            const addDays = await addingRoutineModel.addRoutineDays(days);
 
             if (addDays.rowCount >= 1) {
                // add exercises

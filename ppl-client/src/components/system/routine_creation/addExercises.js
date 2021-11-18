@@ -21,13 +21,13 @@ function AddExercises(props) {
    }
 
    const handleShow = () => {
-      let hidePreviousModal = document.getElementById('addDayModal').parentNode;
+      const hidePreviousModal = document.getElementById('addDayModal').parentNode;
       hidePreviousModal.classList.add("hideAddModal");
       setShow(true);
    }
 
    const handleSetWeight = (e, idx) => {
-      let newSets = [...exerciseSets];
+      const newSets = [...exerciseSets];
 
       if (e.target.value === '' || e.target.value.match(/([^0-9])/g)) {
          newSets[idx].weight = null;
@@ -38,20 +38,28 @@ function AddExercises(props) {
    };
 
    const handleSetReps = (e, idx) => {
-      let newSets = [...exerciseSets];
+      const newSets = [...exerciseSets];
       newSets[idx].reps = e.target.value;
       setExerciseSets(newSets);
    };
 
    const removeSets = (idx) => {
-      let newSets = [...exerciseSets];
-      newSets.splice(idx, 1);
+      const newSets = [...exerciseSets];
+      if (newSets[idx].hasOwnProperty('id')) {
+         newSets[idx]['deleted'] = true;
+      } else {
+         newSets.splice(idx, 1);
+      }
       setExerciseSets(newSets);
    }
 
    const removeExercise = (idx) => {
-      let tempDays = [...exercises];
-      tempDays.splice(idx, 1);
+      const tempDays = [...exercises];
+      if (tempDays[idx].hasOwnProperty('id')) {
+         tempDays[idx]['deleted'] = true;
+      } else {
+         tempDays.splice(idx, 1);
+      }
 
       setTempExercises(tempDays)
       setExercises(tempDays);
@@ -126,6 +134,7 @@ function AddExercises(props) {
    const saveEditExercise = () => {
       let newExercises = [...exercises];
       let tempSets = exerciseSets.filter((set) => set.weight !== null);
+      console.log(newExercises);
       if (exerciseSets.length === 0) {
          setExerciseError(3)
       } else {
@@ -139,11 +148,14 @@ function AddExercises(props) {
 
             if (exerciseSets.length === tempSets.length) {
 
-               newExercises[editing.idx] = ({ id: exercises[editing.idx].id, name: exerciseName, routine_day_id: exercises[editing.idx].routine_day_id, sets: exerciseSets, test: 'new' })
+               newExercises[editing.idx] = ({ id: exercises[editing.idx].id, name: exerciseName, routine_day_id: exercises[editing.idx].routine_day_id, sets: exerciseSets })
                setExercises(newExercises);
                setExerciseError(0);
                setTempExercises(newExercises);
                handleClose();
+               console.log('1')
+            } else {
+               console.log('2')
             }
          } else {
             setExerciseError(2)
@@ -180,22 +192,24 @@ function AddExercises(props) {
                <Form.Group controlId="formBasicEmail">
                   <div>
                      Exercise Name: <Form.Control type="input" onChange={(e) => setExerciseName(e.target.value)} value={exerciseName} placeholder="Ex. Push Day, Pull Day, Leg Day" />
-                     {exerciseSets.map((set, idx) =>
-                        <div key={`set-${idx + 1}`} className="setContainer">
-                           <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
-                           <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => handleSetWeight(e, idx)} value={exerciseSets[idx].weight === null ? '' : exerciseSets[idx].weight} />
-                           <span className="weightRepsLabel">Reps:</span>
-                           <select className="setReps" onChange={e => handleSetReps(e, idx)} value={exerciseSets[idx].reps === 0 && exerciseSets[idx].weight === null ? 1 : exerciseSets[idx].reps}>
-                              {
-                                 displayReps(25).map((ele, repIdx) =>
-                                    <option key={`set${idx}-reps${ele}`}>{ele}</option>
-                                 )
-                              }
-                           </select>
-                           <Button className="setDelete" variant="danger" onClick={() => removeSets(idx)}>
-                              X
-                           </Button>
-                        </div>
+                     {exerciseSets.map((set, idx) => {
+                        return !set.hasOwnProperty('deleted') &&
+                           <div key={`set-${idx + 1}`} className="setContainer">
+                              <b className="boldtest">Set {idx + 1}</b><span className="weightRepsLabel">Weight:</span>
+                              <input className="setWeight" type="text" placeholder=" Enter weight in lbs" onChange={e => handleSetWeight(e, idx)} value={exerciseSets[idx].weight === null ? '' : exerciseSets[idx].weight} />
+                              <span className="weightRepsLabel">Reps:</span>
+                              <select className="setReps" onChange={e => handleSetReps(e, idx)} value={exerciseSets[idx].reps === 0 && exerciseSets[idx].weight === null ? 1 : exerciseSets[idx].reps}>
+                                 {
+                                    displayReps(25).map((ele, repIdx) =>
+                                       <option key={`set${idx}-reps${ele}`}>{ele}</option>
+                                    )
+                                 }
+                              </select>
+                              <Button className="setDelete" variant="danger" onClick={() => removeSets(idx)}>
+                                 X
+                              </Button>
+                           </div>
+                     }
                      )}
                      <Button className="btn-outline-primary" variant="light" onClick={(e) => addSet(e)}>Add Set</Button>
                      <div className="exerciseError">
@@ -209,7 +223,7 @@ function AddExercises(props) {
 
                {
                   !!editing.status ?
-                     <Button variant="primary" onClick={(e) => saveEditExercise(e)}>Edit Day</Button>
+                     <Button variant="primary" onClick={(e) => saveEditExercise(e)}>Edit Exercises</Button>
                      :
                      <Button variant="primary" onClick={(e) => saveExercise(e)}>Save Day</Button>
                }
@@ -220,13 +234,15 @@ function AddExercises(props) {
    }
 
    const displayExercisesToDay = () => {
-
-      if (exercises.length === 0) {
+      const findExercisesDeleted = exercises.filter((e) => e.hasOwnProperty('deleted'));
+      console.log(findExercisesDeleted);
+      if (exercises.length === 0 || (findExercisesDeleted.length === exercises.length)) {
          return 'No exercises added - add an exercise to your day'
       }
 
       return (
          exercises.map((exercise, idx) =>
+            !exercise.hasOwnProperty('deleted') &&
             <div className="exerciseAndSets" key={`exercise-${idx}`}>
                <Button className="deleteExercise" variant="secondary" onClick={() => removeExercise(idx)}>X</Button>
                <Button className="editExercise" variant="secondary" onClick={() => editExercise(idx)}>Edit</Button>
@@ -240,7 +256,9 @@ function AddExercises(props) {
                      </tr>
                   </thead>
                   <tbody>
+                     {/* Only show exercises that don't have the deleted key*/}
                      {exercise.sets.map((set, setIdx) =>
+                        !set.hasOwnProperty('deleted') &&
                         <tr key={`exercise-${exercise.name}-set-${setIdx + 1}-table`}>
                            <th scope="row">{setIdx + 1}</th>
                            <td>{set.weight}lbs</td>

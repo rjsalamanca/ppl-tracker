@@ -226,6 +226,17 @@ class PPL_System {
       }
    }
 
+   async deleteRoutine(id) {
+      try {
+         const response = await db.result(`
+            DELETE FROM routine WHERE id = $1
+         `, [id]);
+         return response;
+      } catch (err) {
+         return err.msg;
+      }
+   }
+
    async updateRoutineName() {
       try {
          const response = await db.result(`
@@ -245,16 +256,21 @@ class PPL_System {
    async addRoutineDays(days) {
       const buildDays = () => {
          let buildInsert;
+         console.log(days);
 
          if (typeof days === 'object' && !!Array.isArray(days)) {
             if (days.length === 1) {
+               console.log('1');
                buildInsert = `('${days[0].name}', ${days[0].rest_day}, ${this.routine_id})`
             } else {
+               console.log('2');
                buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
             }
          } else if (typeof days === 'object' && !Array.isArray(days)) {
+            console.log('3');
             buildInsert = `('${days.name}', ${days.rest_day}, ${this.routine_id})`;
          } else {
+            console.log('4');
             buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
          }
 
@@ -269,6 +285,17 @@ class PPL_System {
          return response;
       } catch (err) {
          console.log(err)
+         return err.msg;
+      }
+   }
+
+   async deleteRoutineDay(id) {
+      try {
+         const response = await db.result(`
+            DELETE FROM routine_day WHERE id = $1
+         `, [id]);
+         return response;
+      } catch (err) {
          return err.msg;
       }
    }
@@ -317,6 +344,17 @@ class PPL_System {
       }
    }
 
+   async deleteSingleExerciseSet(id) {
+      try {
+         const response = await db.result(`
+            DELETE FROM exercises WHERE id = $1
+         `, [id]);
+         return response;
+      } catch (err) {
+         return err.msg;
+      }
+   }
+
    async updateExerciseName(exercises) {
       const buildExercises = exercises.map(exercise => `(${exercise.id}, '${exercise.name}', ${exercise.routine_day_id})`);
 
@@ -345,7 +383,7 @@ class PPL_System {
                (SELECT id from routine_day WHERE day_name = '${day.name}' AND routine_id = ${this.routine_id})))`).join(',');
       try {
          const response = await db.result(`
-         INSERT INTO exercise_sets(weight,set_num, reps, exercise_id)
+         INSERT INTO exercise_sets(weight, set_num, reps, exercise_id)
          VALUES ${buildSets}`);
 
          return response;
@@ -364,6 +402,15 @@ class PPL_System {
          return response;
       } catch (err) {
          return err.msg;
+      }
+   }
+
+   async deleteSingleExerciseSet(id) {
+      try {
+         const response = await db.result('DELETE FROM exercise_sets WHERE id = $1', [id]);
+         return response;
+      } catch (err) {
+         return err.msg
       }
    }
 
