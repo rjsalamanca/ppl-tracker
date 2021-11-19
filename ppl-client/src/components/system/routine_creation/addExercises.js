@@ -234,15 +234,15 @@ function AddExercises(props) {
    }
 
    const displayExercisesToDay = () => {
-      const findExercisesDeleted = exercises.filter((e) => e.hasOwnProperty('deleted'));
-      console.log(findExercisesDeleted);
+      // Check if exercises has the 'deleted' key then filter all of them by the deleted:true values.
+      const findExercisesDeleted = exercises.map(e => e.hasOwnProperty('deleted')).filter(ed => !!ed.deleted);
       if (exercises.length === 0 || (findExercisesDeleted.length === exercises.length)) {
          return 'No exercises added - add an exercise to your day'
       }
 
       return (
          exercises.map((exercise, idx) =>
-            !exercise.hasOwnProperty('deleted') &&
+            (!exercise.deleted === undefined || !exercise.deleted) &&
             <div className="exerciseAndSets" key={`exercise-${idx}`}>
                <Button className="deleteExercise" variant="secondary" onClick={() => removeExercise(idx)}>X</Button>
                <Button className="editExercise" variant="secondary" onClick={() => editExercise(idx)}>Edit</Button>
