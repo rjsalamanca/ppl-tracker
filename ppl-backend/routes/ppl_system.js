@@ -91,7 +91,7 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
                day.exercises.forEach(async (exercise) => {
                   if (exercise.hasOwnProperty('deleted')) {
                      if (!!exercise.deleted) {
-                        console.log('deleted exercise:', deleted);
+                        console.log('deleted exercise:', exercise.deleted);
                      }
 
                      // Add new Exercises to Existing days.
@@ -114,7 +114,7 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
 
                   //Update Existing sets.
                   await routineModel.updateExerciseSets(exercise, day);
-               }); x
+               });
             }
          })
       }

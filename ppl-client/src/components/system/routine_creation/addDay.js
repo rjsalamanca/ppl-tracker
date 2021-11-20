@@ -83,18 +83,23 @@ function AddDay() {
 
    const saveEditDay = () => {
       const tempDays = [...routineDays];
-      const countDeleted = tempExercises.map(e => e.hasOwnProperty('deleted')).filter(ed => !!ed.deleted).length;
-      const countNonDeleted = tempExercises.map(e => e.hasOwnProperty('deleted')).filter(ed => !ed.deleted || ed.deleted === undefined).length;
+      const countDeleted = tempExercises.map(e => e.hasOwnProperty('deleted')).filter(ed => ed === true).length;
+      const countNonDeleted = tempExercises.map(e => e.hasOwnProperty('deleted')).filter(ed => ed === false).length;
 
       console.log('Edit Day Button:', tempExercises);
+      console.log(tempExercises);
+      console.log('countDeleted map:', tempExercises.map(e => e.hasOwnProperty('deleted')))
+
       if (dayName !== '') {
-         console.log(tempExercises.length);
-         console.log(countDeleted);
-         console.log(countNonDeleted);
+
+         console.log('temp ex len:', tempExercises.length);
+         console.log('deleted len:', countDeleted);
+         console.log('not deleted len:', countNonDeleted);
+
          if (tempExercises.length === countDeleted) {
             console.log('1')
             setDayError(2)
-         } else if (tempExercises.length !== 0) {
+         } else if (tempExercises.length !== countDeleted) {
             console.log('2')
             tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises, rest_day: routineDays[editing.idx].rest_day, newDay: !!routineDays[editing.idx].hasOwnProperty('newDay') ? true : false });
             setRoutineDays(tempDays);
