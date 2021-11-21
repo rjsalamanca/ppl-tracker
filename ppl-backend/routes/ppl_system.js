@@ -74,10 +74,12 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
 
          days.forEach(async (day) => {
 
-            if (day.hasOwnProperty('newDay')) {
-               const addedDay = await routineModel.addRoutineDays(day);
+            console.log(day);
 
+            if (day.hasOwnProperty('newDay')) {
                if (!!day.newDay) {
+                  const addedDay = await routineModel.addRoutineDays(day);
+
                   // Add a new day and add routine id and routine day id after inserting.
                   day['routine_id'] = addedDay.rows[0].routine_id;
                   day['routine_day_id'] = addedDay.rows[0].id;

@@ -83,8 +83,8 @@ function AddDay() {
 
    const saveEditDay = () => {
       const tempDays = [...routineDays];
-      const countDeleted = tempExercises.map(e => e.hasOwnProperty('deleted')).filter(ed => ed === true).length;
-      const countNonDeleted = tempExercises.map(e => e.hasOwnProperty('deleted')).filter(ed => ed === false).length;
+      const countDeleted = tempExercises.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
+      const countNonDeleted = tempExercises.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === false).length;
 
       console.log('Edit Day Button:', tempExercises);
       console.log(tempExercises);
