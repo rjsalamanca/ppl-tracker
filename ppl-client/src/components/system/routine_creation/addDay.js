@@ -17,9 +17,6 @@ function AddDay() {
 
    const clearDayError = () => setDayError(0);
    const closeModal = () => {
-      console.log('close')
-      console.log(tempExercises);
-
       setTempExercises(tempExercises.map(e => e.deleted = false));
       setShow(false);
       setEditing(false);
@@ -84,23 +81,11 @@ function AddDay() {
    const saveEditDay = () => {
       const tempDays = [...routineDays];
       const countDeleted = tempExercises.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
-      const countNonDeleted = tempExercises.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === false).length;
-
-      console.log('Edit Day Button:', tempExercises);
-      console.log(tempExercises);
-      console.log('countDeleted map:', tempExercises.map(e => e.hasOwnProperty('deleted')))
 
       if (dayName !== '') {
-
-         console.log('temp ex len:', tempExercises.length);
-         console.log('deleted len:', countDeleted);
-         console.log('not deleted len:', countNonDeleted);
-
          if (tempExercises.length === countDeleted) {
-            console.log('1')
             setDayError(2)
          } else if (tempExercises.length !== countDeleted) {
-            console.log('2')
             tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises, rest_day: routineDays[editing.idx].rest_day, newDay: !!routineDays[editing.idx].hasOwnProperty('newDay') ? true : false });
             setRoutineDays(tempDays);
             setDayName('');
@@ -109,7 +94,6 @@ function AddDay() {
             setEditing(false);
             setShow(false);
          } else {
-            console.log('3')
             setDayError(2)
          }
       } else {
@@ -142,7 +126,7 @@ function AddDay() {
             <Modal.Body>
                <Form.Group controlId="formBasicEmail">
                   <Form.Label>Day Name: </Form.Label>
-                  <Form.Control type="input" onChange={(e) => setDayName(e.target.value)} value={dayName} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                  <Form.Control type="input" onChange={(e) => setDayName(e.target.value)} value={dayName} placeholder="Ex. Bench Press, Squats, Deadlifts..." />
                </Form.Group>
                <AddExercises clearDayError={clearDayError} />
                <div className="error-message">
@@ -181,16 +165,6 @@ function AddDay() {
                         <li key={`exercise-${day.name}-${idx}`}>
                            {exercise.name}
                         </li> : ''
-
-                  // !exercise.hasOwnProperty('deleted') ?
-                  //    <li key={`exercise-${day.name}-${idx}`}>
-                  //       {exercise.name}
-                  //    </li>
-                  //    :
-                  //    !exercise.deleted ?
-                  //       <li key={`exercise-${day.name}-${idx}`}>
-                  //          {exercise.name}
-                  //       </li> : ''
                ) : 'No Exercises available.'}
             </ol>
          </div>
