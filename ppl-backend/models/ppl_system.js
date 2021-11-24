@@ -344,11 +344,10 @@ class PPL_System {
       }
    }
 
-   async deleteSingleExerciseSet(id) {
+   // Deleting of Exercises
+   async deleteSingleExercise(id) {
       try {
-         const response = await db.result(`
-            DELETE FROM exercises WHERE id = $1
-         `, [id]);
+         const response = await db.result(`DELETE FROM exercises WHERE id = $1`, [id]);
          return response;
       } catch (err) {
          return err.msg;

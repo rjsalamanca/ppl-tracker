@@ -43,8 +43,21 @@ function AddDay() {
    }
 
    const removeDay = (idx) => {
+      // Shallow Copy Editing
+      // const newSets = { ...editing };
+      // if (newSets.sets[idx].hasOwnProperty('id')) {
+      //    newSets.sets[idx]['deleted'] = true;
+      // } else {
+      //    newSets.sets.splice(idx, 1);
+      // }
+      // setEditing(newSets);
+
       let tempDays = [...routineDays];
+
+
       tempDays.splice(idx, 1);
+
+
       setRoutineDays(tempDays);
    }
 
@@ -86,8 +99,10 @@ function AddDay() {
          if (tempExercises.length === countDeleted) {
             setDayError(2)
          } else if (tempExercises.length !== countDeleted) {
+
             tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises, rest_day: routineDays[editing.idx].rest_day, newDay: !!routineDays[editing.idx].hasOwnProperty('newDay') ? true : false });
             setRoutineDays(tempDays);
+            console.log(routineDays);
             setDayName('');
             setExercises([]);
             setDayError(0);

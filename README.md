@@ -111,7 +111,7 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
   - [x] Edit: Work + rest days not appearing on edit page.
   - [x] Edit: Add Rest Days
   - [x] Edit: Delete Sets
-  - [ ] Edit: Delete Exercises
+  - [x] Edit: Delete Exercises
   - [ ] Edit: Delete Days
   - [ ] Edit: Delete Rest Days
 - [x] Rework with hooks or redux for state management.

@@ -89,13 +89,12 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
             if (day.exercises !== null && !day.rest_day) {
                // Update Exercise Name
                await routineModel.updateExerciseName(day.exercises);
-
                day.exercises.forEach(async (exercise) => {
                   if (exercise.hasOwnProperty('deleted')) {
                      if (!!exercise.deleted) {
+                        await routineModel.deleteSingleExercise(exercise.id);
                         console.log('deleted exercise:', exercise.deleted);
                      }
-
                      // Add new Exercises to Existing days.
                   } else if (exercise.hasOwnProperty('newExercise')) {
                      await routineModel.addSingleExercise(exercise.name, day.routine_day_id);
@@ -113,7 +112,6 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
                         };
                      });
                   }
-
                   //Update Existing sets.
                   await routineModel.updateExerciseSets(exercise, day);
                });
