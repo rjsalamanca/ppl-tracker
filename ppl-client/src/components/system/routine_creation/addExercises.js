@@ -10,15 +10,17 @@ function AddExercises(props) {
    const [exerciseName, setExerciseName] = useState('');
    const [exerciseError, setExerciseError] = useState(0);
    const [exerciseSets, setExerciseSets] = useState([]);
-   const [editing, setEditing] = useState({ name: null, sets: null, idx: null, status: false });
+   const [editing, setEditing] = useState({ name: '', sets: [], idx: null, status: false });
    const { exercises, setExercises, tempExercises, setTempExercises } = useContext(CreateRoutineContext);
 
    const handleClose = () => {
       const hidePreviousModal = document.getElementById('addDayModal').parentNode;
       hidePreviousModal.classList.remove("hideAddModal");
 
+      console.log(editing);
       setShow(false);
-      setExerciseSets(exerciseSets.map(e => e.deleted = false));
+      setExerciseSets(exerciseSets.map(e => e.hasOwnProperty('deleted') ? e.deleted = false : ''));
+      setEditing({ name: '', sets: [], idx: null, status: false });
    }
 
    const handleShow = () => {
@@ -102,8 +104,8 @@ function AddExercises(props) {
    const addSet = () => {
       let newSets = { ...editing };
 
-      newSets.sets.push({ weight: null, newset: true, reps: 1, set: newSets.length + 1, set_date: null })
-      setEditing(newSets)
+      newSets.sets.push({ weight: null, newset: true, reps: 1, set: newSets.length + 1, set_date: null });
+      setEditing(newSets);
    }
 
    const displayReps = (maxReps) => {
@@ -117,28 +119,35 @@ function AddExercises(props) {
 
    const saveExercise = async () => {
       const newExercises = [...exercises];
-      const tempSets = exerciseSets.filter((set) => set.weight !== null);
+      const emptySets = editing.sets.filter((set) => set.weight === null);
+      const countDeleted = editing.sets.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
 
-      if (exerciseSets.length === 0) {
+      console.log(editing);
+      if (editing.sets.length === 0) {
          setExerciseError(3)
+         console.log('1');
       } else {
-         if (exerciseName !== '') {
-            for (let i = 0; i < exerciseSets.length; i++) {
-               if (exerciseSets[i].weight === null) {
-                  setExerciseError(1)
-                  break;
-               }
-            }
-            if (exerciseSets.length === tempSets.length) {
-               console.log(newExercises);
-               newExercises.push({ name: exerciseName, sets: exerciseSets, newExercise: true })
+         if (editing.name !== '') {
+            if (emptySets.length > 0) {
+               console.log('2');
+               setExerciseError(1)
+            } else if (editing.sets.length !== countDeleted) {
+               console.log('3');
+               newExercises.push({ name: editing.name, sets: editing.sets, newExercise: true })
 
+               // newExercises[editing.idx] = { id: exercises[editing.idx].id, name: editing.name, routine_day_id: exercises[editing.idx].routine_day_id, sets: editing.sets };
                setExercises(newExercises);
                setExerciseError(0);
                setTempExercises(newExercises);
                handleClose();
+            } else {
+               console.log('4');
+
+               setExerciseError(1)
             }
          } else {
+            console.log('5');
+
             setExerciseError(2)
          }
       }
@@ -147,12 +156,10 @@ function AddExercises(props) {
    const saveEditExercise = () => {
       const emptySets = editing.sets.filter((set) => set.weight === null);
       const countDeleted = editing.sets.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
-      // Deep Copy
-      // let currentEditingExercise = JSON.parse(JSON.stringify(editing));
       let newExercises = [...exercises];
 
       if (editing.sets.length === 0) {
-         setExerciseError(3)
+         setExerciseError(3);
       } else {
          if (editing.name !== '') {
             if (emptySets.length > 0) {
@@ -201,7 +208,7 @@ function AddExercises(props) {
                <Form.Group controlId="formBasicEmail">
                   <div>
                      Exercise Name:
-                     <Form.Control className="mb-3" type="input" onChange={(e) => handleExerciseName(e.target.value)} value={editing.name} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                     <Form.Control className="mb-3" type="input" onChange={(e) => handleExerciseName(e)} value={editing.name} placeholder="Ex. Push Day, Pull Day, Leg Day" />
                      {editing.sets !== null && editing.sets.map((set, idx) =>
                         (set.deleted === undefined || !set.deleted) &&
                         <div key={`set-${idx + 1}`} className="setContainer">
@@ -230,7 +237,7 @@ function AddExercises(props) {
                   !!editing.status ?
                      <Button variant="primary" onClick={(e) => saveEditExercise(e)}>Edit Exercises</Button>
                      :
-                     <Button variant="primary" onClick={(e) => saveExercise(e)}>Save Day</Button>
+                     <Button variant="primary" onClick={(e) => saveExercise(e)}>Save Exercise</Button>
                }
 
             </Modal.Footer>
@@ -241,7 +248,6 @@ function AddExercises(props) {
    const displayExercisesToDay = () => {
       // Check if exercises has the 'deleted' key then filter all of them by the deleted:true values.
 
-      console.log(exercises);
       const countDeleted = exercises.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
       if (exercises.length === 0 || (countDeleted.length === exercises.length)) {
          return 'No exercises added - add an exercise to your day'
