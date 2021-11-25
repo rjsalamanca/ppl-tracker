@@ -75,6 +75,12 @@ router.post('/routine/update_routine', requireLogin, async (req, res) => {
          days.forEach(async (day) => {
 
             console.log(day);
+            if (day.hasOwnProperty('deleted')) {
+               if (!!day.deleted) {
+
+                  await routineModel.deleteRoutineDay(day.routine_day_id);
+               }
+            }
 
             if (day.hasOwnProperty('newDay')) {
                if (!!day.newDay) {

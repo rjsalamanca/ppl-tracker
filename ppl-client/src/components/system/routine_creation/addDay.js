@@ -44,19 +44,12 @@ function AddDay() {
 
    const removeDay = (idx) => {
       // Shallow Copy Editing
-      // const newSets = { ...editing };
-      // if (newSets.sets[idx].hasOwnProperty('id')) {
-      //    newSets.sets[idx]['deleted'] = true;
-      // } else {
-      //    newSets.sets.splice(idx, 1);
-      // }
-      // setEditing(newSets);
-
       let tempDays = [...routineDays];
-
-
-      tempDays.splice(idx, 1);
-
+      if (!tempDays[idx].hasOwnProperty('newDay')) {
+         tempDays[idx]['deleted'] = true;
+      } else {
+         tempDays.splice(idx, 1);
+      }
 
       setRoutineDays(tempDays);
    }
@@ -161,9 +154,8 @@ function AddDay() {
    }
 
    const displayDays = () => {
-
-      return routineDays.length > 0 && routineDays.map((day, dayIdx) =>
-         <div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
+      const temp = (day, dayIdx) => {
+         return < div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
             {/* Edit buttton removed when it's a rest day. You can only delete. */}
             {!day.rest_day && <Button className="editDay" variant="secondary" onClick={() => editDay(dayIdx)}>Edit</Button>}
             <Button className="deleteDay" variant="secondary" onClick={() => removeDay(dayIdx)}>X</Button>
@@ -182,8 +174,17 @@ function AddDay() {
                         </li> : ''
                ) : 'No Exercises available.'}
             </ol>
-         </div>
-      )
+         </div >
+      }
+      return routineDays.length > 0 && routineDays.map((day, dayIdx) => {
+         if (day.hasOwnProperty('deleted')) {
+            if (!day.deleted) {
+               return temp(day, dayIdx);
+            }
+         } else {
+            return temp(day, dayIdx);
+         }
+      });
    }
 
    return (

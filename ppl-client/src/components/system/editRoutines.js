@@ -85,12 +85,14 @@ function EditRoutines() {
          routine_name: routineName,
          days: routineDays
       }
+      const countDeleted = routineDays.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
+
 
       setErrorCode(-1)
 
       if (routineName.length < 3) {
          setErrorCode(2)
-      } else if (routineDays.length !== 0) {
+      } else if (routineDays.length !== 0 && (routineDays.length !== countDeleted)) {
 
          const url = "http://localhost:3000/ppl/routine/update_routine";
 
@@ -103,7 +105,6 @@ function EditRoutines() {
          // 3: No Days In Routine                      //
          // 4: Backend Connection Failed               //
          ////////////////////////////////////////////////
-         console.log('send info:', sendInfo);
          try {
             const response = await fetch(url, {
                method: "POST",
