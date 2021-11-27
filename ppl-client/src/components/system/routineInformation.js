@@ -147,7 +147,7 @@ function RoutineInformation() {
 
    return (
       <div>
-         {console.log(fullRoutine.routine)}
+         {/* {console.log(fullRoutine.routine)} */}
          {displayRoutineDays()}
       </div>
    );
