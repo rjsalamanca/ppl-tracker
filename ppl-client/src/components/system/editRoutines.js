@@ -75,6 +75,9 @@ function EditRoutines() {
          console.log(err);
       }
    }
+   const refreshPage = () => {
+      window.location.reload(false);
+   }
 
    const updateRoutine = async () => {
       let sendInfo = {
@@ -82,12 +85,14 @@ function EditRoutines() {
          routine_name: routineName,
          days: routineDays
       }
+      const countDeleted = routineDays.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
+
 
       setErrorCode(-1)
 
       if (routineName.length < 3) {
          setErrorCode(2)
-      } else if (routineDays.length !== 0) {
+      } else if (routineDays.length !== 0 && (routineDays.length !== countDeleted)) {
 
          const url = "http://localhost:3000/ppl/routine/update_routine";
 
@@ -100,7 +105,6 @@ function EditRoutines() {
          // 3: No Days In Routine                      //
          // 4: Backend Connection Failed               //
          ////////////////////////////////////////////////
-
          try {
             const response = await fetch(url, {
                method: "POST",
@@ -186,7 +190,7 @@ function EditRoutines() {
    const displayAddDayModal = () => {
 
       return (
-         <Modal show={show} onHide={() => setShow(false)} id="addDayModal">
+         <Modal show={show} onHide={() => { setShow(false); refreshPage(); }} id="addDayModal">
             <Modal.Header closeButton>
                <Modal.Title>Completed Updating</Modal.Title>
             </Modal.Header>
@@ -195,11 +199,11 @@ function EditRoutines() {
                click below to either create a new routine or visit youur profile page.
             </Modal.Body>
             <Modal.Footer>
-               <Button variant="secondary" onClick={(e) => setShow(false)}>Close</Button>
+               <Button variant="secondary" onClick={(e) => { setShow(false); refreshPage(); }}>Close</Button>
                <Link className="" variant={'danger'} to="/ppl/create_routine">
                   <Button variant="secondary">Create a Routine</Button>
                </Link>
-               <Link className="" variant={'danger'} to="/ppl/create_routine">
+               <Link className="" variant={'danger'} to="/profile">
                   <Button variant="secondary">Profile</Button>
                </Link>
             </Modal.Footer>
@@ -216,7 +220,6 @@ function EditRoutines() {
                <AddDay />
                <Button className="mb-3" type="submit" variant={'danger'} onClick={() => updateRoutine()}>Update</Button>
                {displayAddDayModal()}
-
             </div>
          )
       }

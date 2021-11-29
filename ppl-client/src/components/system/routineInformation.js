@@ -89,11 +89,12 @@ function RoutineInformation() {
                                  :
                                  <div>
                                     <ul>
-                                       {workoutDays[day].exercises.map((exercise, idx) =>
+                                       {console.log(workoutDays[day].exercises)}
+                                       {/* {workoutDays[day].exercises.map((exercise, idx) =>
                                           <li key={`exercise-${workoutDays[day].name}-${idx}`}>
                                              {exercise.name}
                                           </li>
-                                       )}
+                                       )} */}
                                     </ul>
                                     <Button onClick={(e) => getSelectedWorkout(workoutDays[day])}>Start</Button>
                                  </div>
@@ -146,6 +147,7 @@ function RoutineInformation() {
 
    return (
       <div>
+         {console.log(fullRoutine.routine)}
          {displayRoutineDays()}
       </div>
    );

@@ -8,12 +8,12 @@ INSERT INTO routine
 VALUES('Push Pull Legs Routine', 'Nov 25 2019', 1);
 
 INSERT INTO routine_day
-   (day_name, routine_id)
-VALUES('Chest Day', 1);
+   (day_name, rest_day, routine_id)
+VALUES('Chest Day', false, 1);
 
 INSERT INTO routine_day
-   (day_name, routine_id)
-VALUES('Back Day', 1);
+   (day_name, rest_day, routine_id)
+VALUES('Back Day', false, 1);
 
 INSERT INTO exercises
    (exercise_name, routine_day_id)

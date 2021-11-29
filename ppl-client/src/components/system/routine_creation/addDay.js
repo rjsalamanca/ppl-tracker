@@ -16,10 +16,15 @@ function AddDay() {
    const { routineDays, setRoutineDays, tempExercises, setTempExercises, setExercises } = useContext(CreateRoutineContext);
 
    const clearDayError = () => setDayError(0);
+   const closeModal = () => {
+      setTempExercises(tempExercises.map(e => e.deleted = false));
+      setShow(false);
+      setEditing(false);
+   }
 
    const modalTrigger = () => {
       if (!!show) {
-         setShow(false)
+         setShow(false);
       } else {
          setExercises([])
          setShow(true);
@@ -33,36 +38,40 @@ function AddDay() {
       let tempDays = [...routineDays];
       let currentAmountOfRestDays = tempDays.filter(e => e.name.includes('Rest Day')).length;
 
-      tempDays.push({ name: `Rest Day #${currentAmountOfRestDays + 1}`, rest_day: true, exercises: [{ name: 'No exercises available.' }] });
+      tempDays.push({ name: `Rest Day #${currentAmountOfRestDays + 1}`, newDay: true, rest_day: true, exercises: [{ name: 'No exercises available.' }] });
       setRoutineDays(tempDays);
    }
 
    const removeDay = (idx) => {
+      // Shallow Copy Editing
       let tempDays = [...routineDays];
-      tempDays.splice(idx, 1);
+      if (!tempDays[idx].hasOwnProperty('newDay')) {
+         tempDays[idx]['deleted'] = true;
+      } else {
+         tempDays.splice(idx, 1);
+      }
+
       setRoutineDays(tempDays);
    }
 
    const editDay = (idx) => {
       setEditing({ idx, status: true });
       if (!!show) {
-         setShow(false)
+         setShow(false);
       } else {
          setShow(true);
-         setDayName(routineDays[idx].name)
-         setTempExercises(routineDays[idx].exercises)
-         setExercises(routineDays[idx].exercises)
+         setDayName(routineDays[idx].name);
+         setTempExercises(routineDays[idx].exercises);
+         setExercises(routineDays[idx].exercises);
          setDayError(0);
       }
    }
 
    const saveExercisesToDay = async () => {
       let tempDays = [...routineDays];
-
       if (dayName !== '') {
          if (tempExercises.length !== 0) {
-            tempDays.push({ name: dayName, exercises: tempExercises })
-
+            tempDays.push({ name: dayName, exercises: tempExercises, rest_day: false, newDay: true })
             setRoutineDays(tempDays);
             setDayName('')
             setDayError(0);
@@ -76,11 +85,17 @@ function AddDay() {
    }
 
    const saveEditDay = () => {
-      let tempDays = [...routineDays];
+      const tempDays = [...routineDays];
+      const countDeleted = tempExercises.map(e => e.hasOwnProperty('deleted') ? e.deleted : false).filter(ed => ed === true).length;
+
       if (dayName !== '') {
-         if (tempExercises.length !== 0) {
-            tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises });
+         if (tempExercises.length === countDeleted) {
+            setDayError(2)
+         } else if (tempExercises.length !== countDeleted) {
+
+            tempDays[editing.idx] = ({ name: dayName, routine_day_id: routineDays[editing.idx].routine_day_id, routine_id: routineDays[editing.idx].routine_id, exercises: tempExercises, rest_day: routineDays[editing.idx].rest_day, newDay: !!routineDays[editing.idx].hasOwnProperty('newDay') ? true : false });
             setRoutineDays(tempDays);
+            console.log(routineDays);
             setDayName('');
             setExercises([]);
             setDayError(0);
@@ -112,14 +127,14 @@ function AddDay() {
       }
 
       return (
-         <Modal show={show} onHide={() => setShow(false)} id="addDayModal">
+         <Modal show={show} onHide={() => closeModal()} id="addDayModal">
             <Modal.Header closeButton>
                <Modal.Title>Add A Day</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                <Form.Group controlId="formBasicEmail">
                   <Form.Label>Day Name: </Form.Label>
-                  <Form.Control type="input" onChange={(e) => setDayName(e.target.value)} value={dayName} placeholder="Ex. Push Day, Pull Day, Leg Day" />
+                  <Form.Control type="input" onChange={(e) => setDayName(e.target.value)} value={dayName} placeholder="Ex. Bench Press, Squats, Deadlifts..." />
                </Form.Group>
                <AddExercises clearDayError={clearDayError} />
                <div className="error-message">
@@ -127,7 +142,7 @@ function AddDay() {
                </div>
             </Modal.Body>
             <Modal.Footer>
-               <Button variant="secondary" onClick={(e) => setShow(false)}>Close</Button>
+               <Button variant="secondary" onClick={(e) => closeModal(e)}>Close</Button>
                {!!editing.status ?
                   <Button variant="primary" onClick={(e) => saveEditDay(e)}>Edit Day</Button>
                   :
@@ -139,22 +154,37 @@ function AddDay() {
    }
 
    const displayDays = () => {
-
-      return routineDays.length > 0 && routineDays.map((day, dayIdx) =>
-         <div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
-            <Button className="editDay" variant="secondary" onClick={() => editDay(dayIdx)}>Edit</Button>
+      const temp = (day, dayIdx) => {
+         return < div className="singleDayContainer" key={`day-${day.name}-${dayIdx}`}>
+            {/* Edit buttton removed when it's a rest day. You can only delete. */}
+            {!day.rest_day && <Button className="editDay" variant="secondary" onClick={() => editDay(dayIdx)}>Edit</Button>}
             <Button className="deleteDay" variant="secondary" onClick={() => removeDay(dayIdx)}>X</Button>
             <h4 className="dayName h4">Day {dayIdx + 1} - {day.name}</h4>
             <h6 className="exerciseHeader h6">Exercises:</h6>
             <ol>
-               {day.exercises.map((exercise, idx) =>
-                  <li key={`exercise-${day.name}-${idx}`}>
-                     {exercise.name}
-                  </li>
-               )}
+               {day.exercises !== null ? day.exercises.map((exercise, idx) =>
+                  exercise.deleted === undefined ?
+                     <li key={`exercise-${day.name}-${idx}`}>
+                        {exercise.name}
+                     </li>
+                     :
+                     !exercise.deleted ?
+                        <li key={`exercise-${day.name}-${idx}`}>
+                           {exercise.name}
+                        </li> : ''
+               ) : 'No Exercises available.'}
             </ol>
-         </div>
-      )
+         </div >
+      }
+      return routineDays.length > 0 && routineDays.map((day, dayIdx) => {
+         if (day.hasOwnProperty('deleted')) {
+            if (!day.deleted) {
+               return temp(day, dayIdx);
+            }
+         } else {
+            return temp(day, dayIdx);
+         }
+      });
    }
 
    return (

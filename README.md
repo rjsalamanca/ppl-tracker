@@ -96,12 +96,24 @@ PPL is short for Push Pull Legs. This project was created to be a personal track
 - [x] Editing of routine/exericses/sets when creating routine.
 - [x] Ability to remove days when creating routine.
 - [x] Ability to remove exercises when creating routine.
+- [x] Ability to save a Rest Day
+  - [x] Work + rest days not saving.
+  - [x] Work + rest days not appearing on profile page.
 - [x] Ability to edit routines/days/exercises after we have **SAVED**.
   - [x] Be able to edit the whole routine.
   - [x] Add Failsafe to update.
   - [x] Add Finish button.
   - [x] Work on backend UPDATE.
   - [x] Updating of select option doesn't work properly.
+  - [x] Edit: Add Sets
+  - [x] Edit: Add Exercises
+  - [x] Edit: Add Days
+  - [x] Edit: Work + rest days not appearing on edit page.
+  - [x] Edit: Add Rest Days
+  - [x] Edit: Delete Sets
+  - [x] Edit: Delete Exercises
+  - [x] Edit: Delete Days
+  - [ ] Edit: Delete Rest Days
 - [x] Rework with hooks or redux for state management.
   - We're using hooks
   - [x] Convert Profile Route and all children components.
