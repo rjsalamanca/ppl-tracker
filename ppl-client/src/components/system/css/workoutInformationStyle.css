@@ -1,49 +1,58 @@
 .workoutInfoContainer{
-    background: lightgray;
+   /* background: lightgray; */
 }
 
 .workoutInnerContainer{
-    padding:20px;
-    max-width:1400px;
-    margin:0 auto;
+   padding:20px;
+   max-width:1400px;
+   margin:0 auto;
+   border-radius:0 0 5px 5px;
+   background: lightgray;
+
 }
 
 .workoutButtonContainer{
-    display:flex;
-    justify-content: space-between;
+   display:flex;
+   justify-content: space-between;
+}
+
+#workoutProgressBar{
+   height:50px;
+   border-radius: 5px 5px 0 0;
+   background: silver;
 }
 
 .workoutInfo{
-    display:flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
+   display:flex;
+   flex-direction: row;
+   justify-content: center;
+   flex-wrap: wrap;
 }
 
 .workoutTitle{
-    text-align: center;
-    text-transform: uppercase;
+   text-align: center;
+   text-transform: uppercase;
 }
 
 .exerciseContainer{
-    border-radius: 4px;
-    margin:10px;
-    background-color: #fff;
-    min-width: 350px;
+   border-radius: 4px;
+   margin:10px;
+   background-color: #fff;
+   min-width: 350px;
 }
 
 .exerciseName{
-    display:block;
-    text-align:center;
-    text-transform: uppercase;
-    padding:10px;
-    font-size:1.2em;
+   display:block;
+   text-align:center;
+   text-transform: uppercase;
+   padding:10px;
+   font-size:1.2em;
 }
 
 .table.exerciseTable{
-    margin-bottom: 0;
+   margin-bottom: 0;
 }
 
 .exerciseTable{
-    text-align: center;
+   text-align: center;
 }
