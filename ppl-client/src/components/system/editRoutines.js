@@ -75,6 +75,7 @@ function EditRoutines() {
          console.log(err);
       }
    }
+
    const refreshPage = () => {
       window.location.reload(false);
    }

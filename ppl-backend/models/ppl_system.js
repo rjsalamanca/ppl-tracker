@@ -151,11 +151,19 @@ class PPL_System {
    }
 
    static async finishWorkout(workoutInfo, date) {
+      console.log(workoutInfo)
       try {
          const buildValues = workoutInfo.map(workout => {
             const buildSets = workout.sets.map(set => `(${set.weight}, ${set.set}, ${set.reps}, '${date}', ${set.exercise_id})`)
             return buildSets.join(',');
          }).join(',');
+
+
+         await db.result(`
+            UPDATE routine_day
+               SET workouts_completed = workouts_completed +1
+               WHERE ID  = $1
+         `, [workoutInfo[0].routine_day_id]);
 
          const response = await db.result(`
             INSERT INTO exercise_sets 
@@ -261,17 +269,17 @@ class PPL_System {
          if (typeof days === 'object' && !!Array.isArray(days)) {
             if (days.length === 1) {
                console.log('1');
-               buildInsert = `('${days[0].name}', ${days[0].rest_day}, ${this.routine_id})`
+               buildInsert = `('${days[0].name}', ${days[0].rest_day}, 0, ${this.routine_id})`
             } else {
                console.log('2');
-               buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
+               buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, 0, ${this.routine_id})`).join(',');
             }
          } else if (typeof days === 'object' && !Array.isArray(days)) {
             console.log('3');
-            buildInsert = `('${days.name}', ${days.rest_day}, ${this.routine_id})`;
+            buildInsert = `('${days.name}', ${days.rest_day}, 0, ${this.routine_id})`;
          } else {
             console.log('4');
-            buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
+            buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, 0, ${this.routine_id})`).join(',');
          }
 
          // typeof days === 'object' ?  `('${days.name}', ${days.rest_day}, ${this.routine_id})` : days.map(day => `('${day.name}', ${days.rest_day}, ${this.routine_id}, 'test')`).join(',');
@@ -280,7 +288,7 @@ class PPL_System {
 
       try {
          const response = await db.result(`
-            INSERT INTO routine_day(day_name, rest_day, routine_id)
+            INSERT INTO routine_day(day_name, rest_day, workouts_completed, routine_id)
             VALUES ${buildDays()} RETURNING *`);
          return response;
       } catch (err) {

@@ -27,6 +27,7 @@ CREATE TABLE routine_day
    id SERIAL PRIMARY KEY,
    day_name VARCHAR(100),
    rest_day BOOLEAN,
+   workouts_completed INT,
    routine_id INT REFERENCES routine(id) ON DELETE CASCADE
 );
 
