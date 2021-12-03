@@ -42,7 +42,7 @@ function TrackProgress() {
    }
 
    const getFullRoutine = async () => {
-      const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
+      const url = `http://localhost:3000/ppl/track/${selectedRoutine}`;
       try {
          const response = await fetch(url, {
             method: "GET",
