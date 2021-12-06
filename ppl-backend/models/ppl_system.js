@@ -165,6 +165,7 @@ class PPL_System {
                            routine_day.id AS routine_day_id,
                            routine_day.rest_day,
                            routine_day.routine_id,
+                           routine_day.workouts_completed,
                            (SELECT json_agg(EXER)
                               FROM(
                                  SELECT id,
