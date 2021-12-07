@@ -14,6 +14,8 @@ function TrackProgress() {
    }, [routines]);
 
    useEffect(() => {
+      // console.log(fullRoutine);
+      // console.log(selectedRoutine);
       if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') getFullRoutine();
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [fullRoutine, setFullRoutine, selectedRoutine]);
@@ -50,7 +52,7 @@ function TrackProgress() {
          });
 
          const data = await response.json();
-
+         console.log(data)
          if (!!data.routine_found) {
             await setFullRoutine(data)
          } else {

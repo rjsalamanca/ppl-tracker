@@ -190,5 +190,7 @@ router.get('/track/:routine?', requireLogin, async (req, res) => {
    const { routine } = req.params;
    const user_id = req.session.users.user_id;
    const getTrackedRoutine = await pplSystemModel.getTrackedRoutine(routine, user_id);
+   console.log(getTrackedRoutine)
+   res.json(getTrackedRoutine)
 });
 module.exports = router;
