@@ -104,7 +104,6 @@ function TrackProgress() {
          let totalSupposedWorkoutsSinceStart = 0;
          let workoutAttendence = 0;
          let buildGraph = [];
-         let buildLabels = [];
          let dates = [];
          let filteredDates = [];
 
@@ -122,12 +121,12 @@ function TrackProgress() {
             if (!fullRoutine.routine.routine_days[i % 3].rest_day) {
                totalSupposedWorkoutsSinceStart++;
             } else {
+               temp = true;
                restLabel = 'Rest Day';
                rest_day = true;
             }
 
             buildGraph.push({ x: new Date(moment(fullRoutine.routine.date_started).add(i, 'd')), y: temp, rest: rest_day });
-            buildLabels.push(restLabel);
          }
 
          workoutAttendence = ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2);
