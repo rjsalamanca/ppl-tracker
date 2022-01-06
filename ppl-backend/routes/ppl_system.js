@@ -186,4 +186,11 @@ router.post('/routine/finish_workout', requireLogin, async (req, res) => {
    addSets.rowCount > 0 ? res.json({ completed_workout: true }) : res.json({ completed_workout: false });
 });
 
+router.get('/track/:routine?', requireLogin, async (req, res) => {
+   const { routine } = req.params;
+   const user_id = req.session.users.user_id;
+   const getTrackedRoutine = await pplSystemModel.getTrackedRoutine(routine, user_id);
+
+   getTrackedRoutine === undefined ? res.json({ routine_found: false }) : res.json({ routine_found: true, routine: getTrackedRoutine[0].json_agg[0] })
+});
 module.exports = router;

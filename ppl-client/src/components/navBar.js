@@ -12,9 +12,7 @@ function NavBar() {
    const { loggedIn, setLoggedIn, update, setUpdate } = useContext(UserContext);
 
    useEffect(() => {
-      // console.log('update nav')
-      // console.log(cookies)
-      // console.log(loggedIn)
+
       if (!!cookies.hasOwnProperty('user')) {
          !!cookies.user.isLoggedIn ? setLoggedIn(true) : setLoggedIn(false);
       } else {
@@ -68,7 +66,9 @@ function NavBar() {
                                  <NavDropdown.Item className="dropdown-item" href="/ppl/edit_routines">Edit Routines</NavDropdown.Item>
                               </div>
                            </div>
-
+                           <Nav.Item className="nav-item active">
+                              <Link className="nav-link" to="/track_progress">Track Progress</Link>
+                           </Nav.Item>
                            <Nav.Item className="nav-item active">
                               <Link className="nav-link" to="/profile">Profile</Link>
                            </Nav.Item>

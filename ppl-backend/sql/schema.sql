@@ -18,7 +18,8 @@ CREATE TABLE routine
 (
    id SERIAL PRIMARY KEY,
    routine_name VARCHAR(500),
-   date_started VARCHAR(100),
+   date_started DATE,
+   date_ended DATE,
    user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -27,6 +28,7 @@ CREATE TABLE routine_day
    id SERIAL PRIMARY KEY,
    day_name VARCHAR(100),
    rest_day BOOLEAN,
+   workouts_completed INT,
    routine_id INT REFERENCES routine(id) ON DELETE CASCADE
 );
 

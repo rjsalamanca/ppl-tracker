@@ -150,12 +150,76 @@ class PPL_System {
       }
    }
 
+   static async getTrackedRoutine(routine_name, uid) {
+      console.log(routine_name);
+      try {
+         const response = await db.any(`
+            SELECT json_agg(USR) 
+            FROM (
+               SELECT users.id AS user_id, 
+                  routine.id AS routine_id, 
+                  routine.routine_name AS routine_name,
+                  routine.date_started,
+                  (SELECT json_agg(RD)
+                     FROM(
+                        SELECT routine_day.day_name as name, 
+                           routine_day.id AS routine_day_id,
+                           routine_day.rest_day,
+                           routine_day.routine_id,
+                           routine_day.workouts_completed,
+                           (SELECT json_agg(EXER)
+                              FROM(
+                                 SELECT id,
+                                 exercise_name as name,
+                                 routine_day_id,
+                                 (SELECT json_agg(single_set)
+                                    FROM(
+                                       SELECT weight,
+                                          id,
+                                          set_num AS set,
+                                          reps,
+                                          set_date,
+                                          exercise_id
+                                          FROM exercise_sets
+                                          WHERE set_date > routine.date_started
+                                          ORDER BY id ASC
+                                    ) single_set
+                                    WHERE single_set.exercise_id = exercises.id
+                              ) AS sets
+                           FROM exercises
+                        ) AS EXER
+                        WHERE EXER.routine_day_id = routine_day.id
+                     ) AS exercises
+                     FROM routine
+                     INNER JOIN routine_day ON routine.id = routine_day.routine_id
+                  ) AS RD
+                  WHERE RD.routine_id = routine.id
+               ) AS ROUTINE_DAYS
+               FROM users
+               INNER JOIN routine ON users.id = routine.user_id
+               WHERE users.id = $1 AND routine.user_id = $1 AND routine.routine_name = $2
+            ) AS USR
+            `, [uid, routine_name]);
+         return response;
+      } catch (err) {
+         return err.msg;
+      }
+   }
+
    static async finishWorkout(workoutInfo, date) {
+      console.log(workoutInfo)
       try {
          const buildValues = workoutInfo.map(workout => {
             const buildSets = workout.sets.map(set => `(${set.weight}, ${set.set}, ${set.reps}, '${date}', ${set.exercise_id})`)
             return buildSets.join(',');
          }).join(',');
+
+
+         await db.result(`
+            UPDATE routine_day
+               SET workouts_completed = workouts_completed +1
+               WHERE ID  = $1
+         `, [workoutInfo[0].routine_day_id]);
 
          const response = await db.result(`
             INSERT INTO exercise_sets 
@@ -261,26 +325,25 @@ class PPL_System {
          if (typeof days === 'object' && !!Array.isArray(days)) {
             if (days.length === 1) {
                console.log('1');
-               buildInsert = `('${days[0].name}', ${days[0].rest_day}, ${this.routine_id})`
+               buildInsert = `('${days[0].name}', ${days[0].rest_day}, 0, ${this.routine_id})`
             } else {
                console.log('2');
-               buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
+               buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, 0, ${this.routine_id})`).join(',');
             }
          } else if (typeof days === 'object' && !Array.isArray(days)) {
             console.log('3');
-            buildInsert = `('${days.name}', ${days.rest_day}, ${this.routine_id})`;
+            buildInsert = `('${days.name}', ${days.rest_day}, 0, ${this.routine_id})`;
          } else {
             console.log('4');
-            buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, ${this.routine_id})`).join(',');
+            buildInsert = days.map(day => `('${day.name}', ${day.rest_day}, 0, ${this.routine_id})`).join(',');
          }
 
-         // typeof days === 'object' ?  `('${days.name}', ${days.rest_day}, ${this.routine_id})` : days.map(day => `('${day.name}', ${days.rest_day}, ${this.routine_id}, 'test')`).join(',');
          return buildInsert;
       }
 
       try {
          const response = await db.result(`
-            INSERT INTO routine_day(day_name, rest_day, routine_id)
+            INSERT INTO routine_day(day_name, rest_day, workouts_completed, routine_id)
             VALUES ${buildDays()} RETURNING *`);
          return response;
       } catch (err) {

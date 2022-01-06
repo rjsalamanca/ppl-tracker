@@ -5,15 +5,15 @@ VALUES('First Temp', 'Last Temp', 'rj@rj.com', '$2a$10$jAv09QOZoPtqmwprFW8tguMJd
 
 INSERT INTO routine
    (routine_name,date_started,user_id)
-VALUES('Push Pull Legs Routine', 'Nov 25 2019', 1);
+VALUES('Push Pull Legs Routine', '2021-11-27', 1);
 
 INSERT INTO routine_day
-   (day_name, rest_day, routine_id)
-VALUES('Chest Day', false, 1);
+   (day_name, rest_day, workouts_completed, routine_id)
+VALUES('Chest Day', false, 0, 1);
 
 INSERT INTO routine_day
-   (day_name, rest_day, routine_id)
-VALUES('Back Day', false, 1);
+   (day_name, rest_day, workouts_completed, routine_id)
+VALUES('Back Day', false, 0, 1);
 
 INSERT INTO exercises
    (exercise_name, routine_day_id)

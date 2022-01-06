@@ -89,12 +89,11 @@ function RoutineInformation() {
                                  :
                                  <div>
                                     <ul>
-                                       {console.log(workoutDays[day].exercises)}
-                                       {/* {workoutDays[day].exercises.map((exercise, idx) =>
+                                       {workoutDays[day].exercises.map((exercise, idx) =>
                                           <li key={`exercise-${workoutDays[day].name}-${idx}`}>
                                              {exercise.name}
                                           </li>
-                                       )} */}
+                                       )}
                                     </ul>
                                     <Button onClick={(e) => getSelectedWorkout(workoutDays[day])}>Start</Button>
                                  </div>
