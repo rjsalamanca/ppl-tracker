@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Card, Col, Container, Form, Button, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import moment from 'moment';
 
 function TrackProgress() {
    const [routines, setRoutines] = useState([]);
@@ -52,7 +53,7 @@ function TrackProgress() {
          });
 
          const data = await response.json();
-         console.log('test:', data);
+
          if (!!data.routine_found) {
             await setFullRoutine(data)
          } else {
@@ -63,7 +64,7 @@ function TrackProgress() {
       }
    }
 
-   const displayRoutineInformation = () => {
+   const displayRoutineSelection = () => {
       if (!initialLoad) {
          if (routines.length !== 0) {
             return (
@@ -93,9 +94,71 @@ function TrackProgress() {
       }
    }
 
+   const displayRoutineInformation = () => {
+
+      if (!!fullRoutine.routine_found) {
+         const totalDaysSinceStart = moment().diff(fullRoutine.routine.date_started, 'days');
+         const workoutsCompleted = fullRoutine.routine.routine_days.filter(day => !day.rest_day).reduce((a, b) => a.workouts_completed + b.workouts_completed);
+
+         let totalSupposedWorkoutsSinceStart = 0;
+         let workoutAttendence = 0;
+
+         for (let i = 0; i < totalDaysSinceStart; i++) {
+            if (!fullRoutine.routine.routine_days[i % 3].rest_day) totalSupposedWorkoutsSinceStart++;
+         }
+
+         workoutAttendence = ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2);
+
+         return (
+            <Container className='trackedRoutineInfoContainer'>
+               <h2>{selectedRoutine}</h2>
+               <h5>{moment().format("MMM Do YYYY")}</h5>
+               <Row>
+                  <Col>
+                     <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                           <Card.Title>Workouts Completed</Card.Title>
+                           <Card.Text>
+                              {workoutsCompleted}
+                           </Card.Text>
+                        </Card.Body>
+                     </Card>
+                  </Col>
+                  <Col>
+                     <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                           <Card.Title>Workouts Not Completed</Card.Title>
+                           <Card.Text>
+                              {totalSupposedWorkoutsSinceStart}
+                           </Card.Text>
+                        </Card.Body>
+                     </Card>
+                  </Col>
+                  <Col>
+                     <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                           <Card.Title>Attendence</Card.Title>
+                           <Card.Text>
+                              {workoutAttendence}%
+                           </Card.Text>
+                        </Card.Body>
+                     </Card>
+                  </Col>
+               </Row>
+            </Container >
+         );
+      } else {
+         return (
+            <Container className='trackedRoutineInfoContainer'>
+               No Results Found
+            </Container>
+         )
+      }
+   }
 
    return (
       <div>
+         {displayRoutineSelection()}
          {displayRoutineInformation()}
       </div>
    );
