@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Card, Col, Container, Form, Button, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import moment from 'moment';
+import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
 
 function TrackProgress() {
    const [routines, setRoutines] = useState([]);
@@ -102,13 +103,35 @@ function TrackProgress() {
 
          let totalSupposedWorkoutsSinceStart = 0;
          let workoutAttendence = 0;
+         let buildGraph = [];
+         let buildLabels = [];
+         let dates = [];
+         let filteredDates = [];
 
-         for (let i = 0; i < totalDaysSinceStart; i++) {
-            if (!fullRoutine.routine.routine_days[i % 3].rest_day) totalSupposedWorkoutsSinceStart++;
+         // push all set dates to dates variable.
+         fullRoutine.routine.routine_days.filter(day => !day.rest_day).forEach(day => day.exercises.forEach(exercise => exercise.sets.forEach(set => dates.push(set.set_date))));
+         // filter dates to only appear once.
+         filteredDates = dates.filter((date, i, array) => array.indexOf(date) === i);
+
+         for (let i = 0; i <= totalDaysSinceStart; i++) {
+            let temp = filteredDates.includes(moment(fullRoutine.routine.date_started).add(i, 'd').format("YYYY-MM-DD"));
+            let restLabel = '';
+            let rest_day = false;
+
+            console.log(fullRoutine.routine.routine_days[i % 3])
+            if (!fullRoutine.routine.routine_days[i % 3].rest_day) {
+               totalSupposedWorkoutsSinceStart++;
+            } else {
+               restLabel = 'Rest Day';
+               rest_day = true;
+            }
+
+            buildGraph.push({ x: new Date(moment(fullRoutine.routine.date_started).add(i, 'd')), y: temp, rest: rest_day });
+            buildLabels.push(restLabel);
          }
 
          workoutAttendence = ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2);
-
+         console.log(buildGraph)
          return (
             <Container className='trackedRoutineInfoContainer'>
                <h2>{selectedRoutine}</h2>
@@ -144,6 +167,19 @@ function TrackProgress() {
                         </Card.Body>
                      </Card>
                   </Col>
+               </Row>
+               <Row>
+                  <VictoryChart>
+                     <VictoryScatter
+                        style={{
+                           data: {
+                              fill: ({ datum }) => datum.rest === false ? "#000000" : "#FFA500",
+                              stroke: ({ datum }) => datum.rest === false ? "#000000" : "#FFA500",
+                           }
+                        }}
+                        data={buildGraph}
+                     />
+                  </VictoryChart>
                </Row>
             </Container >
          );
