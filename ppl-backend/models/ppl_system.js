@@ -151,6 +151,7 @@ class PPL_System {
    }
 
    static async getTrackedRoutine(routine_name, uid) {
+      console.log(routine_name);
       try {
          const response = await db.any(`
             SELECT json_agg(USR) 
@@ -180,7 +181,8 @@ class PPL_System {
                                           set_date,
                                           exercise_id
                                           FROM exercise_sets
-                                          WHERE set_date IS NULL
+                                          WHERE set_date > routine.date_started
+                                          ORDER BY id ASC
                                     ) single_set
                                     WHERE single_set.exercise_id = exercises.id
                               ) AS sets

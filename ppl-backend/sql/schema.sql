@@ -18,7 +18,8 @@ CREATE TABLE routine
 (
    id SERIAL PRIMARY KEY,
    routine_name VARCHAR(500),
-   date_started VARCHAR(100),
+   date_started DATE,
+   date_ended DATE,
    user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
 
