@@ -1,14 +1,15 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Col, Container, Form, Button, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import moment from 'moment';
-import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
+import { VictoryChart, VictoryGroup, VictoryTooltip, VictoryLine, VictoryScatter, VictoryArea, VictoryAxis, VictoryBrushContainer, VictoryZoomContainer } from 'victory';
 
 function TrackProgress() {
    const [routines, setRoutines] = useState([]);
-   const [fullRoutine, setFullRoutine] = useState(false)
+   const [fullRoutine, setFullRoutine] = useState(false);
    const [initialLoad, setInitialLoad] = useState(true);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
+   const [zoomDomain, setZoomDomain] = useState({ x: [0, 1] });
 
    useEffect(() => {
       if (routines.length === 0) checkForRoutines();
@@ -16,16 +17,18 @@ function TrackProgress() {
    }, [routines]);
 
    useEffect(() => {
-      console.log(fullRoutine);
-      // console.log(selectedRoutine);
       if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') getFullRoutine();
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [fullRoutine, setFullRoutine, selectedRoutine]);
 
 
    const handleSelect = (e) => {
-      setFullRoutine({})
+      setFullRoutine({});
       setSelectedRoutine(e.target.value);
+   }
+
+   const handleZoom = (domain) => {
+      setZoomDomain(domain);
    }
 
    const checkForRoutines = async () => {
@@ -56,7 +59,10 @@ function TrackProgress() {
          const data = await response.json();
 
          if (!!data.routine_found) {
-            await setFullRoutine(data)
+            await setZoomDomain({ x: [moment().subtract(7, 'd'), moment()] });
+
+            await setFullRoutine(data);
+
          } else {
             await setFullRoutine({ routine_found: false });
          }
@@ -103,7 +109,8 @@ function TrackProgress() {
 
          let totalSupposedWorkoutsSinceStart = 0;
          let workoutAttendence = 0;
-         let buildGraph = [];
+         let buildGraph1 = [];
+         let buildGraph2 = [];
          let dates = [];
          let filteredDates = [];
 
@@ -114,27 +121,25 @@ function TrackProgress() {
 
          for (let i = 0; i <= totalDaysSinceStart; i++) {
             let temp = filteredDates.includes(moment(fullRoutine.routine.date_started).add(i, 'd').format("YYYY-MM-DD"));
-            let restLabel = '';
             let rest_day = false;
 
-            console.log(fullRoutine.routine.routine_days[i % 3])
             if (!fullRoutine.routine.routine_days[i % 3].rest_day) {
                totalSupposedWorkoutsSinceStart++;
             } else {
                temp = true;
-               restLabel = 'Rest Day';
                rest_day = true;
             }
-
-            buildGraph.push({ x: new Date(moment(fullRoutine.routine.date_started).add(i, 'd')), y: temp, rest: rest_day });
+            buildGraph1.push({ a: new Date(moment(fullRoutine.routine.date_started).add(i, 'd')), b: temp, rest: rest_day });
+            buildGraph2.push({ key: new Date(moment(fullRoutine.routine.date_started).add(i, 'd')), b: temp, rest: rest_day });
          }
 
          workoutAttendence = ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2);
-         console.log(buildGraph)
+
          return (
             <Container className='trackedRoutineInfoContainer'>
                <h2>{selectedRoutine}</h2>
                <h5>{moment().format("MMM Do YYYY")}</h5>
+               <h6>Day - {totalDaysSinceStart}</h6>
                <Row>
                   <Col>
                      <Card style={{ width: '18rem' }}>
@@ -168,16 +173,82 @@ function TrackProgress() {
                   </Col>
                </Row>
                <Row>
-                  <VictoryChart>
-                     <VictoryScatter
+                  <VictoryChart
+                     domainPadding={{ y: [20, 20], x: [20, 20] }}
+                     padding={{ top: 50, bottom: 50, left: 40, right: 50 }}
+                     width={600}
+                     height={250}
+                     scale={{ x: "time" }}
+                     containerComponent={
+                        <VictoryZoomContainer
+                           zoomDimension="x"
+                           zoomDomain={zoomDomain}
+                           onZoomDomainChange={handleZoom.bind(this)}
+                        />
+                     }
+                  >
+
+                     <VictoryAxis tickFormat={(x) => moment(x).format('MMM DD, YY')} />
+                     <VictoryAxis
+                        dependentAxis
                         style={{
-                           data: {
-                              fill: ({ datum }) => datum.rest === false ? "#000000" : "#FFA500",
-                              stroke: ({ datum }) => datum.rest === false ? "#000000" : "#FFA500",
-                           }
+                           axis: { stroke: 0 },
+                           axisLabel: { fontSize: 10, padding: 20 },
                         }}
-                        data={buildGraph}
+                        tickFormat={b => ''}
+                        label='Completed Workouts'
+
                      />
+
+                     <VictoryGroup color="#c43a31">
+                        <VictoryLine
+                           data={buildGraph1}
+                           x="a"
+                           y="b"
+                        />
+                        <VictoryScatter
+                           labels={({ datum }) => `${!!datum.rest ? 'Rest Day\n' : ''} \nDate: ${moment(datum.a).format('MMM DD YYYY')}\n`}
+                           labelComponent={
+                              <VictoryTooltip
+                                 style={{ fontSize: 10 }}
+                              />
+                           }
+                           data={buildGraph1}
+                           x="a"
+                           y="b"
+                        />
+                     </VictoryGroup>
+                  </VictoryChart>
+                  <VictoryChart
+                     domainPadding={{ y: [5, 5] }}
+                     padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
+                     width={600}
+                     height={50}
+                     scale={{ x: "time" }}
+                     containerComponent={
+                        <VictoryBrushContainer
+                           brushDimension="x"
+                           brushDomain={zoomDomain}
+                           onBrushDomainChange={handleZoom.bind(this)}
+                        />
+                     }
+                  >
+                     <VictoryAxis tickFormat={(x) => moment(x).format('MMM DD, YY')} />
+
+                     <VictoryGroup color="#c43a31" >
+                        <VictoryLine
+                           data={buildGraph2}
+                           x="key"
+                           y="b"
+                        />
+                        <VictoryScatter
+                           data={buildGraph2}
+                           x="key"
+                           y="b"
+                        />
+                     </VictoryGroup>
+
+
                   </VictoryChart>
                </Row>
             </Container >
