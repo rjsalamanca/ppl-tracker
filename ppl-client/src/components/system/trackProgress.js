@@ -134,12 +134,13 @@ function TrackProgress() {
          }
 
          workoutAttendence = ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2);
-
+         console.log(fullRoutine);
          return (
             <Container className='trackedRoutineInfoContainer'>
                <h2>{selectedRoutine}</h2>
                <h5>{moment().format("MMM Do YYYY")}</h5>
                <h6>Day - {totalDaysSinceStart}</h6>
+               <hr />
                <Row>
                   <Col>
                      <Card style={{ width: '18rem' }}>
@@ -175,7 +176,7 @@ function TrackProgress() {
                <Row>
                   <VictoryChart
                      domainPadding={{ y: [20, 20], x: [20, 20] }}
-                     padding={{ top: 50, bottom: 50, left: 40, right: 50 }}
+                     padding={{ top: 50, bottom: 50, left: 50, right: 50 }}
                      width={600}
                      height={250}
                      scale={{ x: "time" }}
@@ -187,7 +188,6 @@ function TrackProgress() {
                         />
                      }
                   >
-
                      <VictoryAxis tickFormat={(x) => moment(x).format('MMM DD, YY')} />
                      <VictoryAxis
                         dependentAxis
@@ -197,7 +197,6 @@ function TrackProgress() {
                         }}
                         tickFormat={b => ''}
                         label='Completed Workouts'
-
                      />
 
                      <VictoryGroup color="#c43a31">
@@ -221,7 +220,7 @@ function TrackProgress() {
                   </VictoryChart>
                   <VictoryChart
                      domainPadding={{ y: [5, 5] }}
-                     padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
+                     padding={{ top: 0, bottom: 30, left: 50, right: 50 }}
                      width={600}
                      height={50}
                      scale={{ x: "time" }}
@@ -242,14 +241,27 @@ function TrackProgress() {
                            y="b"
                         />
                         <VictoryScatter
+                           style={{ data: { strokeWidth: 0.5 } }}
+                           size={2}
                            data={buildGraph2}
                            x="key"
                            y="b"
                         />
                      </VictoryGroup>
-
-
                   </VictoryChart>
+               </Row>
+               <Row>
+                  {fullRoutine.routine.routine_days.filter(day => !day.rest_day).map(day =>
+                     <Col>
+                        <Card style={{ width: '18rem' }}>
+                           <Card.Body>
+                              <Card.Title>{day.name}</Card.Title>
+                              <Card.Text>
+                              </Card.Text>
+                           </Card.Body>
+                        </Card>
+                     </Col>
+                  )}
                </Row>
             </Container >
          );
