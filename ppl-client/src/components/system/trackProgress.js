@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Col, Container, Form, Button, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import moment from 'moment';
-import { VictoryChart, VictoryGroup, VictoryTooltip, VictoryLine, VictoryScatter, VictoryArea, VictoryAxis, VictoryBrushContainer, VictoryZoomContainer } from 'victory';
+import { VictoryChart, VictoryGroup, VictoryTooltip, VictoryLine, VictoryScatter, VictoryPie, VictoryAnimation, VictoryLabel, VictoryAxis, VictoryBrushContainer, VictoryZoomContainer } from 'victory';
 
 function TrackProgress() {
    const [routines, setRoutines] = useState([]);
@@ -10,9 +10,13 @@ function TrackProgress() {
    const [initialLoad, setInitialLoad] = useState(true);
    const [selectedRoutine, setSelectedRoutine] = useState('Select A Routine');
    const [zoomDomain, setZoomDomain] = useState({ x: [0, 1] });
+   const [buildGraph1, setBuildGraph1] = useState([]);
+   const [buildGraph2, setBuildGraph2] = useState([]);
 
    useEffect(() => {
-      if (routines.length === 0) checkForRoutines();
+      if (routines.length === 0) {
+         checkForRoutines();
+      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [routines]);
 
@@ -30,6 +34,8 @@ function TrackProgress() {
    const handleZoom = (domain) => {
       setZoomDomain(domain);
    }
+
+   const getData = (percent) => [{ x: 1, y: percent }, { x: 2, y: 100 - percent }];
 
    const checkForRoutines = async () => {
       const url = "http://localhost:3000/ppl/routine";
@@ -60,15 +66,62 @@ function TrackProgress() {
 
          if (!!data.routine_found) {
             await setZoomDomain({ x: [moment().subtract(7, 'd'), moment()] });
-
-            await setFullRoutine(data);
-
+            generateRoutine(data);
          } else {
             await setFullRoutine({ routine_found: false });
          }
       } catch (err) {
          console.log(err);
       }
+   }
+
+   const generateRoutine = async (data) => {
+      const totalDaysSinceStart = moment().diff(data.routine.date_started, 'days');
+      const lengthOfDaysInProgram = data.routine.routine_days.length;
+
+      let totalSupposedWorkoutsSinceStart = 0;
+      let tempBuildGraph1 = [];
+      let tempBuildGraph2 = [];
+      let dates = [];
+      let filteredDates = [];
+      let tempDays = [...data.routine.routine_days].map(day => {
+         day['total_workouts'] = 0;
+         return day;
+      });
+
+      // push all set dates to dates variable.
+      data.routine.routine_days.filter(day => !day.rest_day).forEach(day => day.exercises.forEach(exercise => exercise.sets.forEach(set => dates.push(set.set_date))));
+      // filter dates to only appear once.
+      filteredDates = dates.filter((date, i, array) => array.indexOf(date) === i);
+
+      // Loop through days since start of program.
+      for (let i = 0; i <= totalDaysSinceStart; i++) {
+         const dayIteration = i % lengthOfDaysInProgram; // Iterates amount of days in a program. Example 5 days in a program will iterate 1-5.
+         let temp = filteredDates.includes(moment(data.routine.date_started).add(i, 'd').format("YYYY-MM-DD"));
+         let restDay = false;
+
+         tempDays[dayIteration].total_workouts++;
+
+         if (!data.routine.routine_days[dayIteration].rest_day) {
+            totalSupposedWorkoutsSinceStart++;
+         } else {
+            temp = true;
+            restDay = true;
+         }
+
+         tempBuildGraph1.push({ a: new Date(moment(data.routine.date_started).add(i, 'd')), b: temp, rest: restDay });
+         tempBuildGraph2.push({ key: new Date(moment(data.routine.date_started).add(i, 'd')), b: temp, rest: restDay });
+      }
+
+      tempDays.map(day => {
+         day['incomplete_workouts'] = day.total_workouts - day.workouts_completed;
+         return day;
+      })
+
+      data.routine.routine_days = tempDays;
+      await setBuildGraph1(tempBuildGraph1);
+      await setBuildGraph2(tempBuildGraph2);
+      await setFullRoutine(data);
    }
 
    const displayRoutineSelection = () => {
@@ -109,32 +162,9 @@ function TrackProgress() {
 
          let totalSupposedWorkoutsSinceStart = 0;
          let workoutAttendence = 0;
-         let buildGraph1 = [];
-         let buildGraph2 = [];
-         let dates = [];
-         let filteredDates = [];
-
-         // push all set dates to dates variable.
-         fullRoutine.routine.routine_days.filter(day => !day.rest_day).forEach(day => day.exercises.forEach(exercise => exercise.sets.forEach(set => dates.push(set.set_date))));
-         // filter dates to only appear once.
-         filteredDates = dates.filter((date, i, array) => array.indexOf(date) === i);
-
-         for (let i = 0; i <= totalDaysSinceStart; i++) {
-            let temp = filteredDates.includes(moment(fullRoutine.routine.date_started).add(i, 'd').format("YYYY-MM-DD"));
-            let rest_day = false;
-
-            if (!fullRoutine.routine.routine_days[i % 3].rest_day) {
-               totalSupposedWorkoutsSinceStart++;
-            } else {
-               temp = true;
-               rest_day = true;
-            }
-            buildGraph1.push({ a: new Date(moment(fullRoutine.routine.date_started).add(i, 'd')), b: temp, rest: rest_day });
-            buildGraph2.push({ key: new Date(moment(fullRoutine.routine.date_started).add(i, 'd')), b: temp, rest: rest_day });
-         }
 
          workoutAttendence = ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2);
-         console.log(fullRoutine);
+
          return (
             <Container className='trackedRoutineInfoContainer'>
                <h2>{selectedRoutine}</h2>
@@ -257,6 +287,13 @@ function TrackProgress() {
                            <Card.Body>
                               <Card.Title>{day.name}</Card.Title>
                               <Card.Text>
+
+                                 <VictoryPie
+                                    data={[
+                                       { x: `Completed:`, y: day.workouts_completed },
+                                       { x: `Incomplete`, y: day.incomplete_workouts }
+                                    ]}
+                                 />
                               </Card.Text>
                            </Card.Body>
                         </Card>
