@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, Col, Container, Form, Button, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import moment from 'moment';
-import { VictoryChart, VictoryGroup, VictoryTooltip, VictoryLine, VictoryScatter, VictoryPie, VictoryAnimation, VictoryLabel, VictoryAxis, VictoryBrushContainer, VictoryZoomContainer } from 'victory';
+import { VictoryChart, VictoryGroup, VictoryTooltip, VictoryLine, VictoryScatter, VictoryPie, VictoryAxis, VictoryBrushContainer, VictoryZoomContainer } from 'victory';
+import DisplayRoutineSelection from '../shared/DisplayRoutineSelection';
 
 function TrackProgress() {
    const [routines, setRoutines] = useState([]);
@@ -27,6 +28,7 @@ function TrackProgress() {
 
 
    const handleSelect = (e) => {
+      console.log(e)
       setFullRoutine({});
       setSelectedRoutine(e.target.value);
    }
@@ -122,36 +124,6 @@ function TrackProgress() {
       await setBuildGraph1(tempBuildGraph1);
       await setBuildGraph2(tempBuildGraph2);
       await setFullRoutine(data);
-   }
-
-   const displayRoutineSelection = () => {
-      if (!initialLoad) {
-         if (routines.length !== 0) {
-            return (
-               <div className="routineInformation">
-                  <Form>
-                     <Form.Control onChange={e => handleSelect(e)} as="select" defaultValue={selectedRoutine}>
-                        <option value="Select A Routine">Select A Routine</option>
-                        {routines.map(routine =>
-                           <option key={`routine${routine.id}`} value={routine.routine_name}>{routine.routine_name}</option>
-                        )}
-                     </Form.Control>
-                  </Form>
-               </div>
-            );
-         } else {
-            return (
-               <div>
-                  <p>No Routines Found</p>
-                  <Link className="" variant={'danger'} to="/ppl/create_routine">
-                     <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
-                  </Link>
-               </div>
-            );
-         }
-      } else {
-         return <div></div>
-      }
    }
 
    const displayRoutineInformation = () => {
@@ -290,8 +262,8 @@ function TrackProgress() {
 
                                  <VictoryPie
                                     data={[
-                                       { x: `Completed:`, y: day.workouts_completed },
-                                       { x: `Incomplete`, y: day.incomplete_workouts }
+                                       { x: `Completed: ${day.workouts_completed}`, y: day.workouts_completed },
+                                       { x: `Incomplete: ${day.incomplete_workouts}`, y: day.incomplete_workouts }
                                     ]}
                                  />
                               </Card.Text>
@@ -313,7 +285,7 @@ function TrackProgress() {
 
    return (
       <div>
-         {displayRoutineSelection()}
+         {!initialLoad ? <DisplayRoutineSelection routines={routines} selectedRoutine={selectedRoutine} handleSelect={handleSelect} /> : ''}
          {displayRoutineInformation()}
       </div>
    );

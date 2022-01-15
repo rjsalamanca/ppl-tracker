@@ -159,12 +159,11 @@ function Profile() {
             }
          </div>
          <div className="routineSelection">
-
             {
                routines.length === 0 ?
                   <div>
                      No Routine Found
-                           <Link className="nav-link" to="/ppl/create_routine">
+                     <Link className="nav-link" to="/ppl/create_routine">
                         <Button className="mb-3" type="submit" variant={'danger'} >Create A routine</Button>
                      </Link>
                   </div>
