@@ -6,7 +6,6 @@ function DisplayRoutineSelection({ routines, selectedRoutine, handleSelect }) {
 
    return (
       <div className="routineInformation">
-         {console.log('test')}
          {
             routines.length !== 0 ?
                <Form>
