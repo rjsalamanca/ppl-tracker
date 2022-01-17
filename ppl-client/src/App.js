@@ -22,11 +22,11 @@ import RoutineProvider from './components/providers/RoutineProvider';
 import './App.css';
 
 function App() {
-   const [run, setRun] = useState(true);
+   // const [run, setRun] = useState(true);
    const [loggedIn, setLoggedIn] = useState(false);
    const [update, setUpdate] = useState(0);
    const [cookies, setCookie] = useCookies(['user']);
-   const [cookieCheck, setCookieCheck] = useState(cookies);
+   // const [cookieCheck, setCookieCheck] = useState(cookies);
 
    const createUserValues = useMemo(() => (
       {
@@ -80,34 +80,38 @@ function App() {
    //    runContent();
    // }, [update])
 
-   const runContent = () => {
-      // if (!!cookies.hasOwnProperty('user')) {
-      //    console.log('in if:', cookies.user)
-      // setRun(<div></div>)
-      return (
-         <Router>
-            <NavBar />
-            <Switch>
-               <Route path="/" exact render={(props) => < LandingPage {...props} />} />
-               <Route path="/login" exact render={(props) => {
-                  console.log('route login status:', loggedIn)
-                  return !!loggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
-               }
-               } />
-               <Route path="/register" exact render={(props) => !!loggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
-            </Switch>
+   //////////////////////
+   // double commented //
+   //////////////////////
 
-            <PrivateRoute path="/ppl/edit_routines" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={EditRoutines} />
-            {/* <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
-               <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} /> */}
-         </Router>
-      )
-      // } else {
-      //    console.log('empty')
-      //    setCookie('user', { isLoggedIn: false })
-      //    return (<div></div>)
-      // }
-   }
+   // const runContent = () => {
+   //    // if (!!cookies.hasOwnProperty('user')) {
+   //    //    console.log('in if:', cookies.user)
+   //    // setRun(<div></div>)
+   //    return (
+   //       <Router>
+   //          <NavBar />
+   //          <Switch>
+   //             <Route path="/" exact render={(props) => < LandingPage {...props} />} />
+   //             <Route path="/login" exact render={(props) => {
+   //                console.log('route login status:', loggedIn)
+   //                return !!loggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
+   //             }
+   //             } />
+   //             <Route path="/register" exact render={(props) => !!loggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />
+   //          </Switch>
+
+   //          <PrivateRoute path="/ppl/edit_routines" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={EditRoutines} />
+   //          {/* <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
+   //             <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} /> */}
+   //       </Router>
+   //    )
+   //    // } else {
+   //    //    console.log('empty')
+   //    //    setCookie('user', { isLoggedIn: false })
+   //    //    return (<div></div>)
+   //    // }
+   // }
 
    return (
       <CookiesProvider>

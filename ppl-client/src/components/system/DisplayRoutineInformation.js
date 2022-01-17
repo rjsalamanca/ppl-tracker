@@ -1,20 +1,18 @@
 import React from 'react';
 import moment from 'moment';
+
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import { VictoryChart, VictoryGroup, VictoryTooltip, VictoryLine, VictoryScatter, VictoryPie, VictoryAxis, VictoryBrushContainer, VictoryZoomContainer } from 'victory';
+import { VictoryChart, VictoryGroup, VictoryTooltip, VictoryLine, VictoryScatter, VictoryAxis, VictoryBrushContainer, VictoryZoomContainer } from 'victory';
 
+import CardPieChart from '../shared/CardPieChart';
 
-
-function DisplayRoutineInformation({ fullRoutine, selectedRoutine, zoomDomain, buildGraph1, buildGraph2, handleZoom }) {
+function DisplayRoutineInformation({ fullRoutine, selectedRoutine, totalSupposedWorkoutsSinceStart, zoomDomain, buildGraph1, buildGraph2, handleZoom }) {
 
    if (!!fullRoutine.routine_found) {
       const totalDaysSinceStart = moment().diff(fullRoutine.routine.date_started, 'days');
       const workoutsCompleted = fullRoutine.routine.routine_days.filter(day => !day.rest_day).reduce((a, b) => a.workouts_completed + b.workouts_completed);
 
-      let totalSupposedWorkoutsSinceStart = 0;
-      let workoutAttendence = 0;
-
-      workoutAttendence = ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2);
+      let workoutAttendence = (workoutsCompleted && totalSupposedWorkoutsSinceStart !== 0) ? ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2) : 0;
 
       return (
          <Container className='trackedRoutineInfoContainer'>
@@ -132,24 +130,7 @@ function DisplayRoutineInformation({ fullRoutine, selectedRoutine, zoomDomain, b
                </VictoryChart>
             </Row>
             <Row>
-               {fullRoutine.routine.routine_days.filter(day => !day.rest_day).map(day =>
-                  <Col>
-                     <Card style={{ width: '18rem' }}>
-                        <Card.Body>
-                           <Card.Title>{day.name}</Card.Title>
-                           <Card.Text>
-
-                              <VictoryPie
-                                 data={[
-                                    { x: `Completed: ${day.workouts_completed}`, y: day.workouts_completed },
-                                    { x: `Incomplete: ${day.incomplete_workouts}`, y: day.incomplete_workouts }
-                                 ]}
-                              />
-                           </Card.Text>
-                        </Card.Body>
-                     </Card>
-                  </Col>
-               )}
+               {fullRoutine.routine.routine_days.filter(day => !day.rest_day).map((day, i) => <CardPieChart day={day} key={`card_pie_chart_${i}`} />)}
             </Row>
          </Container >
       );

@@ -1,15 +1,15 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Nav, NavDropdown, Button } from 'react-bootstrap';
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 
 import { UserContext } from '../contexts/UserContext';
 
 function NavBar() {
    const [cookies, setCookie] = useCookies(['user']);
-   const [redirect, setRedirect] = useState(false);
+   // const [redirect, setRedirect] = useState(false);
    //const [loggedIn, setLoggedIn] = useState(false);
-   const { loggedIn, setLoggedIn, update, setUpdate } = useContext(UserContext);
+   const { loggedIn, setLoggedIn } = useContext(UserContext);
 
    useEffect(() => {
 
@@ -19,7 +19,7 @@ function NavBar() {
          setLoggedIn(false);
       }
 
-   }, [cookies.user, loggedIn])
+   }, [cookies, loggedIn, setLoggedIn])
 
    const loggedInToLogout = async (e) => {
       e.preventDefault();
@@ -42,7 +42,7 @@ function NavBar() {
 
    return (
       < Nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm" style={{ zIndex: 100 }} >
-         {!!redirect && <Redirect to="/" />}
+         {/* {!!redirect && <Redirect to="/" />} */}
          <Link className="navbar-brand" to="/">PPL Tracker</Link>
          <Button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>

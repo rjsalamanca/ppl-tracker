@@ -11,6 +11,7 @@ function TrackProgress() {
    const [zoomDomain, setZoomDomain] = useState({ x: [0, 1] });
    const [buildGraph1, setBuildGraph1] = useState([]);
    const [buildGraph2, setBuildGraph2] = useState([]);
+   const [totalSupposedWorkoutsSinceStart, setTotalSupposedWorkoutsSinceStart] = useState(0);
 
    useEffect(() => {
       if (routines.length === 0) {
@@ -76,7 +77,7 @@ function TrackProgress() {
       const totalDaysSinceStart = moment().diff(data.routine.date_started, 'days');
       const lengthOfDaysInProgram = data.routine.routine_days.length;
 
-      let totalSupposedWorkoutsSinceStart = 0;
+      let tempTotalSupposedWorkoutsSinceStart = 0;
       let tempBuildGraph1 = [];
       let tempBuildGraph2 = [];
       let dates = [];
@@ -87,7 +88,7 @@ function TrackProgress() {
       });
 
       // push all set dates to dates variable.
-      data.routine.routine_days.filter(day => !day.rest_day).forEach(day => day.exercises.forEach(exercise => exercise.sets.forEach(set => dates.push(set.set_date))));
+      data.routine.routine_days.filter(day => !day.rest_day).forEach(day => day.exercises.forEach(exercise => exercise.sets !== null && exercise.sets.forEach(set => dates.push(set.set_date))));
       // filter dates to only appear once.
       filteredDates = dates.filter((date, i, array) => array.indexOf(date) === i);
 
@@ -100,7 +101,7 @@ function TrackProgress() {
          tempDays[dayIteration].total_workouts++;
 
          if (!data.routine.routine_days[dayIteration].rest_day) {
-            totalSupposedWorkoutsSinceStart++;
+            tempTotalSupposedWorkoutsSinceStart++;
          } else {
             temp = true;
             restDay = true;
@@ -119,12 +120,14 @@ function TrackProgress() {
       await setBuildGraph1(tempBuildGraph1);
       await setBuildGraph2(tempBuildGraph2);
       await setFullRoutine(data);
+      await setTotalSupposedWorkoutsSinceStart(tempTotalSupposedWorkoutsSinceStart);
    }
 
    return (
       <div>
          {!initialLoad ? <DisplayRoutineSelection routines={routines} selectedRoutine={selectedRoutine} handleSelect={handleSelect} /> : ''}
-         < DisplayRoutineInformation fullRoutine={fullRoutine} selectedRoutine={selectedRoutine} zoomDomain={zoomDomain} buildGraph1={buildGraph1} buildGraph2={buildGraph2} handleZoom={handleZoom} />      </div>
+         < DisplayRoutineInformation fullRoutine={fullRoutine} selectedRoutine={selectedRoutine} totalSupposedWorkoutsSinceStart={totalSupposedWorkoutsSinceStart} zoomDomain={zoomDomain} buildGraph1={buildGraph1} buildGraph2={buildGraph2} handleZoom={handleZoom} />
+      </div>
    );
 }
 

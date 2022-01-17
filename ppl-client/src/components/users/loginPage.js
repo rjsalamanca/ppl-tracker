@@ -4,7 +4,6 @@ import { Card, Button, Form, Alert } from "react-bootstrap";
 
 import { useCookies } from 'react-cookie';
 import { UserContext } from '../../contexts/UserContext';
-import axios from 'axios';
 import '../../App.css';
 
 function Login(props) {
@@ -13,7 +12,7 @@ function Login(props) {
    const [password, setPassword] = useState('');
 
    const [cookies, setCookie] = useCookies(['user']);
-   const { loggedIn, setLoggedIn } = useContext(UserContext)
+   const { setLoggedIn } = useContext(UserContext)
 
    useEffect(() => {
       if (props.location.errorCode === 0 && cookies.user.isLoggedIn === false) setErrorCode(5);

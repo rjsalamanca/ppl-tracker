@@ -7,7 +7,7 @@ import "../css/addExercisesStyle.css";
 
 function AddExercises(props) {
    const [show, setShow] = useState(false);
-   const [exerciseName, setExerciseName] = useState('');
+   // const [exerciseName, setExerciseName] = useState('');
    const [exerciseError, setExerciseError] = useState(0);
    const [exerciseSets, setExerciseSets] = useState([]);
    const [editing, setEditing] = useState({ name: '', sets: [], idx: null, status: false });
@@ -94,7 +94,7 @@ function AddExercises(props) {
    const modalTrigger = () => {
       props.clearDayError();
 
-      setExerciseName('');
+      // setExerciseName('');
       setExerciseSets([{ weight: null, reps: 1, initial_set: true }]);
       setExerciseError(0);
 

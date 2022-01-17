@@ -50,3 +50,6 @@ CREATE TABLE exercise_sets
    initial_set BOOLEAN,
    exercise_id INT REFERENCES exercises(id) ON DELETE CASCADE
 );
+
+
+

@@ -180,6 +180,8 @@ function AddDay() {
          if (day.hasOwnProperty('deleted')) {
             if (!day.deleted) {
                return temp(day, dayIdx);
+            } else {
+               return ''
             }
          } else {
             return temp(day, dayIdx);

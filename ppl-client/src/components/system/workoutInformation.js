@@ -27,7 +27,7 @@ function WorkoutInformation() {
       }
 
       setOldWorkout(selectedWorkout);
-   });
+   }, [selectedWorkout, completedSets, oldWorkout]);
 
    const handleClose = () => {
       setShowEndEarly(false);
