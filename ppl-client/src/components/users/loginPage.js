@@ -12,13 +12,13 @@ function Login(props) {
    const [password, setPassword] = useState('');
 
    const [cookies, setCookie] = useCookies(['user']);
-   const { setLoggedIn } = useContext(UserContext)
+   const { setLoggedIn } = useContext(UserContext);
 
    useEffect(() => {
       if (props.location.errorCode === 0 && cookies.user.isLoggedIn === false) setErrorCode(5);
    }, [props.location.errorCode, cookies]);
 
-   const login = async (e) => {
+   const loginAccount = async (e) => {
       const formCheck = document.getElementById('loginForm').checkValidity();
       const url = "http://localhost:3000/users/login";
       if (!!formCheck) {
@@ -44,15 +44,14 @@ function Login(props) {
             // 2 = Password Incorrect        //
             // 3 = Database Error            //
             // 4 = URL to backend is bad     //
-            // 5 = Redirecteed from register //
+            // 5 = Redirected from register //
             //     - display message         //
             ///////////////////////////////////s
 
             if (data.errorCode === 0) {
-               console.log('setting login')
+               setErrorCode(0);
                setCookie('user', { isLoggedIn: true })
                setLoggedIn(true);
-               setErrorCode(0);
             } else {
                setErrorCode(data.errorCode);
             }
@@ -117,7 +116,7 @@ function Login(props) {
                      <Form.Label>Password</Form.Label>
                      <Form.Control autoComplete="on" type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" value={password} required />
                   </Form.Group>
-                  <Button className="mb-3" type="submit" variant="primary" onClick={(e) => login(e)}>Sign In</Button>
+                  <Button className="mb-3" type="submit" variant="primary" onClick={(e) => loginAccount(e)}>Sign In</Button>
                </Form>
                {errorCode !== -1 && displayError()}
                <p className="mt-4">

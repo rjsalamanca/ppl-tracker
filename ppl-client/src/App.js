@@ -120,9 +120,10 @@ function App() {
                <NavBar />
                <Switch>
                   <Route path="/" exact render={(props) => < LandingPage {...props} />} />
+
                   <Route path="/login" exact render={(props) => {
                      console.log('route login status:', loggedIn)
-                     return !!loggedIn ? <Redirect to="/" /> : <LoginPage {...props} />
+                     return !!loggedIn ? 'test' : <LoginPage {...props} />
                   }
                   } />
                   <Route path="/register" exact render={(props) => !!loggedIn ? <Redirect to="/" /> : < RegisterPage {...props} />} />

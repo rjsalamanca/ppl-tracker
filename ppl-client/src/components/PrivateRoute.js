@@ -29,7 +29,7 @@ function PrivateRoute({ ContextProvider, LoadComponent, ...routerProps }) {
             setLoadRoute(<Route render={() => <Redirect to='/' />} />)
          }
       }
-   }, [cookies, loggedIn, checkLoginStatus])
+   }, [cookies, loggedIn])
 
    const checkLoginStatus = async () => {
       await setLoadRoute(
