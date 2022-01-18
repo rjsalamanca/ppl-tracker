@@ -78,7 +78,7 @@ function DisplayRoutineInformation({ fullRoutine, selectedRoutine, totalSupposed
                      label='Completed Workouts'
                   />
 
-                  <VictoryGroup color="#c43a31">
+                  <VictoryGroup color="#006edc">
                      <VictoryLine
                         data={buildGraph1}
                         x="a"
@@ -113,7 +113,7 @@ function DisplayRoutineInformation({ fullRoutine, selectedRoutine, totalSupposed
                >
                   <VictoryAxis tickFormat={(x) => moment(x).format('MMM DD, YY')} />
 
-                  <VictoryGroup color="#c43a31" >
+                  <VictoryGroup color="#006edc" >
                      <VictoryLine
                         data={buildGraph2}
                         x="key"

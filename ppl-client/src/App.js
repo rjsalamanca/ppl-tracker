@@ -9,6 +9,7 @@ import ProfilePage from './components/system/profilePage';
 import CreateRoutine from './components/system/routine_creation/createRoutine';
 import EditRoutines from './components/system/editRoutines';
 import TrackProgress from './components/system/trackProgress';
+import TrackTest from './components/system/trackTest';
 
 import PrivateRoute from './components/PrivateRoute';
 
@@ -132,6 +133,7 @@ function App() {
                <PrivateRoute path="/ppl/edit_routines" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={EditRoutines} />
                <PrivateRoute path="/ppl/create_routine" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={CreateRoutine} />
                <PrivateRoute path="/track_progress" exact ContextProvider={CreateRoutineContextProvider} LoadComponent={TrackProgress} />
+               <PrivateRoute path="/track_progress/trackTest" ContextProvider={CreateRoutineContextProvider} LoadComponent={TrackTest} />
                <PrivateRoute path="/profile" exact ContextProvider={RoutineProvider} LoadComponent={ProfilePage} />
             </Router>
          </UserContext.Provider>
