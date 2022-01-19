@@ -11,8 +11,6 @@ function CardPieChart({ day }) {
             <Link className="cardLink" to={{
                pathname: '/track_progress/trackTest',
                search: `/Routine_${day.routine_id}/Day_${day.routine_day_id}`,
-               state: { fromDashboard: true },
-               day
             }}>
 
                <div className="backgroundEffect"></div>

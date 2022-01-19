@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import DisplayRoutineSelection from '../shared/DisplayRoutineSelection';
 import DisplayRoutineInformation from './DisplayRoutineInformation';
+import { useCookies } from 'react-cookie';
 
 function TrackProgress() {
    const [routines, setRoutines] = useState([]);
@@ -12,6 +13,7 @@ function TrackProgress() {
    const [buildGraph1, setBuildGraph1] = useState([]);
    const [buildGraph2, setBuildGraph2] = useState([]);
    const [totalSupposedWorkoutsSinceStart, setTotalSupposedWorkoutsSinceStart] = useState(0);
+   const [cookies, setCookie] = useCookies(['routine']);
 
    useEffect(() => {
       if (routines.length === 0) {
@@ -120,6 +122,7 @@ function TrackProgress() {
       await setBuildGraph1(tempBuildGraph1);
       await setBuildGraph2(tempBuildGraph2);
       await setFullRoutine(data);
+      setCookie('routine', data.routine)
       await setTotalSupposedWorkoutsSinceStart(tempTotalSupposedWorkoutsSinceStart);
    }
 

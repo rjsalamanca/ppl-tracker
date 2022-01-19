@@ -10,7 +10,6 @@ function PrivateRoute({ ContextProvider, LoadComponent, ...routerProps }) {
    const { loggedIn, setLoggedIn } = useContext(UserContext);
 
    useEffect(() => {
-      console.log('run first:', loggedIn)
       if (!!cookies.hasOwnProperty('user')) {
          if (!!loggedIn && !!cookies.user.isLoggedIn) {
             setLoggedIn(true);

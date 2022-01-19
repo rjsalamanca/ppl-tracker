@@ -14,6 +14,8 @@ function Login(props) {
    const [cookies, setCookie] = useCookies(['user']);
    const { setLoggedIn } = useContext(UserContext);
 
+   console.log(cookies)
+
    useEffect(() => {
       if (props.location.errorCode === 0 && cookies.user.isLoggedIn === false) setErrorCode(5);
    }, [props.location.errorCode, cookies]);

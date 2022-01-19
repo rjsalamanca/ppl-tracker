@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 import { UserContext } from '../contexts/UserContext';
 
 function NavBar() {
-   const [cookies, setCookie] = useCookies(['user']);
+   const [cookies, setCookie, removeCookie] = useCookies(['user', 'routine']);
    // const [redirect, setRedirect] = useState(false);
    //const [loggedIn, setLoggedIn] = useState(false);
    const { loggedIn, setLoggedIn } = useContext(UserContext);
@@ -31,10 +31,10 @@ function NavBar() {
          })
          const data = await response.json();
          if (!data.is_logged_in) {
-            // setUpdate(update + 1);
-            setCookie('user', { isLoggedIn: false })
-            console.log('\n\n\n\nsetting login to false:', cookies)
+            setCookie('user', { isLoggedIn: false });
+            removeCookie('routine')
             setLoggedIn(false);
+
          }
       } catch (err) {
       }
