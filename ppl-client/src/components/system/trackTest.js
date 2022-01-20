@@ -8,10 +8,9 @@ function TrackTest() {
    const [day, setDay] = useState({});
    const [cookies, setCookie] = useCookies(['user']);
 
-
    useEffect(() => {
       // if page refresh, we need to get day information fr
-      if (!location.hasOwnProperty('day')) getDay();
+      if (!cookies.hasOwnProperty('routine')) getDay();
    }, [])
 
    console.log(cookies);

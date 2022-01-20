@@ -9,10 +9,19 @@ import CardPieChart from '../shared/CardPieChart';
 function DisplayRoutineInformation({ fullRoutine, selectedRoutine, totalSupposedWorkoutsSinceStart, zoomDomain, buildGraph1, buildGraph2, handleZoom }) {
 
    if (!!fullRoutine.routine_found) {
-      const totalDaysSinceStart = moment().diff(fullRoutine.routine.date_started, 'days');
-      const workoutsCompleted = fullRoutine.routine.routine_days.filter(day => !day.rest_day).reduce((a, b) => a.workouts_completed + b.workouts_completed);
+      const totalDaysSinceStart = moment().diff(fullRoutine.routine.date_started, 'days') + 1;
+      const workoutsCompleted = () => {
+         const filterRoutine = fullRoutine.routine.routine_days.filter(day => !day.rest_day);
+         return filterRoutine.length === 1 ? filterRoutine[0].workouts_completed : filterRoutine.reduce((a, b) => a.workouts_completed + b.workouts_completed);
+      }
 
-      let workoutAttendence = (workoutsCompleted && totalSupposedWorkoutsSinceStart !== 0) ? ((workoutsCompleted / totalSupposedWorkoutsSinceStart) * 100).toFixed(2) : 0;
+      // const workoutAttendence = () => {
+      //    console.log(workoutsCompleted());
+      //    console.log(totalSupposedWorkoutsSinceStart);
+      //    console.log('test:', (workoutsCompleted() && totalSupposedWorkoutsSinceStart !== 0) ? ((workoutsCompleted() / totalSupposedWorkoutsSinceStart) * 100).toFixed(2) : 0);
+      // }
+
+      const workoutAttendence = (workoutsCompleted() && totalSupposedWorkoutsSinceStart !== 0) ? ((workoutsCompleted() / totalSupposedWorkoutsSinceStart) * 100).toFixed(2) : 0;
 
       return (
          <Container className='trackedRoutineInfoContainer'>
@@ -26,7 +35,7 @@ function DisplayRoutineInformation({ fullRoutine, selectedRoutine, totalSupposed
                      <Card.Body>
                         <Card.Title>Workouts Completed</Card.Title>
                         <Card.Text>
-                           {workoutsCompleted}
+                           {workoutsCompleted()}
                         </Card.Text>
                      </Card.Body>
                   </Card>
