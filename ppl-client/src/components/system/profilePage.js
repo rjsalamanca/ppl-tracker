@@ -3,8 +3,8 @@ import Calendar from 'react-calendar';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
-import RoutineInformation from './routineInformation';
-import WorkoutInformation from './workoutInformation';
+import RoutineInformation from './RoutineInformation';
+import WorkoutInformation from './WorkoutInformation';
 
 import { RoutineContext } from '../../contexts/RoutineContext';
 

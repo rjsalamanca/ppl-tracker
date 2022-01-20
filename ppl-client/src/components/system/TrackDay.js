@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 
-function TrackTest() {
+function TrackDay() {
    const location = useLocation();
    const [day, setDay] = useState({});
    const [cookies] = useCookies(['user']);
@@ -47,4 +47,4 @@ function TrackTest() {
    )
 }
 
-export default TrackTest;
+export default TrackDay;

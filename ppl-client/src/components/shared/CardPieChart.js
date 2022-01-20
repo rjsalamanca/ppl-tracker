@@ -9,7 +9,7 @@ function CardPieChart({ day }) {
       <Col>
          <Card style={{ width: '18rem' }} className="clickableCard">
             <Link className="cardLink" to={{
-               pathname: '/track_progress/trackTest/',
+               pathname: '/track_progress/track_day/',
                search: `/routine_${day.routine_id}/day_${day.routine_day_id}`,
             }}>
 
