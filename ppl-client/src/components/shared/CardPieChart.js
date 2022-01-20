@@ -9,8 +9,8 @@ function CardPieChart({ day }) {
       <Col>
          <Card style={{ width: '18rem' }} className="clickableCard">
             <Link className="cardLink" to={{
-               pathname: '/track_progress/trackTest',
-               search: `/Routine_${day.routine_id}/Day_${day.routine_day_id}`,
+               pathname: '/track_progress/trackTest/',
+               search: `/routine_${day.routine_id}/day_${day.routine_day_id}`,
             }}>
 
                <div className="backgroundEffect"></div>
