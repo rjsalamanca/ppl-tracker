@@ -23,7 +23,10 @@ function TrackProgress() {
    }, [routines]);
 
    useEffect(() => {
-      if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') getFullRoutine();
+      if (!fullRoutine.routine_found && selectedRoutine !== 'Select A Routine') {
+         getFullRoutine();
+         getOriginalRoutine();
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [fullRoutine, setFullRoutine, selectedRoutine]);
 
@@ -69,6 +72,25 @@ function TrackProgress() {
             generateRoutine(data);
          } else {
             await setFullRoutine({ routine_found: false });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   }
+
+   const getOriginalRoutine = async () => {
+      const url = `http://localhost:3000/ppl/get_full_routine/${selectedRoutine}`;
+      try {
+         const response = await fetch(url, {
+            method: "GET",
+            credentials: "include"
+         });
+
+         const data = await response.json();
+         if (!!data.routine_found) {
+            await setCookie('original_routine', data)
+         } else {
+            await setCookie('original_routine', { routine_found: false });
          }
       } catch (err) {
          console.log(err);
