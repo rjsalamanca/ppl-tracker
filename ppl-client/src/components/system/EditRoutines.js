@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
-import AddRoutineName from './routine_creation/addRoutineName';
-import AddDay from './routine_creation/addDay';
+import AddRoutineName from './routine_creation/AddRoutineName';
+import AddDay from './routine_creation/AddDay';
 
 import { CreateRoutineContext } from '../../contexts/CreateRoutineContext';
 

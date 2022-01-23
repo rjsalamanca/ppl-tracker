@@ -3,7 +3,9 @@ import { Redirect } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 
-import { Container, Row, Col, Card, Button, Table } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+
+import TrackExerciseTable from './TrackExerciseTable';
 
 function TrackDay() {
    const location = useLocation();
@@ -37,10 +39,15 @@ function TrackDay() {
       console.log('Need to call api to get info')
    }
 
-   console.log(cookies)
+   const overviewExercise = (exercise) => {
+      console.log('exercise:', exercise);
+   }
+
+   const overviewExerciseSets = (exerciseSet) => {
+      console.log('overview exercise sets:', exerciseSet);
+   }
 
    return (
-
       !!loading && Object.keys(originalDay).length === 0 ? <div>'loading'</div> : !!redirectPage ? <Redirect to="/" /> :
          <Container>
             <Row style={{ height: 'auto' }}>
@@ -53,32 +60,7 @@ function TrackDay() {
                         <Card.Body style={{ padding: 0 }}>
                            <Card.Title>{exercise.name}</Card.Title>
                            {exercise.sets !== null ?
-                              <Table>
-                                 <thead>
-                                    <tr>
-                                       <th>Set #</th>
-                                       <th>Current Weight</th>
-                                       <th>Current Reps</th>
-                                       <th></th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                    {exercise.sets.map((set, i) =>
-                                       set !== null ?
-                                          <tr key={i}>
-                                             <td>{set.set}</td>
-                                             <td>{set.weight}</td>
-                                             <td>{set.reps}</td>
-                                             <td><Button>Expand</Button></td>
-                                          </tr> : 'You have not finished a set for this exercise'
-                                    )}
-                                    <tr>
-                                       <td colspan="4">
-                                          <Button>Exercise Overview</Button>
-                                       </td>
-                                    </tr>
-                                 </tbody>
-                              </Table>
+                              <TrackExerciseTable exercise={exercise} overviewExercise={overviewExercise} overviewExerciseSets={overviewExerciseSets} />
                               : 'Complete a workout to see your progress'}
                         </Card.Body>
                      </Card>

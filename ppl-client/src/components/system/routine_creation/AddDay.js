@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Button, Form, Modal } from "react-bootstrap";
 
-import AddExercises from './addExercises';
+import AddExercises from './AddExercises';
 
 import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
 

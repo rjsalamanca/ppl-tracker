@@ -3,8 +3,8 @@ import moment from 'moment';
 import { Redirect } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-import AddRoutineName from './addRoutineName';
-import AddDay from './addDay';
+import AddRoutineName from './AddRoutineName';
+import AddDay from './AddDay';
 
 import { CreateRoutineContext } from '../../../contexts/CreateRoutineContext';
 

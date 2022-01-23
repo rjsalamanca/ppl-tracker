@@ -6,7 +6,7 @@ import LandingPage from './components/LandingPage';
 import LoginPage from './components/users/LoginPage';
 import RegisterPage from './components/users/RegisterPage';
 import ProfilePage from './components/system/ProfilePage';
-import CreateRoutine from './components/system/routine_creation/createRoutine';
+import CreateRoutine from './components/system/routine_creation/CreateRoutine';
 import EditRoutines from './components/system/EditRoutines';
 import TrackProgress from './components/system/TrackProgress';
 import TrackDay from './components/system/TrackDay';
