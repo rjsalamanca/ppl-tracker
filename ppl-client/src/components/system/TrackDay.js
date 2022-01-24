@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Collapse } from 'react-bootstrap';
 
 import TrackExerciseTable from './TrackExerciseTable';
 
@@ -14,6 +14,8 @@ function TrackDay() {
    const [cookies] = useCookies(['user']);
    const [redirectPage, setRedirectPage] = useState(false);
    const [loading, setLoading] = useState(true);
+   const [displayOverview, setOverview] = useState(false);
+   const [displayOverviewSet, setOverviewSet] = useState(false);
 
    useEffect(() => {
       // if page refresh, we need to get day information fr
@@ -59,13 +61,20 @@ function TrackDay() {
                      <Card>
                         <Card.Body style={{ padding: 0 }}>
                            <Card.Title>{exercise.name}</Card.Title>
-                           {exercise.sets !== null ?
-                              <TrackExerciseTable exercise={exercise} overviewExercise={overviewExercise} overviewExerciseSets={overviewExerciseSets} />
-                              : 'Complete a workout to see your progress'}
+                           {exercise.sets !== null ? <TrackExerciseTable exercise={exercise} overviewExercise={overviewExercise} overviewExerciseSets={overviewExerciseSets} displayOverview={displayOverview} setOverview={setOverview} /> : 'Complete a workout to see your progress'}
                         </Card.Body>
                      </Card>
                   </Col>
                )}
+            </Row>
+            <Row>
+               <Collapse in={displayOverview}>
+                  <div id="example-collapse-text">
+                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
+                     terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
+                     labore wes anderson cred nesciunt sapiente ea proident.
+                  </div>
+               </Collapse>
             </Row>
          </Container >
 

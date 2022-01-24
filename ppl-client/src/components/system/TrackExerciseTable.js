@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Button } from 'react-bootstrap';
 
-function TrackExerciseTable({ exercise, overviewExercise, overviewExerciseSets }) {
+function TrackExerciseTable({ exercise, overviewExercise, overviewExerciseSets, displayOverview, setOverview }) {
    return (
       <Table>
          <thead>
@@ -24,7 +24,8 @@ function TrackExerciseTable({ exercise, overviewExercise, overviewExerciseSets }
             )}
             <tr>
                <td colSpan="4">
-                  <Button onClick={() => overviewExercise(exercise)}>Exercise Overview</Button>
+                  <Button onClick={() => setOverview(!displayOverview)} aria-controls="example-collapse-text"
+                     aria-expanded={displayOverview}>Exercise Overview</Button>
                </td>
             </tr>
          </tbody>
