@@ -1,0 +1,14 @@
+
+#example-collapse-text{
+   width:100%;
+}
+.histogram_slider{
+   background-color: #2b2a31;
+   padding: 40px 36px 30px;
+   border-radius: 5px;
+   padding: 24px 20px 10px;
+}
+
+.svgContainer{
+   height:0;
+}

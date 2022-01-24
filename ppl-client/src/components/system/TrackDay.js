@@ -73,7 +73,7 @@ function TrackDay() {
             <Row style={{ height: 'auto' }}>
                <h1>{originalDay.name}</h1>
             </Row>
-            <Row>
+            <Row style={{ height: 'auto' }}>
                {originalDay.exercises.map(exercise =>
                   <Col key={exercise.id}>
                      <Card>
