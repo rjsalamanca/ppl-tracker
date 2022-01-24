@@ -6,6 +6,7 @@ import { useCookies } from 'react-cookie';
 import { Container, Row, Col, Card, Collapse } from 'react-bootstrap';
 
 import TrackExerciseTable from './TrackExerciseTable';
+import TrackExerciseOverview from './TrackExerciseOverview';
 
 function TrackDay() {
    const location = useLocation();
@@ -14,8 +15,8 @@ function TrackDay() {
    const [cookies] = useCookies(['user']);
    const [redirectPage, setRedirectPage] = useState(false);
    const [loading, setLoading] = useState(true);
-   const [displayOverview, setOverview] = useState(false);
-   const [displayOverviewSet, setOverviewSet] = useState(false);
+   const [displayOverview, setOverview] = useState({ originalSelectedExercise: {}, selectedExercise: {}, show: false, changeSelected: false });
+   const [displayOverviewSet, setOverviewSet] = useState({ originalSelectedExercise: {}, show: false, changeSelected: false });
 
    useEffect(() => {
       // if page refresh, we need to get day information fr
@@ -41,8 +42,25 @@ function TrackDay() {
       console.log('Need to call api to get info')
    }
 
+   const getSelectedExercise = (exercise) => day.exercises.filter(e => e.id === exercise.id)[0];
+
+   const handleExitedCollapse = () => {
+      if (!!displayOverview.changeSelected) {
+         setTimeout(() => {
+            setOverview({ ...displayOverview, show: !displayOverview.show, changeSelected: false })
+         }, 200);
+      }
+   }
+
    const overviewExercise = (exercise) => {
-      console.log('exercise:', exercise);
+      if ((Object.keys(displayOverview.originalSelectedExercise).length === 0) ||
+         (exercise === displayOverview.originalSelectedExercise && !displayOverview.show) ||
+         (exercise === displayOverview.originalSelectedExercise)) {
+
+         setOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show })
+      } else {
+         setOverview({ ...displayOverview, originalSelectedExercise: exercise, show: !displayOverview.show, changeSelected: true })
+      }
    }
 
    const overviewExerciseSets = (exerciseSet) => {
@@ -67,17 +85,14 @@ function TrackDay() {
                   </Col>
                )}
             </Row>
-            <Row>
-               <Collapse in={displayOverview}>
+            <Row style={{ border: '1px solid red', height: 'auto' }}>
+               <Collapse in={displayOverview.show} onExited={() => handleExitedCollapse()}>
                   <div id="example-collapse-text">
-                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                     terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
-                     labore wes anderson cred nesciunt sapiente ea proident.
+                     {(Object.keys(displayOverview.originalSelectedExercise).length !== 0) && <TrackExerciseOverview exercise={{ original: displayOverview.originalSelectedExercise, selected: displayOverview.selectedExercise }} />}
                   </div>
                </Collapse>
             </Row>
          </Container >
-
    )
 }
 

@@ -24,8 +24,8 @@ function TrackExerciseTable({ exercise, overviewExercise, overviewExerciseSets, 
             )}
             <tr>
                <td colSpan="4">
-                  <Button onClick={() => setOverview(!displayOverview)} aria-controls="example-collapse-text"
-                     aria-expanded={displayOverview}>Exercise Overview</Button>
+                  <Button onClick={() => overviewExercise(exercise)} aria-controls="example-collapse-text"
+                     aria-expanded={displayOverview.show}>Exercise Overview</Button>
                </td>
             </tr>
          </tbody>
