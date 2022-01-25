@@ -20,6 +20,8 @@ function TrackDay() {
    const [loading, setLoading] = useState(true);
    const [displayOverview, setOverview] = useState({ originalSelectedExercise: {}, selectedExercise: {}, show: false, changeSelected: false });
    const [displayOverviewSet, setOverviewSet] = useState({ originalSelectedExercise: {}, show: false, changeSelected: false });
+   const [onExitDisplayOverview, setOnExitOverview] = useState({ originalSelectedExercise: {}, selectedExercise: {}, show: false, changeSelected: false });
+   const [onExitDisplayOverviewSet, setOnExitOverviewSet] = useState({ originalSelectedExercise: {}, show: false, changeSelected: false });
 
    useEffect(() => {
       // if page refresh, we need to get day information fr
@@ -60,9 +62,11 @@ function TrackDay() {
          (exercise === displayOverview.originalSelectedExercise && !displayOverview.show) ||
          (exercise === displayOverview.originalSelectedExercise)) {
 
-         setOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show })
+         setOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show });
+         setOnExitOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show });
       } else {
-         setOverview({ ...displayOverview, originalSelectedExercise: exercise, show: !displayOverview.show, changeSelected: true })
+         setOverview({ ...displayOverview, originalSelectedExercise: exercise, show: !displayOverview.show, changeSelected: true });
+         setOnExitOverview({ ...displayOverview, originalSelectedExercise: exercise, show: !displayOverview.show, changeSelected: true });
       }
    }
 
@@ -89,8 +93,8 @@ function TrackDay() {
                )}
             </Row>
             <Row className="track-day-row ">
-               <div className="drop-down-indicator">
-                  <BiChevronDownCircle />
+               <div className={`drop-down-indicator ${!!displayOverview.show && 'drop-down-indicator-expanded'}`}>
+                  <BiChevronDownCircle className={`drop-down-icon ${!!displayOverview.show && 'drop-down-icon-rotate'}`} />
                </div>
                <Collapse className="track-exercise-overview-container" in={displayOverview.show} onExited={() => handleExitedCollapse()}>
                   <div id="example-collapse-text">

@@ -1,15 +1,34 @@
 .drop-down-indicator{
    border:1px solid gray;
-   border-radius: 10px 10px 0 0;
-   margin:0 15px;
-   width:100%;
-   text-align:center;
    background-color: lightgray;
+   border-radius: 10px 10px 10px 10px;
+   margin:0 15px;
+   padding:10px;
+   text-align:center;
+   width:100%;
+   transition:border-radius 1s linear;
+}
+
+.drop-down-indicator-expanded{
+   border-radius: 10px 10px 0px 0px;
+   transition:border-radius 0.2s linear;
+}
+
+.drop-down-icon{
+   font-size: 2em;
+   color:white;
+   transition: all 0.5s linear;
+}
+
+.drop-down-icon-rotate{
+   color: #007bff;
+   transform: rotate(180deg);
+   transition: all 0.5s linear;
 }
 
 .track-day-row{
-   height: auto;
    margin:20px 0;
+   height: auto;
 }
 
 .track-exercise-overview-container{
