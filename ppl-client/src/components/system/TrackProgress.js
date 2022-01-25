@@ -141,7 +141,7 @@ function TrackProgress() {
       })
 
       data.routine.routine_days = tempDays;
-      console.log(data)
+
       await setBuildGraph1(tempBuildGraph1);
       await setBuildGraph2(tempBuildGraph2);
       await setFullRoutine(data);

@@ -23,7 +23,6 @@ function RoutineInformation() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [date, fullRoutine, workoutDays]);
 
-
    useEffect(() => {
       let start_date = moment(fullRoutine.routine.date_started);
       let current = moment(date, "YYYY-MM-DD");

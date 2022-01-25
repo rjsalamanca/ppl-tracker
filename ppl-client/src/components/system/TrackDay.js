@@ -85,7 +85,7 @@ function TrackDay() {
                   </Col>
                )}
             </Row>
-            <Row style={{ border: '1px solid red', height: 'auto' }}>
+            <Row style={{ height: 'auto' }}>
                <Collapse in={displayOverview.show} onExited={() => handleExitedCollapse()}>
                   <div id="example-collapse-text">
                      {(Object.keys(displayOverview.originalSelectedExercise).length !== 0) && <TrackExerciseOverview exercise={{ original: displayOverview.originalSelectedExercise, selected: displayOverview.selectedExercise }} />}

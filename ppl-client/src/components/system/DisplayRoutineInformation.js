@@ -15,12 +15,6 @@ function DisplayRoutineInformation({ fullRoutine, selectedRoutine, totalSupposed
          return filterRoutine.length === 1 ? filterRoutine[0].workouts_completed : filterRoutine.reduce((a, b) => a.workouts_completed + b.workouts_completed);
       }
 
-      // const workoutAttendence = () => {
-      //    console.log(workoutsCompleted());
-      //    console.log(totalSupposedWorkoutsSinceStart);
-      //    console.log('test:', (workoutsCompleted() && totalSupposedWorkoutsSinceStart !== 0) ? ((workoutsCompleted() / totalSupposedWorkoutsSinceStart) * 100).toFixed(2) : 0);
-      // }
-
       const workoutAttendence = (workoutsCompleted() && totalSupposedWorkoutsSinceStart !== 0) ? ((workoutsCompleted() / totalSupposedWorkoutsSinceStart) * 100).toFixed(2) : 0;
 
       return (
