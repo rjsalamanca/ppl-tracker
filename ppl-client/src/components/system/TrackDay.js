@@ -52,7 +52,7 @@ function TrackDay() {
    const handleExitedCollapse = () => {
       if (!!displayOverview.changeSelected) {
          setTimeout(() => {
-            setOverview({ ...displayOverview, show: !displayOverview.show, changeSelected: false })
+            setOverview({ ...onExitDisplayOverview, show: !displayOverview.show, changeSelected: false })
          }, 200);
       }
    }
@@ -63,10 +63,9 @@ function TrackDay() {
          (exercise === displayOverview.originalSelectedExercise)) {
 
          setOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show });
-         setOnExitOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show });
       } else {
          setOverview({ ...displayOverview, originalSelectedExercise: exercise, show: !displayOverview.show, changeSelected: true });
-         setOnExitOverview({ ...displayOverview, originalSelectedExercise: exercise, show: !displayOverview.show, changeSelected: true });
+         setOnExitOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show, changeSelected: true });
       }
    }
 

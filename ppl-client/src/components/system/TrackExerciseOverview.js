@@ -32,9 +32,6 @@ function TrackExerciseOverview({ exercise }) {
 
    const victoryLabelFormat = (info) => `Date: ${(info.a).format('MMM, DD, YYYY')}\nTotal Volume: ${info.b}lbs`;
 
-
-   console.log(exercise.selected);
-
    return (
       <div>
          {exercise.selected.sets === null
