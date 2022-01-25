@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 import { BiChevronDownCircle } from 'react-icons/bi';
 
-import { Container, Row, Col, Card, Collapse } from 'react-bootstrap';
+import { Container, Row, Col, Card, Collapse, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 
 import TrackExerciseTable from './TrackExerciseTable';
 import TrackExerciseOverview from './TrackExerciseOverview';
@@ -91,15 +91,46 @@ function TrackDay() {
                   </Col>
                )}
             </Row>
-            <Row className="track-day-row ">
+            <Row className="track-day-row">
                <div className={`drop-down-indicator ${!!displayOverview.show && 'drop-down-indicator-expanded'}`}>
-                  <BiChevronDownCircle className={`drop-down-icon ${!!displayOverview.show && 'drop-down-icon-rotate'}`} />
+                  <OverlayTrigger
+                     placement={'top'}
+                     overlay={
+                        <Tooltip>
+                           <p>
+                              Toggle this collapsable area by clicking
+                              the 'Exercise Overview' button located
+                              in the exercise tables above.
+                           </p>
+                        </Tooltip>
+                     }
+                  >
+                     <BiChevronDownCircle className={`drop-down-icon ${!!displayOverview.show && 'drop-down-icon-rotate'}`} />
+                  </OverlayTrigger>
                </div>
                <Collapse className="track-exercise-overview-container" in={displayOverview.show} onExited={() => handleExitedCollapse()}>
                   <div id="example-collapse-text">
                      {(Object.keys(displayOverview.originalSelectedExercise).length !== 0) && <TrackExerciseOverview exercise={{ original: displayOverview.originalSelectedExercise, selected: displayOverview.selectedExercise }} />}
                   </div>
                </Collapse>
+            </Row>
+            <Row className="track-day-row">
+               <div className={`drop-down-indicator ${!!displayOverviewSet.show && 'drop-down-indicator-expanded'}`}>
+                  <OverlayTrigger
+                     placement={'top'}
+                     overlay={
+                        <Tooltip>
+                           <p>
+                              Toggle this collapsable area by clicking
+                              the 'Expand' button located in the exercise
+                              tables above, to the right of each set.
+                           </p>
+                        </Tooltip>
+                     }
+                  >
+                     <BiChevronDownCircle className={`drop-down-icon ${!!displayOverviewSet.show && 'drop-down-icon-rotate'}`} />
+                  </OverlayTrigger>
+               </div>
             </Row>
          </Container >
    )
