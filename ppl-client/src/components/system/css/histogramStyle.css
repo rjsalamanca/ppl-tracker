@@ -1,7 +1,13 @@
-
 #example-collapse-text{
    width:100%;
 }
+
+.chart-container{
+   width: 90%;
+   margin: 0 auto;
+   padding:10px;
+}
+
 .histogram_slider{
    background-color: #2b2a31;
    padding: 40px 36px 30px;

@@ -6,8 +6,6 @@ import { VictoryChart, VictoryZoomContainer, VictoryTooltip, VictoryGroup, Victo
 import './css/histogramStyle.css';
 
 function TrackExerciseOverview({ exercise }) {
-   // const [year, setYear] = useState(FIRST_YEAR);
-   const [maxDomainY, setMaxDomainY] = useState(0);
    const [zoomDomain, setZoomDomain] = useState({ x: [moment().subtract(7, 'd'), moment()] });
    const [buildGraph1, setBuildGraph1] = useState([]);
    const [buildGraph2, setBuildGraph2] = useState([]);
@@ -32,14 +30,14 @@ function TrackExerciseOverview({ exercise }) {
       setBuildGraph2(tempBuildGraph2);
    }
 
-   const victoryLabelFormat = (info) => `Date: ${(info.a).format('MMM, DD, YYYY')}\nTotal Volume: ${info.b}`;
+   const victoryLabelFormat = (info) => `Date: ${(info.a).format('MMM, DD, YYYY')}\nTotal Volume: ${info.b}lbs`;
 
    return (
-      <div className="mt-3">
+      <div>
          {exercise.selected.sets === null
             ? 'No sets have been completed'
             :
-            <div style={{ width: '80%', margin: '0 auto' }}>
+            <div className="chart-container" style={{ width: '80%', margin: '0 auto' }}>
                <h2 className="d-flex justify-content-center">{`Total ${exercise.selected.name} Volume`}</h2>
                <VictoryChart
                   domain={{ y: [0, 10000] }}

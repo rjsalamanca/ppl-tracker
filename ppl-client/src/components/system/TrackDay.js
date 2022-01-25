@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
+import { BiChevronDownCircle } from 'react-icons/bi';
 
 import { Container, Row, Col, Card, Collapse } from 'react-bootstrap';
 
 import TrackExerciseTable from './TrackExerciseTable';
 import TrackExerciseOverview from './TrackExerciseOverview';
+
+import './css/trackDay.css';
 
 function TrackDay() {
    const location = useLocation();
@@ -70,10 +73,10 @@ function TrackDay() {
    return (
       !!loading && Object.keys(originalDay).length === 0 ? <div>'loading'</div> : !!redirectPage ? <Redirect to="/" /> :
          <Container>
-            <Row style={{ height: 'auto' }}>
+            <Row className="track-day-row">
                <h1>{originalDay.name}</h1>
             </Row>
-            <Row style={{ height: 'auto' }}>
+            <Row className="track-day-row">
                {originalDay.exercises.map(exercise =>
                   <Col key={exercise.id}>
                      <Card>
@@ -85,8 +88,11 @@ function TrackDay() {
                   </Col>
                )}
             </Row>
-            <Row style={{ height: 'auto' }}>
-               <Collapse in={displayOverview.show} onExited={() => handleExitedCollapse()}>
+            <Row className="track-day-row ">
+               <div className="drop-down-indicator">
+                  <BiChevronDownCircle />
+               </div>
+               <Collapse className="track-exercise-overview-container" in={displayOverview.show} onExited={() => handleExitedCollapse()}>
                   <div id="example-collapse-text">
                      {(Object.keys(displayOverview.originalSelectedExercise).length !== 0) && <TrackExerciseOverview exercise={{ original: displayOverview.originalSelectedExercise, selected: displayOverview.selectedExercise }} />}
                   </div>
