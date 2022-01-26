@@ -8,6 +8,7 @@ import { Container, Row, Col, Card, Collapse, OverlayTrigger, Tooltip, Button } 
 
 import TrackExerciseTable from './TrackExerciseTable';
 import TrackExerciseOverview from './TrackExerciseOverview';
+import TrackExerciseSet from './TrackExerciseSet';
 
 import './css/trackDay.css';
 
@@ -70,6 +71,16 @@ function TrackDay() {
    }
 
    const overviewExerciseSets = (exerciseSet) => {
+
+      //    if ((Object.keys(displayOverview.originalSelectedExercise).length === 0) ||
+      //    (exercise === displayOverview.originalSelectedExercise && !displayOverview.show) ||
+      //    (exercise === displayOverview.originalSelectedExercise)) {
+
+      //    setOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show });
+      // } else {
+      //    setOverview({ ...displayOverview, originalSelectedExercise: exercise, show: !displayOverview.show, changeSelected: true });
+      //    setOnExitOverview({ ...displayOverview, originalSelectedExercise: exercise, selectedExercise: getSelectedExercise(exercise), show: !displayOverview.show, changeSelected: true });
+      // }
       console.log('overview exercise sets:', exerciseSet);
    }
 
@@ -85,7 +96,7 @@ function TrackDay() {
                      <Card>
                         <Card.Body style={{ padding: 0 }}>
                            <Card.Title>{exercise.name}</Card.Title>
-                           {exercise.sets !== null ? <TrackExerciseTable exercise={exercise} overviewExercise={overviewExercise} overviewExerciseSets={overviewExerciseSets} displayOverview={displayOverview} setOverview={setOverview} /> : 'Complete a workout to see your progress'}
+                           {exercise.sets !== null ? <TrackExerciseTable exercise={exercise} overviewExercise={overviewExercise} overviewExerciseSets={overviewExerciseSets} displayOverview={displayOverview} displayOverviewSet={displayOverviewSet} /> : 'Complete a workout to see your progress'}
                         </Card.Body>
                      </Card>
                   </Col>
@@ -109,7 +120,7 @@ function TrackDay() {
                   </OverlayTrigger>
                </div>
                <Collapse className="track-exercise-overview-container" in={displayOverview.show} onExited={() => handleExitedCollapse()}>
-                  <div id="example-collapse-text">
+                  <div id="collapse-overview">
                      {(Object.keys(displayOverview.originalSelectedExercise).length !== 0) && <TrackExerciseOverview exercise={{ original: displayOverview.originalSelectedExercise, selected: displayOverview.selectedExercise }} />}
                   </div>
                </Collapse>
@@ -131,6 +142,11 @@ function TrackDay() {
                      <BiChevronDownCircle className={`drop-down-icon ${!!displayOverviewSet.show && 'drop-down-icon-rotate'}`} />
                   </OverlayTrigger>
                </div>
+               <Collapse className="track-exercise-overview-container" in={displayOverviewSet.show} >
+                  <div id="collapse-set">
+                     <TrackExerciseSet />
+                  </div>
+               </Collapse>
             </Row>
          </Container >
    )
